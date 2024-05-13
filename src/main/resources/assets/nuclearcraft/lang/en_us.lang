@@ -318,7 +318,7 @@ tile.nuclearcraft.turbine_rotor_stator.desc=Used to increase the density of the 
 tile.nuclearcraft.turbine_rotor_bearing.name=Turbine Rotor Bearing
 tile.nuclearcraft.turbine_rotor_bearing.desc=Connects the rotor shaft to the turbine wall and dynamo. Must cover the full area of each end of the shaft.
 tile.nuclearcraft.turbine_dynamo_coil.magnesium.name=Magnesium Turbine Dynamo Coil
-tile.nuclearcraft.turbine_dynamo_coil.magnesium.desc=Must be adjacent to at least one Rotor Bearing Block.
+tile.nuclearcraft.turbine_dynamo_coil.magnesium.desc=Must be adjacent to at least one Rotor Bearing Block or one valid Dynamo Coil Connector.
 tile.nuclearcraft.turbine_dynamo_coil.beryllium.name=Beryllium Turbine Dynamo Coil
 tile.nuclearcraft.turbine_dynamo_coil.beryllium.desc=Must be adjacent to at least one valid Magnesium Dynamo Coil.
 tile.nuclearcraft.turbine_dynamo_coil.aluminum.name=Aluminum Turbine Dynamo Coil
@@ -330,6 +330,8 @@ tile.nuclearcraft.turbine_dynamo_coil.copper.desc=Must be adjacent to at least o
 tile.nuclearcraft.turbine_dynamo_coil.silver.name=Silver Turbine Dynamo Coil
 tile.nuclearcraft.turbine_dynamo_coil.silver.desc=Must be adjacent to at least one valid Magnesium Dynamo Coil and one valid Gold Dynamo Coil.
 tile.nuclearcraft.turbine_dynamo_coil.conductivity=Conductivity Multiplier:
+tile.nuclearcraft.turbine_coil_connector.name=Turbine Dynamo Coil Connector
+tile.nuclearcraft.turbine_coil_connector.desc=Must be adjacent to at least one valid Dynamo Coil.
 tile.nuclearcraft.turbine_inlet.name=Turbine Fluid Inlet
 tile.nuclearcraft.turbine_outlet.name=Turbine Fluid Outlet
 tile.nuclearcraft.turbine_computer_port.name=Turbine Computer Port
@@ -1735,6 +1737,7 @@ item.nuclearcraft.record_hyperspace.des0=Ur-Quan Masters - Hyperspace
 item.nuclearcraft.record_hyperspace.des1=Originally by Riku Nuottajärvi
 
 item.nuclearcraft.configuration_blueprint_empty.name=Configuration Blueprint (Empty)
+item.nuclearcraft.configuration_blueprint_empty.desc=Right click on a processor while sneaking in order to copy its configuration. Right click without sneaking on a processor of the same type in order to set its configuration to that of the blueprint. Reset by sneak right-clicking while not facing a processor.
 item.nuclearcraft.configuration_blueprint.name=Configuration Blueprint
 
 entity.nuclearcraft.feral_ghoul.name=Feral Ghoul

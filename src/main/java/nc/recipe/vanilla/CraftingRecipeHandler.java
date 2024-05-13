@@ -253,6 +253,7 @@ public class CraftingRecipeHandler {
 		addShapedOreRecipe(new ItemStack(NCBlocks.turbine_dynamo_coil, 1, 3), new Object[] {"GGG", "HTH", "GGG", 'G', "ingotGold", 'T', "ingotTough", 'H', "ingotHSLASteel"});
 		addShapedOreRecipe(new ItemStack(NCBlocks.turbine_dynamo_coil, 1, 4), new Object[] {"CCC", "HTH", "CCC", 'C', "ingotCopper", 'T', "ingotTough", 'H', "ingotHSLASteel"});
 		addShapedOreRecipe(new ItemStack(NCBlocks.turbine_dynamo_coil, 1, 5), new Object[] {"SSS", "HTH", "SSS", 'S', "ingotSilver", 'T', "ingotTough", 'H', "ingotHSLASteel"});
+		addShapedOreRecipe(new ItemStack(NCBlocks.turbine_coil_connector, 4),new Object[] {"HHH", "HTH", "HHH", 'T', "ingotTough", 'H', "ingotHSLASteel"});
 		addShapedOreRecipe(new ItemStack(NCBlocks.turbine_inlet, 4), new Object[] {"SSS", "TFT", "SVS", 'S', "ingotHSLASteel", 'T', "ingotTough", 'V', "servo", 'F', "steelFrame"});
 		addShapedOreRecipe(new ItemStack(NCBlocks.turbine_outlet, 4), new Object[] {"SSS", "VFV", "SSS", 'S', "ingotHSLASteel", 'V', "servo", 'F', "steelFrame"});
 		if (ModCheck.openComputersLoaded()) {
@@ -357,7 +358,7 @@ public class CraftingRecipeHandler {
 		addShapedOreRecipe(NCArmor.legs_hazmat, new Object[] {"YBY", "SLS", "W W", 'Y', "dyeYellow", 'W', "wool", 'L', Items.LEATHER_LEGGINGS, 'B', "bioplastic", 'S', new ItemStack(NCItems.rad_shielding, 1, 2)});
 		addShapedOreRecipe(NCArmor.boots_hazmat, new Object[] {"SDS", "BLB", 'D', "dyeBlack", 'L', Items.LEATHER_BOOTS, 'B', "bioplastic", 'S', new ItemStack(NCItems.rad_shielding, 1, 2)});
 
-		addShapelessOreRecipe(NCItems.configuration_blueprint_empty, "gemLapis", Items.PAPER, "dustGraphite");
+		addShapelessOreRecipe(NCItems.configuration_blueprint_empty, Items.PAPER, "gemLapis", "dustGraphite");
 	}
 	
 	public static void registerRadShieldingCraftingRecipes() {
@@ -388,7 +389,7 @@ public class CraftingRecipeHandler {
 			
 			addShapelessOreRecipe(new ItemStack(fuelType, 1, 2 + 4*i), new Object[] {"ingot" + element + fissileNo[i], "ingot" + element + fissileNo[i], "ingot" + element + fissileNo[i], "ingot" + element + fissileNo[i], "ingot" + element + fertileNo, "ingot" + element + fertileNo, "ingot" + element + fertileNo, "ingot" + element + fertileNo, "ingot" + element + fertileNo});
 			addShapelessOreRecipe(new ItemStack(fuelType, 1, 3 + 4*i), new Object[] {"ingot" + element + fissileNo[i] + "Oxide", "ingot" + element + fissileNo[i] + "Oxide", "ingot" + element + fissileNo[i] + "Oxide", "ingot" + element + fissileNo[i] + "Oxide", "ingot" + element + fertileNo, "ingot" + element + fertileNo, "ingot" + element + fertileNo, "ingot" + element + fertileNo, "ingot" + element + fertileNo});
-		}	
+		}
 	}
 	
 	public static void fissionClumpRecipes(String element, Item material, int... types) {
@@ -471,7 +472,7 @@ public class CraftingRecipeHandler {
 			if (RECIPE_COUNT_MAP.containsKey(outName)) {
 				int count = RECIPE_COUNT_MAP.get(outName);
 				RECIPE_COUNT_MAP.put(outName, count + 1);
-				outName = outName + "_" + count;	
+				outName = outName + "_" + count;
 			} else RECIPE_COUNT_MAP.put(outName, 1);
 			ResourceLocation location = new ResourceLocation(Global.MOD_ID, outName);
 			try {
@@ -479,7 +480,7 @@ public class CraftingRecipeHandler {
 				recipe.setRegistryName(location);
 				ForgeRegistries.RECIPES.register(recipe);
 			} catch (Exception e) {
-				
+			
 			}
 		}
 	}

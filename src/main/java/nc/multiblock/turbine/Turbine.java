@@ -27,15 +27,7 @@ import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbinePartDir;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbineRotorBladeType;
 import nc.multiblock.turbine.TurbineRotorBladeUtil.TurbineRotorStatorType;
 import nc.multiblock.turbine.block.BlockTurbineRotorShaft;
-import nc.multiblock.turbine.tile.TileTurbineController;
-import nc.multiblock.turbine.tile.TileTurbineDynamoCoil;
-import nc.multiblock.turbine.tile.TileTurbineInlet;
-import nc.multiblock.turbine.tile.TileTurbineOutlet;
-import nc.multiblock.turbine.tile.TileTurbinePartBase;
-import nc.multiblock.turbine.tile.TileTurbineRotorBearing;
-import nc.multiblock.turbine.tile.TileTurbineRotorBlade;
-import nc.multiblock.turbine.tile.TileTurbineRotorShaft;
-import nc.multiblock.turbine.tile.TileTurbineRotorStator;
+import nc.multiblock.turbine.tile.*;
 import nc.multiblock.validation.IMultiblockValidator;
 import nc.network.PacketHandler;
 import nc.recipe.NCRecipes;
@@ -75,6 +67,7 @@ public class Turbine extends CuboidalMultiblockBase<TurbineUpdatePacket> impleme
 	protected Set<TileTurbineRotorStator> rotorStators;
 	protected Set<TileTurbineRotorBearing> rotorBearings;
 	protected Set<TileTurbineDynamoCoil> dynamoCoils;
+	protected Set<TileTurbineCoilConnector> coilConnectors;
 	protected Set<TileTurbineInlet> inlets;
 	protected Set<TileTurbineOutlet> outlets;
 	
@@ -118,6 +111,7 @@ public class Turbine extends CuboidalMultiblockBase<TurbineUpdatePacket> impleme
 		rotorStators = new ObjectOpenHashSet<TileTurbineRotorStator>();
 		rotorBearings = new ObjectOpenHashSet<TileTurbineRotorBearing>();
 		dynamoCoils = new ObjectOpenHashSet<TileTurbineDynamoCoil>();
+		coilConnectors = new ObjectOpenHashSet<TileTurbineCoilConnector>();
 		inlets = new ObjectOpenHashSet<TileTurbineInlet>();
 		outlets = new ObjectOpenHashSet<TileTurbineOutlet>();
 		
@@ -149,6 +143,10 @@ public class Turbine extends CuboidalMultiblockBase<TurbineUpdatePacket> impleme
 	
 	public Set<TileTurbineDynamoCoil> getDynamoCoils() {
 		return dynamoCoils;
+	}
+	
+	public Set<TileTurbineCoilConnector> getCoilConnectors() {
+		return coilConnectors;
 	}
 	
 	public Set<TileTurbineInlet> getInlets() {
@@ -186,6 +184,7 @@ public class Turbine extends CuboidalMultiblockBase<TurbineUpdatePacket> impleme
 		if (newPart instanceof TileTurbineRotorStator) rotorStators.add((TileTurbineRotorStator) newPart);
 		if (newPart instanceof TileTurbineRotorBearing) rotorBearings.add((TileTurbineRotorBearing) newPart);
 		if (newPart instanceof TileTurbineDynamoCoil) dynamoCoils.add((TileTurbineDynamoCoil) newPart);
+		if (newPart instanceof TileTurbineCoilConnector) coilConnectors.add((TileTurbineCoilConnector) newPart);
 		if (newPart instanceof TileTurbineInlet) inlets.add((TileTurbineInlet) newPart);
 		if (newPart instanceof TileTurbineOutlet) outlets.add((TileTurbineOutlet) newPart);
 	}
@@ -198,6 +197,7 @@ public class Turbine extends CuboidalMultiblockBase<TurbineUpdatePacket> impleme
 		if (oldPart instanceof TileTurbineRotorStator) rotorStators.remove(oldPart);
 		if (oldPart instanceof TileTurbineRotorBearing) rotorBearings.remove(oldPart);
 		if (oldPart instanceof TileTurbineDynamoCoil) dynamoCoils.remove(oldPart);
+		if (oldPart instanceof TileTurbineCoilConnector) coilConnectors.remove(oldPart);
 		if (oldPart instanceof TileTurbineInlet) inlets.remove(oldPart);
 		if (oldPart instanceof TileTurbineOutlet) outlets.remove(oldPart);
 	}
@@ -281,7 +281,7 @@ public class Turbine extends CuboidalMultiblockBase<TurbineUpdatePacket> impleme
 	
 	@Override
 	protected void onMachinePaused() {
-		
+	
 	}
 	
 	@Override
@@ -717,12 +717,12 @@ public class Turbine extends CuboidalMultiblockBase<TurbineUpdatePacket> impleme
 	
 	@Override
 	protected void onAssimilate(MultiblockBase assimilated) {
-		
+	
 	}
 	
 	@Override
 	protected void onAssimilated(MultiblockBase assimilator) {
-		
+	
 	}
 	
 	// Server

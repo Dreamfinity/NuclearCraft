@@ -137,14 +137,19 @@ public class TileItemFluidProcessor extends TileEnergyFluidSidedInventory implem
 			boolean wasProcessing = isProcessing;
 			isProcessing = isProcessing();
 			boolean shouldUpdate = false;
-			if (isProcessing) process();
+			if (isProcessing) {
+				process();
+			}
 			else {
 				getRadiationSource().setRadiationLevel(0D);
-				if (time > 0 && (!isHaltedByRedstone() || !readyToProcess())) loseProgress();
+				if (time > 0 && (!isHaltedByRedstone() || !readyToProcess())) {
+					loseProgress();
+				}
+				
 				if (wasProcessing) {
 					pushCooldown = 50;
 				}
-				if (pushCooldown <= 0) {
+				else if (pushCooldown <= 0) {
 					for (int i = 0; i < itemOutputSize; i++) {
 						shouldUpdate |= pushItemProducts(i + itemInputSize);
 					}
@@ -336,7 +341,7 @@ public class TileItemFluidProcessor extends TileEnergyFluidSidedInventory implem
 				int count = Math.min(getInventoryStackLimit(), getInventoryStacks().get(j + itemInputSize).getCount() + itemProduct.getNextStackSize(0));
 				getInventoryStacks().get(j + itemInputSize).setCount(count);
 			}
-			pushItemProducts(j+itemInputSize);
+			pushItemProducts(j + itemInputSize);
 		}
 		for (int j = 0; j < fluidOutputSize; j++) {
 			if (getTankOutputSetting(j + fluidInputSize) == TankOutputSetting.VOID) {
@@ -350,7 +355,7 @@ public class TileItemFluidProcessor extends TileEnergyFluidSidedInventory implem
 			} else if (getTanks().get(j + fluidInputSize).getFluid().isFluidEqual(fluidProduct.getStack())) {
 				getTanks().get(j + fluidInputSize).changeFluidAmount(fluidProduct.getNextStackSize(0));
 			}
-			pushFluidProducts(j+fluidInputSize);
+			pushFluidProducts(j + fluidInputSize);
 		}
 	}
 
@@ -379,7 +384,7 @@ public class TileItemFluidProcessor extends TileEnergyFluidSidedInventory implem
 		Tank tank = getTanks().get(slot);
 		FluidStack fluidInTank = tank.getFluid();
 		if (fluidInTank == null) return false;
-		FluidConnection[] connections = getFluidConnections();;
+		FluidConnection[] connections = getFluidConnections();
 		boolean hasDoneWork = false;
 		for (EnumFacing side : EnumFacing.VALUES) {
 			if (connections[side.ordinal()].getTankSorption(slot) == TankSorption.PUSH)	{
@@ -475,7 +480,7 @@ public class TileItemFluidProcessor extends TileEnergyFluidSidedInventory implem
 	public int getEUSourceTier() {
 		return 1;
 	}
-		
+	
 	@Override
 	public int getEUSinkTier() {
 		return 10;

@@ -1,3 +1,13 @@
+v2.19
+
+* Moved to modern Gradle toolchain for 1.12.2 Forge modding
+
++ Added auto-output mode for processor slots and configuration blueprints [thanks to FakeDomi!]
+
++ Added dynamo coil connector from NCO [thanks to zeng-github01!]
+
+* Moved from GTCE to GTCEu and fixed recipe integration
+
 v2.18zzz
 
 * Fixed crash when GTCEu is installed [thanks to DStrand1!]

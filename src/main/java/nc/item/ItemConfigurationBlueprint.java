@@ -1,9 +1,9 @@
 package nc.item;
 
-import mcp.MethodsReturnNonnullByDefault;
 import nc.init.NCItems;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.inventory.ITileInventory;
+import nc.util.SoundHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -17,11 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class ItemConfigurationBlueprint extends NCItem {
 
     boolean isEmpty;
@@ -41,7 +38,7 @@ public class ItemConfigurationBlueprint extends NCItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         if (!worldIn.isRemote && playerIn.isSneaking()) {
-            playSoundAt(playerIn, SoundEvents.BLOCK_LEVER_CLICK, 0.35F, 1.0F);
+            playSoundAt(playerIn, SoundEvents.BLOCK_LEVER_CLICK, 0.5F, 1F);
             return new ActionResult<>(EnumActionResult.SUCCESS, new ItemStack(NCItems.configuration_blueprint_empty));
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
@@ -60,7 +57,7 @@ public class ItemConfigurationBlueprint extends NCItem {
         }
         EnumFacing facing = items.getFacingHorizontal();
         if (player.isSneaking()) {
-            playSoundAt(player, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.35F, 1.0F);
+            playSoundAt(player, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, 1.0F);
             ItemStack stack = new ItemStack(NCItems.configuration_blueprint);
             NBTTagCompound stackNbt = new NBTTagCompound();
             stackNbt.setTag("inventory_connections", items.writeInventoryConnectionsNormalized(new NBTTagCompound(), facing));
@@ -79,7 +76,7 @@ public class ItemConfigurationBlueprint extends NCItem {
         else if (!this.isEmpty) {
             NBTTagCompound nbt = player.getHeldItem(hand).getTagCompound();
             if (nbt != null && nbt.getString("class").equals(items.getClass().getName())) {
-                playSoundAt(player, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.35F, 0.9F);
+                playSoundAt(player, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F, SoundHelper.getPitch(-1D));
                 items.readInventoryConnectionsNormalized(nbt.getCompoundTag("inventory_connections"), facing);
                 items.readSlotSettings(nbt.getCompoundTag("slot_settings"));
                 items.setRedstoneControl(nbt.getBoolean("redstone_control"));

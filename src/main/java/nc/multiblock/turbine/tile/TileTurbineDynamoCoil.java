@@ -46,7 +46,7 @@ public class TileTurbineDynamoCoil extends TileTurbinePartBase implements ITileE
 	private boolean ic2reg = false;
 	
 	public final TurbineDynamoCoilType coilType;
-	public boolean checked = false, isInValidPosition;
+	public boolean checked = false, isInValidPosition = false;
 	
 	public static class Magnesium extends TileTurbineDynamoCoil {
 		
@@ -123,7 +123,7 @@ public class TileTurbineDynamoCoil extends TileTurbinePartBase implements ITileE
 		case MAGNESIUM: {
 			if (dynamoCoilCheckCount != 0) return 0D;
 			for (EnumFacing dir : BlockPosHelper.getHorizontals(flowDir)) {
-				if (isRotorBearing(dir)) {
+				if (isRotorBearing(dir) || isValidCoilConnector(dir)) {
 					isInValidPosition = true;
 					checked = true;
 					return coilType.getConductivity();
@@ -133,7 +133,7 @@ public class TileTurbineDynamoCoil extends TileTurbinePartBase implements ITileE
 			checked = true;
 			return 0D;
 		}
-			
+		
 		case BERYLLIUM: {
 			if (dynamoCoilCheckCount != 1) return 0D;
 			for (EnumFacing dir : BlockPosHelper.getHorizontals(flowDir)) {
@@ -147,7 +147,7 @@ public class TileTurbineDynamoCoil extends TileTurbinePartBase implements ITileE
 			checked = true;
 			return 0D;
 		}
-			
+		
 		case ALUMINUM: {
 			if (dynamoCoilCheckCount != 4) return 0D;
 			for (EnumFacing dir : BlockPosHelper.getHorizontals(flowDir)) {
@@ -161,7 +161,7 @@ public class TileTurbineDynamoCoil extends TileTurbinePartBase implements ITileE
 			checked = true;
 			return 0D;
 		}
-			
+		
 		case GOLD: {
 			if (dynamoCoilCheckCount != 2) return 0D;
 			for (EnumFacing dir : BlockPosHelper.getHorizontals(flowDir)) {
@@ -175,7 +175,7 @@ public class TileTurbineDynamoCoil extends TileTurbinePartBase implements ITileE
 			checked = true;
 			return 0D;
 		}
-			
+		
 		case COPPER: {
 			if (dynamoCoilCheckCount != 3) return 0D;
 			for (EnumFacing dir : BlockPosHelper.getHorizontals(flowDir)) {
@@ -189,7 +189,7 @@ public class TileTurbineDynamoCoil extends TileTurbinePartBase implements ITileE
 			checked = true;
 			return 0D;
 		}
-			
+		
 		case SILVER: {
 			if (dynamoCoilCheckCount != 3) return 0D;
 			boolean magnesium = false;
@@ -207,7 +207,7 @@ public class TileTurbineDynamoCoil extends TileTurbinePartBase implements ITileE
 			checked = true;
 			return 0D;
 		}
-			
+		
 		default: {
 			isInValidPosition = false;
 			return 0D;
@@ -217,6 +217,13 @@ public class TileTurbineDynamoCoil extends TileTurbinePartBase implements ITileE
 	
 	private boolean isRotorBearing(EnumFacing dir) {
 		return world.getTileEntity(pos.offset(dir)) instanceof TileTurbineRotorBearing;
+	}
+	
+	private boolean isValidCoilConnector(EnumFacing dir) {
+		TileEntity tile = world.getTileEntity(pos.offset(dir));
+		if (!(tile instanceof TileTurbineCoilConnector)) return false;
+		TileTurbineCoilConnector coilConnector = (TileTurbineCoilConnector) tile;
+		return coilConnector.isValidPosition();
 	}
 	
 	private boolean isDynamoCoil(EnumFacing dir, TurbineDynamoCoilType coilType) {

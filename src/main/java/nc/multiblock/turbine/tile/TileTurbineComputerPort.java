@@ -151,6 +151,12 @@ public class TileTurbineComputerPort extends TileTurbinePartBase implements Simp
 	
 	@Callback
 	@Optional.Method(modid = "opencomputers")
+	public Object[] getNumberOfCoilConnectors(Context context, Arguments args) {
+		return new Object[] {isMultiblockAssembled() ? getMultiblock().getCoilConnectors().size() : 0};
+	}
+	
+	@Callback
+	@Optional.Method(modid = "opencomputers")
 	public Object[] getDynamoCoilStats(Context context, Arguments args) {
 		if (isMultiblockAssembled()) {
 			List<Object[]> stats = new ArrayList<Object[]>();

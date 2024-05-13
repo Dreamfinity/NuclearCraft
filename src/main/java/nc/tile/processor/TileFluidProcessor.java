@@ -131,14 +131,19 @@ public class TileFluidProcessor extends TileEnergyFluidSidedInventory implements
 			boolean wasProcessing = isProcessing;
 			isProcessing = isProcessing();
 			boolean shouldUpdate = false;
-			if (isProcessing) process();
+			if (isProcessing) {
+				process();
+			}
 			else {
 				getRadiationSource().setRadiationLevel(0D);
-				if (time > 0 && (!isHaltedByRedstone() || !readyToProcess())) loseProgress();
+				if (time > 0 && (!isHaltedByRedstone() || !readyToProcess())) {
+					loseProgress();
+				}
+				
 				if (wasProcessing) {
 					pushCooldown = 50;
 				}
-				if (pushCooldown <= 0) {
+				else if (pushCooldown <= 0) {
 					for (int i = 0; i < fluidOutputSize; i++) {
 						shouldUpdate |= pushFluidProducts(i + fluidInputSize);
 					}
@@ -312,7 +317,7 @@ public class TileFluidProcessor extends TileEnergyFluidSidedInventory implements
 		Tank tank = getTanks().get(slot);
 		FluidStack fluidInTank = tank.getFluid();
 		if (fluidInTank == null) return false;
-		FluidConnection[] connections = getFluidConnections();;
+		FluidConnection[] connections = getFluidConnections();
 		boolean hasDoneWork = false;
 		for (EnumFacing side : EnumFacing.VALUES) {
 			if (connections[side.ordinal()].getTankSorption(slot) == TankSorption.PUSH)	{
@@ -393,7 +398,7 @@ public class TileFluidProcessor extends TileEnergyFluidSidedInventory implements
 	public int getEUSourceTier() {
 		return 1;
 	}
-		
+	
 	@Override
 	public int getEUSinkTier() {
 		return 10;
