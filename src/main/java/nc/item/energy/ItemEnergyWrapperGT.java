@@ -18,7 +18,7 @@ public class ItemEnergyWrapperGT implements IElectricItem {
 	protected EnergyStorage storage;
 	protected int energyTier;
 	
-	public List<BiConsumer<ItemStack, Long>> listeners = new ArrayList<BiConsumer<ItemStack, Long>>();
+	public List<BiConsumer<ItemStack, Long>> listeners = new ArrayList<>();
 	
 	public ItemEnergyWrapperGT(ItemStack stack, EnergyStorage storage, int energyTier) {
 		this.stack = stack;
@@ -29,6 +29,12 @@ public class ItemEnergyWrapperGT implements IElectricItem {
 	@Override
 	@Optional.Method(modid = "gregtech")
 	public boolean canProvideChargeExternally() {
+		return true;
+	}
+	
+	@Override
+	@Optional.Method(modid = "gregtech")
+	public boolean chargeable() {
 		return true;
 	}
 	

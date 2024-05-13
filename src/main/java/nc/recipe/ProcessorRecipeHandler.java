@@ -59,7 +59,6 @@ public abstract class ProcessorRecipeHandler extends AbstractRecipeHandler<Proce
 	
 	public void addGTCERecipes() {
 		if (ModCheck.gregtechLoaded() && GTCE_INTEGRATION.getBoolean(recipeName)) {
-			GTCERecipeHelper.checkGtVersion();
 			for (ProcessorRecipe recipe : recipeList) {
 				GTCERecipeHelper.addGTCERecipe(recipeName, recipe);
 			}

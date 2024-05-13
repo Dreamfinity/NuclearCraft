@@ -1,46 +1,21 @@
 package nc.integration.gtce;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import net.minecraftforge.fml.common.Loader;
-import org.apache.commons.lang3.tuple.Pair;
-
-import gregtech.api.items.metaitem.MetaItem.MetaValueItem;
-import gregtech.api.recipes.CountableIngredient;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeBuilder;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.recipes.ingredients.IntCircuitIngredient;
+import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.recipes.*;
+import gregtech.api.recipes.ingredients.*;
 import gregtech.common.items.MetaItems;
 import nc.config.NCConfig;
-import nc.recipe.ProcessorRecipe;
-import nc.recipe.RecipeHelper;
-import nc.recipe.RecipeTupleGenerator;
-import nc.recipe.ingredient.ChanceFluidIngredient;
-import nc.recipe.ingredient.ChanceItemIngredient;
-import nc.recipe.ingredient.IFluidIngredient;
-import nc.recipe.ingredient.IItemIngredient;
-import nc.recipe.ingredient.OreIngredient;
-import nc.util.NCUtil;
-import nc.util.OreDictHelper;
+import nc.recipe.*;
+import nc.recipe.ingredient.*;
+import nc.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.*;
 
 public class GTCERecipeHelper {
-
-	private static RecipeMap<?> EXTRACTOR_MAP;
-
-	@Optional.Method(modid = "gregtech")
-	public static void checkGtVersion() {
-		String version = Loader.instance().getIndexedModList().get("gregtech").getVersion();
-		EXTRACTOR_MAP = getExtractorMap(Integer.parseInt(version.split("\\.")[0]));
-	}
 	
 	// Thanks so much to Firew0lf for the original method!
 	@Optional.Method(modid = "gregtech")
@@ -72,9 +47,8 @@ public class GTCERecipeHelper {
 			builder = addStats(recipeMap.recipeBuilder(), recipe, 16, 12);
 			break;
 		case "melter":
-			recipeMap = EXTRACTOR_MAP;
-			if (recipeMap != null)
-			    builder = addStats(recipeMap.recipeBuilder(), recipe, 32, 16);
+			recipeMap = RecipeMaps.EXTRACTOR_RECIPES;
+			builder = addStats(recipeMap.recipeBuilder(), recipe, 32, 16);
 			break;
 		case "supercooler":
 			recipeMap = RecipeMaps.VACUUM_RECIPES;
@@ -117,9 +91,8 @@ public class GTCERecipeHelper {
 			builder = addStats(recipeMap.recipeBuilder(), recipe, 20, 20).notConsumable(new IntCircuitIngredient(1));
 			break;
 		case "extractor":
-			recipeMap = EXTRACTOR_MAP;
-			if (recipeMap != null)
-			    builder = addStats(recipeMap.recipeBuilder(), recipe, 16, 12);
+			recipeMap = RecipeMaps.EXTRACTOR_RECIPES;
+			builder = addStats(recipeMap.recipeBuilder(), recipe, 16, 12);
 			break;
 		case "centrifuge":
 			recipeMap = RecipeMaps.CENTRIFUGE_RECIPES;
@@ -128,10 +101,10 @@ public class GTCERecipeHelper {
 		case "rock_crusher":
 			recipeMap = RecipeMaps.MACERATOR_RECIPES;
 			builder = addStats(recipeMap.recipeBuilder(), recipe, 20, 12);
-			return;
+			break;
 		}
 		
-		if (recipeMap == null || builder == null) {
+		if (builder == null) {
 			return;
 		}
 		
@@ -167,7 +140,7 @@ public class GTCERecipeHelper {
 			}
 		}
 		
-		List<RecipeBuilder<?>> builders = new ArrayList<RecipeBuilder<?>>(); // Holds all the recipe variants
+		List<RecipeBuilder<?>> builders = new ArrayList<>(); // Holds all the recipe variants
 		builders.add(builder);
 		
 		for (IItemIngredient input : recipe.itemIngredients()) {
@@ -177,14 +150,14 @@ public class GTCERecipeHelper {
 				}
 			}
 			else {
-				List<String> ingredientOreList = new ArrayList<String>(); // Hold the different oreDict names
-				List<RecipeBuilder<?>> newBuilders = new ArrayList<RecipeBuilder<?>>();
+				List<String> ingredientOreList = new ArrayList<>(); // Hold the different oreDict names
+				List<RecipeBuilder<?>> newBuilders = new ArrayList<>();
 				for (ItemStack inputVariant : input.getInputStackList()) {
 					if(inputVariant.isEmpty()) continue;
 					Set<String> variantOreList = OreDictHelper.getOreNames(inputVariant);
 					
 					if (!variantOreList.isEmpty()) { // This variant has oreDict entries
-						if (ingredientOreList.containsAll(variantOreList)) {
+						if (new HashSet<>(ingredientOreList).containsAll(variantOreList)) {
 							continue;
 						}
 						ingredientOreList.addAll(variantOreList);
@@ -204,7 +177,7 @@ public class GTCERecipeHelper {
 		}
 		
 		if (recipeMap == RecipeMaps.FLUID_SOLIDFICATION_RECIPES) {
-			MetaValueItem mold = getIngotFormerMold(recipe);
+			MetaItem<?>.MetaValueItem mold = getIngotFormerMold(recipe);
 			for (RecipeBuilder<?> builderVariant : builders) {
 				builderVariant.notConsumable(mold);
 			}
@@ -250,51 +223,26 @@ public class GTCERecipeHelper {
 	
 	@Optional.Method(modid = "gregtech")
 	private static RecipeBuilder<?> addStats(RecipeBuilder<?> builder, ProcessorRecipe recipe, int processPower, int processTime) {
-		return builder.EUt(Math.max((int) recipe.getBaseProcessPower(processPower), 1)).duration((int) recipe.getBaseProcessTime(20D*processTime));
+		return builder.EUt(Math.max((int) recipe.getBaseProcessPower(processPower), 1)).duration((int) recipe.getBaseProcessTime(20D * processTime));
 	}
 	
 	// GTCE recipe matching - modified from GTCE source
 	
 	@Optional.Method(modid = "gregtech")
-	private static boolean isRecipeInvalid(RecipeMap<?> recipeMap, List<ItemStack> inputs, List<FluidStack> fluidInputs) {
-		if (fluidInputs.size() < recipeMap.getMinFluidInputs() || fluidInputs.size() > recipeMap.getMaxFluidInputs()) {
-			return true;
-		}
-		else if (inputs.size() < recipeMap.getMinInputs() || inputs.size() > recipeMap.getMaxInputs()) {
+	private static boolean isRecipeInvalid(RecipeMap<?> recipeMap, List<ItemStack> itemInputs, List<FluidStack> fluidInputs) {
+		int itemInputCount = itemInputs.size(), fluidInputCount = fluidInputs.size();
+		
+		if (itemInputCount > recipeMap.getMaxInputs() || fluidInputCount > recipeMap.getMaxFluidInputs() || itemInputCount + fluidInputCount < 1) {
 			return true;
 		}
 		
-		if (recipeMap.getMaxInputs() > 0) {
-			return findConflictByInputs(recipeMap, inputs, fluidInputs);
-		}
-		else {
-			return findConflictByFluidInputs(recipeMap, inputs, fluidInputs);
-		}
+		return findRecipeInputConflict(recipeMap, itemInputs, fluidInputs);
 	}
 	
 	@Optional.Method(modid = "gregtech")
-	private static boolean findConflictByFluidInputs(RecipeMap<?> recipeMap, List<ItemStack> inputs, List<FluidStack> fluidInputs) {
-		for (FluidStack fluid : fluidInputs) {
-			if (fluid == null) {
-				continue;
-			}
-			Collection<Recipe> recipes = recipeMap.getRecipesForFluid(fluid);
-			if (recipes == null) {
-				continue;
-			}
-			for (Recipe recipe : recipes) {
-				if (isRecipeConflict(recipe, inputs, fluidInputs)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	@Optional.Method(modid = "gregtech")
-	private static boolean findConflictByInputs(RecipeMap<?> recipeMap, List<ItemStack> inputs, List<FluidStack> fluidInputs) {
+	private static boolean findRecipeInputConflict(RecipeMap<?> recipeMap, List<ItemStack> itemInputs, List<FluidStack> fluidInputs) {
 		for (Recipe recipe : recipeMap.getRecipeList()) {
-			if (isRecipeConflict(recipe, inputs, fluidInputs)) {
+			if (isRecipeInputConflict(recipe, itemInputs, fluidInputs)) {
 				return true;
 			}
 		}
@@ -302,23 +250,27 @@ public class GTCERecipeHelper {
 	}
 	
 	@Optional.Method(modid = "gregtech")
-	private static boolean isRecipeConflict(Recipe recipe, List<ItemStack> inputs, List<FluidStack> fluidInputs) {
-		itemLoop: for (ItemStack input : inputs) {
-			for (CountableIngredient ingredient : recipe.getInputs()) {
-				if (ingredient.getIngredient().apply(input)) {
+	private static boolean isRecipeInputConflict(Recipe recipe, List<ItemStack> itemInputs, List<FluidStack> fluidInputs) {
+		itemLoop:
+		for (ItemStack input : itemInputs) {
+			for (GTRecipeInput gtInput : recipe.getInputs()) {
+				if (gtInput.acceptsStack(input)) {
 					continue itemLoop;
 				}
 			}
 			return false;
 		}
-		fluidLoop: for (FluidStack input : fluidInputs) {
-			for (FluidStack fluid : recipe.getFluidInputs()) {
-				if (input.isFluidEqual(fluid)) {
+		
+		fluidLoop:
+		for (FluidStack input : fluidInputs) {
+			for (GTRecipeInput gtInput : recipe.getFluidInputs()) {
+				if (gtInput.acceptsFluid(input)) {
 					continue fluidLoop;
 				}
 			}
 			return false;
 		}
+		
 		return true;
 	}
 	
@@ -327,24 +279,17 @@ public class GTCERecipeHelper {
 		return output != null && OreDictHelper.hasOrePrefix(output, "plate", "plateDense");
 	}
 	
-	private static MetaValueItem getIngotFormerMold(ProcessorRecipe recipe) {
+	@Optional.Method(modid = "gregtech")
+	private static MetaItem<?>.MetaValueItem getIngotFormerMold(ProcessorRecipe recipe) {
 		ItemStack output = recipe.itemProducts().get(0).getStack();
 		if (output != null) {
-			if (OreDictHelper.hasOrePrefix(output, "ingot")) return MetaItems.SHAPE_MOLD_INGOT;
-			else if (OreDictHelper.hasOrePrefix(output, "block")) return MetaItems.SHAPE_MOLD_BLOCK;
+			if (OreDictHelper.hasOrePrefix(output, "ingot")) {
+				return MetaItems.SHAPE_MOLD_INGOT;
+			}
+			else if (OreDictHelper.hasOrePrefix(output, "block")) {
+				return MetaItems.SHAPE_MOLD_BLOCK;
+			}
 		}
 		return MetaItems.SHAPE_MOLD_BALL;
-	}
-
-	@Optional.Method(modid = "gregtech")
-	private static RecipeMap<?> getExtractorMap(int gtVersion) {
-		if (gtVersion == 2) {
-			return RecipeMaps.EXTRACTOR_RECIPES;
-		} else {
-			try {
-				return (RecipeMap<?>) RecipeMaps.class.getField("FLUID_EXTRACTION_RECIPES").get(null);
-			} catch (NoSuchFieldException | IllegalAccessException ignored) {}
-		}
-		return null;
 	}
 }
