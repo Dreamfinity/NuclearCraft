@@ -1,9 +1,5 @@
 package nc.config;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import nc.Global;
 import nc.ModCheck;
 import nc.network.PacketHandler;
@@ -14,7 +10,8 @@ import nc.util.Lang;
 import nc.util.NCMath;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -24,6 +21,10 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NCConfig {
 	
@@ -1952,7 +1953,7 @@ public class NCConfig {
 	public static void onConfigPacket(ConfigUpdatePacket message) {
 		if (!radiation_enabled_public && message.radiation_enabled) {
 			String unloc = "message.nuclearcraft.radiation_config_info" + (ModCheck.jeiLoaded() ? "_jei" : "");
-			Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.GOLD + Lang.localise(unloc)));
+			Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation(unloc).setStyle(new Style().setColor(TextFormatting.GOLD)));
 		}
 		radiation_enabled_public = message.radiation_enabled;
 		radiation_horse_armor_public = message.radiation_horse_armor;

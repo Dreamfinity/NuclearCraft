@@ -5,7 +5,6 @@ import nc.config.NCConfig;
 import nc.enumm.BlockEnums.SimpleTileType;
 import nc.radiation.RadiationHelper;
 import nc.tile.radiation.TileGeigerCounter;
-import nc.util.Lang;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -13,12 +12,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 public class BlockGeigerCounter extends BlockSimpleTile {
-	
-	private static final String RADIATION = Lang.localise("item.nuclearcraft.geiger_counter.rads");
 
 	public BlockGeigerCounter() {
 		super(SimpleTileType.GEIGER_BLOCK);
@@ -33,7 +32,7 @@ public class BlockGeigerCounter extends BlockSimpleTile {
 				if (!world.isRemote) {
 					TileGeigerCounter geiger = (TileGeigerCounter) world.getTileEntity(pos);
 					double radiation = geiger.getChunkRadiationLevel();
-					player.sendMessage(new TextComponentString(RADIATION + " " + RadiationHelper.getRadiationTextColor(radiation) + (radiation < NCConfig.radiation_lowest_rate ? "0 Rads/t" : RadiationHelper.radsPrefix(radiation, true))));
+					player.sendMessage(new TextComponentTranslation("item.nuclearcraft.geiger_counter.rads").appendText(" ").appendSibling(new TextComponentString(radiation < NCConfig.radiation_lowest_rate ? "0 Rads/t" : RadiationHelper.radsPrefix(radiation, true)).setStyle(new Style().setColor(RadiationHelper.getRadiationTextColor(radiation)))));
 				}
 				return true;
 			}

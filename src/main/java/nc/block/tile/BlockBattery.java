@@ -6,7 +6,6 @@ import nc.tile.energy.ITileEnergy;
 import nc.tile.energy.battery.IBattery;
 import nc.tile.internal.energy.EnergyConnection;
 import nc.tile.internal.energy.EnergyStorage;
-import nc.util.Lang;
 import nc.util.UnitHelper;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -19,7 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -56,7 +55,7 @@ public class BlockBattery extends BlockSimpleTile implements ISidedEnergy, INBTD
 			}
 			else if (!world.isRemote && !player.isSneaking()) {
 				EnergyStorage storage = battery.getEnergyStorage();
-				player.sendMessage(new TextComponentString(Lang.localise("gui.container.energy_stored") + " " + UnitHelper.prefix(storage.getEnergyStored(), storage.getMaxEnergyStored(), 5, "RF")));
+				player.sendMessage(new TextComponentTranslation("gui.container.energy_stored").appendText(" ").appendText(UnitHelper.prefix(storage.getEnergyStored(), storage.getMaxEnergyStored(), 5, "RF")));
 			}
 		}
 		return true;

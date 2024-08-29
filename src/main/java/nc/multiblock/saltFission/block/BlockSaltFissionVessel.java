@@ -5,7 +5,6 @@ import nc.block.property.PropertySidedEnum;
 import nc.multiblock.saltFission.SaltFissionVesselSetting;
 import nc.multiblock.saltFission.tile.TileSaltFissionVessel;
 import nc.tile.internal.fluid.FluidConnection;
-import nc.util.Lang;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,7 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -71,17 +71,24 @@ public class BlockSaltFissionVessel extends BlockSaltFissionPartBase implements 
 			TileSaltFissionVessel vessel = (TileSaltFissionVessel) world.getTileEntity(pos);
 			EnumFacing side = player.isSneaking() ? facing.getOpposite() : facing;
 			vessel.toggleVesselSetting(side);
-			if (!world.isRemote) player.sendMessage(getToggleMessage(player, vessel, side));
+			if (!world.isRemote) {
+				player.sendMessage(getToggleMessage(player, vessel, side));
+			}
 			return true;
 		}
 		return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
 	}
 	
-	private static TextComponentString getToggleMessage(EntityPlayer player, TileSaltFissionVessel vessel, EnumFacing side) {
+	private static TextComponentTranslation getToggleMessage(EntityPlayer player, TileSaltFissionVessel vessel, EnumFacing side) {
 		SaltFissionVesselSetting setting = vessel.getVesselSetting(side);
 		String message = player.isSneaking() ? "nc.block.fluid_toggle_opposite" : "nc.block.fluid_toggle";
 		TextFormatting color = setting == SaltFissionVesselSetting.DEPLETED_OUT ? TextFormatting.LIGHT_PURPLE : (setting == SaltFissionVesselSetting.FUEL_SPREAD ? TextFormatting.GREEN : (setting == SaltFissionVesselSetting.DEFAULT ? TextFormatting.WHITE : TextFormatting.GRAY));
-		return new TextComponentString(Lang.localise(message) + " " + color + Lang.localise("nc.block.salt_vessel_fluid_side." + setting.getName()));
+		TextComponentTranslation componentTranslation = new TextComponentTranslation(message);
+		componentTranslation.appendText(" ");
+		Style style = new Style();
+		style.setColor(color);
+		componentTranslation.appendSibling(new TextComponentTranslation("nc.block.salt_vessel_fluid_side." + setting.getName()).setStyle(style));
+		return componentTranslation;
 	}
 	
 	@Override

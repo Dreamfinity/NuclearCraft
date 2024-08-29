@@ -6,7 +6,6 @@ import nc.multiblock.heatExchanger.HeatExchangerTubeSetting;
 import nc.multiblock.heatExchanger.HeatExchangerTubeType;
 import nc.multiblock.heatExchanger.tile.TileHeatExchangerTube;
 import nc.tile.internal.fluid.FluidConnection;
-import nc.util.Lang;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,7 +15,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -90,11 +90,15 @@ public class BlockHeatExchangerTube extends BlockHeatExchangerPartBase implement
 		return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
 	}
 	
-	private static TextComponentString getToggleMessage(EntityPlayer player, TileHeatExchangerTube tube, EnumFacing side) {
+	private static TextComponentTranslation getToggleMessage(EntityPlayer player, TileHeatExchangerTube tube, EnumFacing side) {
 		HeatExchangerTubeSetting setting = tube.getTubeSetting(side);
 		String message = player.isSneaking() ? "nc.block.fluid_toggle_opposite" : "nc.block.fluid_toggle";
 		TextFormatting color = setting == HeatExchangerTubeSetting.PRODUCT_OUT ? TextFormatting.LIGHT_PURPLE : (setting == HeatExchangerTubeSetting.INPUT_SPREAD ? TextFormatting.GREEN : (setting == HeatExchangerTubeSetting.DEFAULT ? TextFormatting.WHITE : TextFormatting.GRAY));
-		return new TextComponentString(Lang.localise(message) + " " + color + Lang.localise("nc.block.exchanger_tube_fluid_side." + setting.getName()));
+		TextComponentTranslation componentTranslation = new TextComponentTranslation(message);
+		componentTranslation.appendText(" ");
+		Style style = new Style().setColor(color);
+		componentTranslation.appendSibling(new TextComponentTranslation("nc.block.exchanger_tube_fluid_side." + setting.getName()).setStyle(style));
+		return componentTranslation;
 	}
 	
 	@Override
