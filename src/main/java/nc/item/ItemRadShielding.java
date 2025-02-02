@@ -4,7 +4,6 @@ import nc.capability.radiation.resistance.IRadiationResistance;
 import nc.config.NCConfig;
 import nc.enumm.MetaEnums;
 import nc.radiation.RadiationHelper;
-import nc.util.Lang;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -14,7 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -25,18 +24,13 @@ public class ItemRadShielding extends NCItemMeta<MetaEnums.RadShieldingType> {
 		super(MetaEnums.RadShieldingType.class, tooltips);
 	}
 	
-	private static final String NOT_HARDCORE = Lang.localise("item.nuclearcraft.rad_shielding.not_hardcore");
-	private static final String FAILED_NOT_HARDCORE = Lang.localise("item.nuclearcraft.rad_shielding.failed_not_hardcore");
-	private static final String INSTALL_FAIL = Lang.localise("item.nuclearcraft.rad_shielding.install_fail");
-	private static final String INSTALL_SUCCESS = Lang.localise("item.nuclearcraft.rad_shielding.install_success");
-	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 		if (!NCConfig.radiation_tile_shielding || !player.isSneaking()) return actionResult(false, stack);
 		if (NCConfig.radiation_hardcore_containers <= 0D) {
 			if (!world.isRemote) {
-				player.sendMessage(new TextComponentString(NOT_HARDCORE));
+				player.sendMessage(new TextComponentTranslation("item.nuclearcraft.rad_shielding.not_hardcore"));
 			}
 			return actionResult(false, stack);
 		}
@@ -55,7 +49,7 @@ public class ItemRadShielding extends NCItemMeta<MetaEnums.RadShieldingType> {
 		
 		if (NCConfig.radiation_hardcore_containers <= 0D) {
 			if (!world.isRemote) {
-				player.sendMessage(new TextComponentString(FAILED_NOT_HARDCORE));
+				player.sendMessage(new TextComponentTranslation("item.nuclearcraft.rad_shielding.failed_not_hardcore"));
 			}
 			return actionResult(false, stack);
 		}
@@ -63,7 +57,7 @@ public class ItemRadShielding extends NCItemMeta<MetaEnums.RadShieldingType> {
 		double newResistance = NCConfig.radiation_shielding_level[stack.getMetadata()];
 		if (newResistance <= tile.getRadiationResistance()) {
 			if (!world.isRemote) {
-				player.sendMessage(new TextComponentString(INSTALL_FAIL + " " + RadiationHelper.resistanceSigFigs(tile.getRadiationResistance())));
+				player.sendMessage(new TextComponentTranslation("item.nuclearcraft.rad_shielding.install_fail").appendText(" " + RadiationHelper.resistanceSigFigs(tile.getRadiationResistance())));
 			}
 			return actionResult(false, stack);
 		}
@@ -72,7 +66,7 @@ public class ItemRadShielding extends NCItemMeta<MetaEnums.RadShieldingType> {
 		stack.shrink(1);
 		te.markDirty();
 		if (!world.isRemote) {
-			player.sendMessage(new TextComponentString(INSTALL_SUCCESS + " " + RadiationHelper.resistanceSigFigs(tile.getRadiationResistance())));
+			player.sendMessage(new TextComponentTranslation("item.nuclearcraft.rad_shielding.install_success").appendText(" " + RadiationHelper.resistanceSigFigs(tile.getRadiationResistance())));
 		}
 		else {
 			player.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 0.5F, 1F);

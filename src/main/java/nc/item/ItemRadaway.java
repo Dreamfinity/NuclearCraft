@@ -3,7 +3,6 @@ package nc.item;
 import nc.capability.radiation.entity.IEntityRads;
 import nc.config.NCConfig;
 import nc.init.NCSounds;
-import nc.util.Lang;
 import nc.util.UnitHelper;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,13 +14,12 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ItemRadaway extends NCItem {
-	
-	private static final String RADAWAY_COOLDOWN = Lang.localise("message.nuclearcraft.radaway_cooling_down");
 	
 	private final boolean slow;
 	
@@ -57,7 +55,8 @@ public class ItemRadaway extends NCItem {
 	private static void sendCooldownMessage(World world, EntityPlayer player, IEntityRads playerRads, boolean playSound) {
 		if (playerRads.getRadawayCooldown() > 0D) {
 			if (playSound && world.isRemote) player.playSound(NCSounds.chems_wear_off, 0.5F, 1F);
-			player.sendMessage(new TextComponentString(TextFormatting.ITALIC + RADAWAY_COOLDOWN + " " + UnitHelper.applyTimeUnitShort(Math.ceil(playerRads.getRadawayCooldown()), 2, 1)));
+			Style style = new Style().setColor(TextFormatting.ITALIC);
+			player.sendMessage(new TextComponentTranslation("message.nuclearcraft.radaway_cooling_down").setStyle(style).appendText(" ").appendText(UnitHelper.applyTimeUnitShort(Math.ceil(playerRads.getRadawayCooldown()), 2, 1)));
 		}
 	}
 	

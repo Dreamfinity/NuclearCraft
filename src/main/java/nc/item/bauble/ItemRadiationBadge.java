@@ -8,23 +8,20 @@ import nc.capability.radiation.sink.IRadiationSink;
 import nc.config.NCConfig;
 import nc.init.NCSounds;
 import nc.item.NCItem;
-import nc.util.Lang;
 import nc.util.UnitHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.Interface(iface = "baubles.api.IBauble", modid = "baubles")
 public class ItemRadiationBadge extends NCItem implements IBauble {
-	
-	private static final String EXPOSURE = Lang.localise("item.nuclearcraft.radiation_badge.exposure");
-	private static final String BADGE_BROKEN = Lang.localise("item.nuclearcraft.radiation_badge.broken");
 	
 	public ItemRadiationBadge(String... tooltip) {
 		super(tooltip);
@@ -75,8 +72,11 @@ public class ItemRadiationBadge extends NCItem implements IBauble {
 			World world = player.getEntityWorld();
 			if (badge.getRadiationLevel() >= NCConfig.radiation_badge_durability) {
 				if (!world.isRemote) {
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + EXPOSURE + " " + UnitHelper.prefix(badge.getRadiationLevel(), 3, "Rads")));
-					player.sendMessage(new TextComponentString(TextFormatting.ITALIC + BADGE_BROKEN));
+					TextComponentTranslation componentTranslation = new TextComponentTranslation("item.nuclearcraft.radiation_badge.exposure");
+					componentTranslation.getStyle().setColor(TextFormatting.ITALIC);
+					componentTranslation.appendText(" " + UnitHelper.prefix(badge.getRadiationLevel(), 3, "Rads"));
+					player.sendMessage(componentTranslation);
+					player.sendMessage(new TextComponentTranslation("item.nuclearcraft.radiation_badge.broken").setStyle(new Style().setColor(TextFormatting.ITALIC)));
 				}
 				else {
 					player.playSound(NCSounds.chems_wear_off, 0.65F, 1F);
@@ -84,7 +84,7 @@ public class ItemRadiationBadge extends NCItem implements IBauble {
 				stack.shrink(1);
 			}
 			else if (!world.isRemote && infoCount != MathHelper.floor(badge.getRadiationLevel()/(NCConfig.radiation_badge_info_rate*NCConfig.radiation_badge_durability))) {
-				player.sendMessage(new TextComponentString(TextFormatting.ITALIC + EXPOSURE + " " + UnitHelper.prefix(badge.getRadiationLevel(), 3, "Rads")));
+				player.sendMessage(new TextComponentTranslation("item.nuclearcraft.radiation_badge.exposure").setStyle(new Style().setColor(TextFormatting.ITALIC)).appendText(" " + UnitHelper.prefix(badge.getRadiationLevel(), 3, "Rads")));
 			}
 		}
 	}

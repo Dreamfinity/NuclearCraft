@@ -5,7 +5,6 @@ import nc.block.property.PropertySidedEnum;
 import nc.multiblock.saltFission.SaltFissionHeaterSetting;
 import nc.multiblock.saltFission.tile.TileSaltFissionHeater;
 import nc.tile.internal.fluid.FluidConnection;
-import nc.util.Lang;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,7 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -77,11 +77,14 @@ public class BlockSaltFissionHeater extends BlockSaltFissionPartBase implements 
 		return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
 	}
 	
-	private static TextComponentString getToggleMessage(EntityPlayer player, TileSaltFissionHeater heater, EnumFacing side) {
+	private static TextComponentTranslation getToggleMessage(EntityPlayer player, TileSaltFissionHeater heater, EnumFacing side) {
 		SaltFissionHeaterSetting setting = heater.getHeaterSetting(side);
 		String message = player.isSneaking() ? "nc.block.fluid_toggle_opposite" : "nc.block.fluid_toggle";
 		TextFormatting color = setting == SaltFissionHeaterSetting.HOT_COOLANT_OUT ? TextFormatting.RED : (setting == SaltFissionHeaterSetting.COOLANT_SPREAD ? TextFormatting.AQUA : (setting == SaltFissionHeaterSetting.DEFAULT ? TextFormatting.WHITE : TextFormatting.GRAY));
-		return new TextComponentString(Lang.localise(message) + " " + color + Lang.localise("nc.block.salt_heater_fluid_side." + setting.getName()));
+		TextComponentTranslation text = new TextComponentTranslation(message);
+		text.appendText(" ");
+		text.appendSibling(new TextComponentTranslation("nc.block.salt_heater_fluid_side." + setting.getName()).setStyle(new Style().setColor(color)));
+		return text;
 	}
 	
 	@Override

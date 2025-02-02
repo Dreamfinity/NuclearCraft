@@ -1,7 +1,5 @@
 package nc.multiblock;
 
-import javax.annotation.Nullable;
-
 import nc.Global;
 import nc.block.NCBlock;
 import nc.multiblock.validation.ValidationError;
@@ -9,7 +7,6 @@ import nc.render.BlockHighlightTracker;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.inventory.ITileInventory;
 import nc.util.FluidHelper;
-import nc.util.Lang;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -26,12 +23,14 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public abstract class MultiblockBlockPartBase extends NCBlock implements ITileEntityProvider {
 	
@@ -70,7 +69,7 @@ public abstract class MultiblockBlockPartBase extends NCBlock implements ITileEn
 						return true;
 					}
 				} else {
-					player.sendMessage(new TextComponentString(Lang.localise(Global.MOD_ID + ".multiblock_validation.no_controller")));
+					player.sendMessage(new TextComponentTranslation(Global.MOD_ID + ".multiblock_validation.no_controller"));
 					return true;
 				}
 			}

@@ -1,16 +1,6 @@
 package nc.radiation;
 
-import static nc.config.NCConfig.radiation_player_tick_rate;
-import static nc.config.NCConfig.radiation_world_chunks_per_tick;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Lists;
-
 import nc.ModCheck;
 import nc.capability.radiation.entity.IEntityRads;
 import nc.capability.radiation.source.IRadiationSource;
@@ -27,7 +17,6 @@ import nc.tile.internal.fluid.Tank;
 import nc.tile.radiation.ITileRadiationEnvironment;
 import nc.util.DamageSources;
 import nc.util.ItemStackHelper;
-import nc.util.Lang;
 import nc.util.StructureHelper;
 import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.block.state.IBlockState;
@@ -45,7 +34,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -57,12 +47,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.*;
+
+import static nc.config.NCConfig.radiation_player_tick_rate;
+import static nc.config.NCConfig.radiation_world_chunks_per_tick;
+
 public class RadiationHandler {
 	
 	private static final Random RAND = new Random();
-	
-	private static final String RAD_X_WORE_OFF = Lang.localise("message.nuclearcraft.rad_x_wore_off");
-	private static final String RAD_WARNING = Lang.localise("message.nuclearcraft.rad_warning");
 	
 	private static EnumFacing tile_side = EnumFacing.DOWN;
 	
@@ -196,11 +188,11 @@ public class RadiationHandler {
 			if (playerRads == null) return;
 			if (playerRads.getRadXWoreOff() && playerRads.getRadXUsed()) {
 				player.playSound(NCSounds.chems_wear_off, 0.65F, 1F);
-				player.sendMessage(new TextComponentString(TextFormatting.ITALIC + RAD_X_WORE_OFF));
+				player.sendMessage(new TextComponentTranslation("message.nuclearcraft.rad_x_wore_off").setStyle(new Style().setColor(TextFormatting.ITALIC)));
 			}
 			if (playerRads.getShouldWarn()) {
 				player.playSound(NCSounds.chems_wear_off, 0.8F, 0.7F);
-				player.sendMessage(new TextComponentString(TextFormatting.GOLD + RAD_WARNING));
+				player.sendMessage(new TextComponentTranslation("message.nuclearcraft.rad_warning").setStyle(new Style().setColor(TextFormatting.GOLD)));
 			}
 		}
 	}
