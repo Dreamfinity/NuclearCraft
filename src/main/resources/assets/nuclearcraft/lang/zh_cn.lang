@@ -196,7 +196,7 @@ tile.nuclearcraft.lithium_ion_battery_basic.name=基础锂离子电池块
 tile.nuclearcraft.lithium_ion_battery_advanced.name=高级锂离子电池块
 tile.nuclearcraft.lithium_ion_battery_du.name=贫铀锂离子电池块
 tile.nuclearcraft.lithium_ion_battery_elite.name=精英锂离子电池块
-tile.nuclearcraft.energy_storage.desc=右击以查看当前存储的能量，手持多功能工具右击以调整该面的能量输入输出设定。潜行以已存在的锂离子电池块为基础放置另一个锂离子电池块以复制其侧面配置。
+tile.nuclearcraft.energy_storage.desc=右击查看当前存储的能量，手持多功能工具右击以调整该面的能量输入输出设定。潜行以已存在的锂离子电池块为基础放置另一个锂离子电池块以复制其侧面配置。
 
 tile.nuclearcraft.bin.name=通用垃圾桶
 tile.nuclearcraft.bin.desc=销毁物品、流体与能量。
@@ -1735,19 +1735,19 @@ item.nuclearcraft.gem.carobbiite.name=方氟钾石
 item.nuclearcraft.gem.boron_arsenide.name=砷化硼
 item.nuclearcraft.gem.silicon.name=硅
 
-item.nuclearcraft.gem_dust.diamond.name=粉碎钻石
-item.nuclearcraft.gem_dust.rhodochrosite.name=粉碎菱锰
-item.nuclearcraft.gem_dust.quartz.name=粉碎石英
-item.nuclearcraft.gem_dust.obsidian.name=粉碎黑曜石
+item.nuclearcraft.gem_dust.diamond.name=钻石粉末
+item.nuclearcraft.gem_dust.rhodochrosite.name=菱锰粉末
+item.nuclearcraft.gem_dust.quartz.name=石英粉末
+item.nuclearcraft.gem_dust.obsidian.name=黑曜石粉末
 item.nuclearcraft.gem_dust.boron_nitride.name=六方氮化硼
-item.nuclearcraft.gem_dust.fluorite.name=粉碎氟石
+item.nuclearcraft.gem_dust.fluorite.name=氟石粉末
 item.nuclearcraft.gem_dust.sulfur.name=硫磺
 #item.nuclearcraft.gem_dust.sulfur.desc=挖掘煤矿石时掉落。
-item.nuclearcraft.gem_dust.coal.name=粉碎煤炭
-item.nuclearcraft.gem_dust.villiaumite.name=粉碎氟盐
-item.nuclearcraft.gem_dust.carobbiite.name=粉碎方氟钾石
-item.nuclearcraft.gem_dust.arsenic.name=粉碎砷
-item.nuclearcraft.gem_dust.end_stone.name=粉碎末地石
+item.nuclearcraft.gem_dust.coal.name=煤炭粉末
+item.nuclearcraft.gem_dust.villiaumite.name=氟盐粉末
+item.nuclearcraft.gem_dust.carobbiite.name=方氟钾石粉末
+item.nuclearcraft.gem_dust.arsenic.name=砷粉末
+item.nuclearcraft.gem_dust.end_stone.name=末地石粉末
 
 item.nuclearcraft.alloy.bronze.name=青铜锭
 item.nuclearcraft.alloy.tough.name=高强合金锭
@@ -6450,13 +6450,13 @@ fluid.depleted_pbp_fluoride_flibe=熔融枯竭钚增殖钚 氟化物燃料氟锂
 item.contenttweaker.uranium_oxide.name=氧化铀锭
 item.contenttweaker.pre_candu.name=未加压 CANDU 燃料束
 item.contenttweaker.candu.name=加压 CANDU 燃料束
-item.contenttweaker.dcandu.name=枯竭CANDU 燃料束
+item.contenttweaker.dcandu.name=枯竭 CANDU 燃料束
 # 加拿大重水铀
 
 item.contenttweaker.thorium_oxide.name=氧化钍锭
 item.contenttweaker.pre_aneel.name=未加压 ANEEL 燃料束
 item.contenttweaker.aneel.name=加压 ANEEL 燃料束
-item.contenttweaker.daneel.name=枯竭ANEEL 燃料束
+item.contenttweaker.daneel.name=枯竭 ANEEL 燃料束
 # Advanced Nuclear Energy for Enriched Life 丰富生活下更先进的核能
 
 item.contenttweaker.eightsmore.name=八层棉花糖巧克力夹心饼干
