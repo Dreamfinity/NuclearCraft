@@ -42,6 +42,7 @@ v2o.9.0
 * Tweaked turbine inlet and outlet textures to match style of heat exchanger
 * Tweaked turbine controller GUI text layout to match other multiblock controllers
 
+* Updated Chinese language file [thanks to WuzgXY!]
 * Fixed various errors in the English language file
 
 * A few other minor changes and bouts of despaghettification
