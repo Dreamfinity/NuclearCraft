@@ -210,7 +210,7 @@ public class GTCERecipeHelper {
 				continue;
 			}
 			for (RecipeBuilder<?> builderVariant : builders) {
-				builderVariant = builderVariant.outputs(outputStackList.get(0));
+				builderVariant = builderVariant.outputs(outputStackList.get(outputStackList.size() - 1));
 			}
 		}
 		
@@ -223,7 +223,7 @@ public class GTCERecipeHelper {
 				continue;
 			}
 			for (RecipeBuilder<?> builderVariant : builders) {
-				builderVariant.fluidOutputs(outputStackList.get(0));
+				builderVariant.fluidOutputs(outputStackList.get(outputStackList.size() - 1));
 			}
 		}
 		
