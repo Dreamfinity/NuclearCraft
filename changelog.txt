@@ -45,6 +45,8 @@ v2o.9.0
 * Updated Chinese language file [thanks to WuzgXY!]
 * Fixed various errors in the English language file
 
+* Fixed crash with GTCEu development builds [thanks to Michael-Sebero!]
+
 * A few other minor changes and bouts of despaghettification
 
 - Removed Paulobrine and Herobrian
