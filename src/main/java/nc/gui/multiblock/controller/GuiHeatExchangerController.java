@@ -63,14 +63,8 @@ public class GuiHeatExchangerController extends GuiMultiblockController<HeatExch
 			fontRenderer.drawString(tubeInputRate, xSize / 2 - fontRenderer.getStringWidth(tubeInputRate) / 2, 34, fontColor);
 		}
 		
-		if (NCUtil.isModifierKeyDown()) {
-			String heatDissipationRate = Lang.localize("gui.nc.container.heat_exchanger_controller.heat_dissipation_rate") + " " + UnitHelper.prefix(Math.round(multiblock.heatDissipationRateFP), 5, "H/t");
-			fontRenderer.drawString(heatDissipationRate, xSize / 2 - fontRenderer.getStringWidth(heatDissipationRate) / 2, 46, fontColor);
-		}
-		else {
-			String heatTransferRate = Lang.localize("gui.nc.container.heat_exchanger_controller.heat_transfer_rate") + " " + UnitHelper.prefix(Math.round(multiblock.heatTransferRateFP), 5, "H/t");
-			fontRenderer.drawString(heatTransferRate, xSize / 2 - fontRenderer.getStringWidth(heatTransferRate) / 2, 46, fontColor);
-		}
+		String heatTransferRate = Lang.localize("gui.nc.container.heat_exchanger_controller.heat_transfer_rate") + " " + UnitHelper.prefix(Math.round(multiblock.heatTransferRateFP), 5, "H/t");
+		fontRenderer.drawString(heatTransferRate, xSize / 2 - fontRenderer.getStringWidth(heatTransferRate) / 2, 46, fontColor);
 		
 		String meanTempDiff = Lang.localize("gui.nc.container.heat_exchanger_controller.mean_temp_diff") + " " + UnitHelper.prefix(multiblock.activeContactCount == 0 ? 0D : Math.round(multiblock.totalTempDiff / multiblock.activeContactCount), 5, "K");
 		fontRenderer.drawString(meanTempDiff, xSize / 2 - fontRenderer.getStringWidth(meanTempDiff) / 2, 58, fontColor);

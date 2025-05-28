@@ -55,6 +55,8 @@ public class GSContainer extends GroovyPropertyContainer {
 			case "salt_fission" -> new GSSaltFissionRecipeRegistry(name);
 			case "fission_emergency_cooling" -> new GSFissionEmergencyCoolingRecipeRegistry(name);
 			case "heat_exchanger" -> new GSHeatExchangerRecipeRegistry(name);
+			case "condenser" -> new GSCondenserRecipeRegistry(name);
+			case "condenser_dissipation_fluid" -> new GSCondenserDissipationFluidRecipeRegistry(name);
 			case "turbine" -> new GSTurbineRecipeRegistry(name);
 			case "radiation_scrubber" -> new GSRadiationScrubberRecipeRegistry(name);
 			case "radiation_block_mutation" -> new GSRadiationBlockMutationRecipeRegistry(name);

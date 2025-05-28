@@ -35,7 +35,7 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 	protected final @Nonnull List<Tank> filterTanks;
 	protected final int capacity;
 	
-	protected @Nonnull FluidConnection[] fluidConnections = ITileFluid.fluidConnectionAll(Lists.newArrayList(TankSorption.IN, TankSorption.OUT));
+	protected @Nonnull FluidConnection[] fluidConnections = ITileFluid.fluidConnectionAll(Lists.newArrayList(TankSorption.IN, TankSorption.NON));
 	
 	protected @Nonnull FluidTileWrapper[] fluidSides;
 	protected @Nonnull GasTileWrapper gasWrapper;
@@ -260,6 +260,12 @@ public abstract class TileFissionFluidPort<PORT extends TileFissionFluidPort<POR
 		readTanks(nbt);
 		readFluidConnections(nbt);
 		readTankSettings(nbt);
+		
+		for (EnumFacing side : EnumFacing.VALUES) {
+			if (getTankSorption(side, 0).equals(TankSorption.IN)) {
+				setTankSorption(side, 1, TankSorption.NON);
+			}
+		}
 	}
 	
 	@Override

@@ -21,8 +21,8 @@ public class NCBiomes {
 	public static class RegistrationHandler {
 		
 		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<Biome> event) {
-			final IForgeRegistry<Biome> registry = event.getRegistry();
+		public static void onEvent(RegistryEvent.Register<Biome> event) {
+			IForgeRegistry<Biome> registry = event.getRegistry();
 			registry.register(NUCLEAR_WASTELAND.setRegistryName(Global.MOD_ID, "nuclear_wasteland"));
 		}
 	}

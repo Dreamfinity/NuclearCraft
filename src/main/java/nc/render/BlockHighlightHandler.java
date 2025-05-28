@@ -10,7 +10,7 @@ import nc.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.*;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.*;
@@ -50,27 +50,31 @@ public class BlockHighlightHandler {
 		}
 		
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
-		double relativeX = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.getPartialTicks();
-		double relativeY = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
-		double relativeZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
+		if (player == null) {
+			return;
+		}
+		
+		Vec3d playerPos = NCRenderHelper.getPlayerPos(player, event.getPartialTicks());
 		
 		float r = (float) NCMath.trapezoidalWave(time * 0.18D, 0D);
 		float g = (float) NCMath.trapezoidalWave(time * 0.18D, 120D);
 		float b = (float) NCMath.trapezoidalWave(time * 0.18D, 240D);
 		
-		GlStateManager.pushMatrix();
 		GlStateManager.color(r, g, b);
 		GlStateManager.glLineWidth(2);
-		GlStateManager.translate(-relativeX, -relativeY, -relativeZ);
 		
 		GlStateManager.disableDepth();
 		GlStateManager.disableTexture2D();
 		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(-playerPos.x, -playerPos.y, -playerPos.z);
+		
 		NCRenderHelper.renderBlockFrame(pos, r, g, b, 1F);
 		Tessellator.getInstance().draw();
 		
+		GlStateManager.popMatrix();
+		
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableDepth();
-		GlStateManager.popMatrix();
 	}
 }

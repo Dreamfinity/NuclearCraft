@@ -43,7 +43,7 @@ public class HeatExchanger extends CuboidalMultiblock<HeatExchanger, IHeatExchan
 	
 	public static final int BASE_MAX_INPUT = 4000, BASE_MAX_OUTPUT = 16000;
 	
-	public final @Nonnull List<Tank> shellTanks = Lists.newArrayList(new Tank(BASE_MAX_INPUT, NCRecipes.getValidFluids("heat_exchanger").get(0)), new Tank(BASE_MAX_OUTPUT, null));
+	public final @Nonnull List<Tank> shellTanks = Lists.newArrayList(new Tank(BASE_MAX_INPUT, NCRecipes.heat_exchanger.validFluids.get(0)), new Tank(BASE_MAX_OUTPUT, null));
 	
 	public RecipeInfo<BasicRecipe> shellRecipe;
 	
@@ -54,7 +54,6 @@ public class HeatExchanger extends CuboidalMultiblock<HeatExchanger, IHeatExchan
 	public double tubeInputRate = 0D, tubeInputRateFP = 0D;
 	public double shellInputRate = 0D, shellInputRateFP = 0D;
 	public double heatTransferRate = 0D, heatTransferRateFP = 0D;
-	public double heatDissipationRate = 0D, heatDissipationRateFP = 0D;
 	public double totalTempDiff = 0D;
 	
 	protected final Set<EntityPlayer> updatePacketListeners = new ObjectOpenHashSet<>();

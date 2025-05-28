@@ -1,3 +1,23 @@
+v2o.9.1
+
+* Fixed crash without CraftTweaker installed
+
+* Condenser now has its own recipes, including heat dissipation fluids
+* Fixed heat exchanger not allowing multiple disconnected shell flows
+* Fixed heat exchanger and condenser controller GUIs showing imprecise heat transfer and dissipation rates
+
++ Added side highlighting when hovering over heat exchanger tubes with multitool
+
+* Fixed Electric Furnace using up all input items when completing a recipe
+
+* Fixed turbine bearing failing when outlet is full
+
+* Fixed some multiblock ports incorrectly auto-outputting items and fluids
+* Attempted to fix Mekanism pipes failing to respect changes to NC tank filters
+
+* Fixed fission reactor not updating correctly when resupplying ports with material
++ Added config to control rate of fission reactor heat dissipation
+
 v2o.9.0
 
 + Added Multiblock Heat Exchanger and Condenser - the Rankine cycle is back!
@@ -232,7 +252,7 @@ v2o.7.1
 * Attempted to improve performance of radiation system's chunk loop
 * Attempted to fix cross-mod crash where radiation capabilities are added to objects twice
 
-* References to NCO's network wrapper are no longer hard-coded
+* References to NC's network wrapper are no longer hard-coded
 
 * Fixed broken placement rule pluralisation when using some JVMs
 

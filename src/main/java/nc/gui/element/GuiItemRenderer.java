@@ -18,8 +18,6 @@ import java.awt.*;
 
 public class GuiItemRenderer {
 	
-	protected static final Minecraft MC = Minecraft.getMinecraft();
-	
 	protected final @Nonnull ItemStack stack;
 	protected final int x, y;
 	protected final float alpha;
@@ -53,29 +51,30 @@ public class GuiItemRenderer {
 	}
 	
 	protected void renderItem() {
-		MC.getRenderItem().zLevel += 50F;
+		Minecraft mc = Minecraft.getMinecraft();
+		mc.getRenderItem().zLevel += 50F;
 		GlStateManager.pushMatrix();
-		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		MC.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+		mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.alphaFunc(516, 0.1F);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1F, 1F, 1F, alpha);
-		IBakedModel model = MC.getRenderItem().getItemModelWithOverrides(stack, null, null);
+		IBakedModel model = mc.getRenderItem().getItemModelWithOverrides(stack, null, null);
 		setupGuiTransform(x, y, model.isGui3d());
 		model = ForgeHooksClient.handleCameraTransforms(model, ItemCameraTransforms.TransformType.GUI, false);
 		renderModelAndEffect(stack, model);
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.disableLighting();
 		GlStateManager.popMatrix();
-		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		MC.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
-		MC.getRenderItem().zLevel -= 50F;
+		mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+		mc.getRenderItem().zLevel -= 50F;
 	}
 	
 	protected void setupGuiTransform(int x, int y, boolean isGui3d) {
-		GlStateManager.translate(x, y, 100F + MC.getRenderItem().zLevel);
+		GlStateManager.translate(x, y, 100F + Minecraft.getMinecraft().getRenderItem().zLevel);
 		GlStateManager.translate(8F, 8F, 0F);
 		GlStateManager.scale(1F, -1F, 1F);
 		GlStateManager.scale(width, 16F, height);
@@ -108,11 +107,12 @@ public class GuiItemRenderer {
 	}
 	
 	protected void renderEffect(IBakedModel model) {
+		Minecraft mc = Minecraft.getMinecraft();
 		GlStateManager.depthMask(false);
 		GlStateManager.depthFunc(514);
 		GlStateManager.disableLighting();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
-		MC.getTextureManager().bindTexture(new ResourceLocation("textures/misc/enchanted_item_glint.png"));
+		mc.getTextureManager().bindTexture(new ResourceLocation("textures/misc/enchanted_item_glint.png"));
 		GlStateManager.matrixMode(5890);
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(8F, 8F, 8F);
@@ -133,12 +133,13 @@ public class GuiItemRenderer {
 		GlStateManager.enableLighting();
 		GlStateManager.depthFunc(515);
 		GlStateManager.depthMask(true);
-		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 	}
 	
 	protected void renderModel(IBakedModel model, int color, ItemStack itemStack) {
+		Minecraft mc = Minecraft.getMinecraft();
 		if (ForgeModContainer.allowEmissiveItems) {
-			ForgeHooksClient.renderLitItem(MC.getRenderItem(), model, color, itemStack);
+			ForgeHooksClient.renderLitItem(mc.getRenderItem(), model, color, itemStack);
 			return;
 		}
 		
@@ -147,10 +148,10 @@ public class GuiItemRenderer {
 		bufferbuilder.begin(7, DefaultVertexFormats.ITEM);
 		
 		for (EnumFacing facing : EnumFacing.VALUES) {
-			MC.getRenderItem().renderQuads(bufferbuilder, model.getQuads(null, facing, 0L), color, itemStack);
+			mc.getRenderItem().renderQuads(bufferbuilder, model.getQuads(null, facing, 0L), color, itemStack);
 		}
 		
-		MC.getRenderItem().renderQuads(bufferbuilder, model.getQuads(null, null, 0L), color, itemStack);
+		mc.getRenderItem().renderQuads(bufferbuilder, model.getQuads(null, null, 0L), color, itemStack);
 		tessellator.draw();
 	}
 	

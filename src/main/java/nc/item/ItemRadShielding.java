@@ -52,14 +52,14 @@ public class ItemRadShielding extends NCItemMeta<MetaEnums.RadShieldingType> {
 			return actionResult(false, stack);
 		}
 		
-		RayTraceResult raytraceresult = rayTrace(world, player, false);
-		if (raytraceresult == null || raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
+		RayTraceResult ray = rayTrace(world, player, false);
+		if (ray == null || ray.typeOfHit != RayTraceResult.Type.BLOCK) {
 			return actionResult(false, stack);
 		}
 		
-		BlockPos pos = raytraceresult.getBlockPos();
+		BlockPos pos = ray.getBlockPos();
 		TileEntity tile = world.getTileEntity(pos);
-		EnumFacing side = raytraceresult.sideHit;
+		EnumFacing side = ray.sideHit;
 		
 		if (!world.isBlockModifiable(player, pos) || tile == null || !tile.hasCapability(IRadiationResistance.CAPABILITY_RADIATION_RESISTANCE, null) || !tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side) && !tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
 			return actionResult(false, stack);

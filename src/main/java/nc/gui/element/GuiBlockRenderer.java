@@ -18,17 +18,15 @@ import java.util.List;
 
 public class GuiBlockRenderer {
 	
-	private static final Minecraft MC = Minecraft.getMinecraft();
-	
 	private static TextureAtlasSprite getTexture(IBlockState state, EnumFacing facing) {
-		IBakedModel ibakedmodel = MC.getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
+		IBakedModel ibakedmodel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
 		List<BakedQuad> quadList = ibakedmodel.getQuads(state, facing, 0L);
 		TextureAtlasSprite sprite = quadList.isEmpty() ? ibakedmodel.getParticleTexture() : quadList.get(0).getSprite();
 		return sprite == null ? getMissingSprite() : sprite;
 	}
 	
 	private static @Nonnull TextureAtlasSprite getMissingSprite() {
-		return MC.getTextureMapBlocks().getMissingSprite();
+		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 	}
 	
 	public static void renderGuiBlock(@Nullable IBlockState state, EnumFacing facing, int x, int y, double zLevel, int width, int height) {
@@ -37,7 +35,7 @@ public class GuiBlockRenderer {
 		}
 		TextureAtlasSprite icon = getTexture(state, facing);
 		
-		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		
 		GlStateManager.enableBlend();
 		for (int i = 0; i < width; i += 16) {

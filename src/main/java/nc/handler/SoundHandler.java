@@ -19,60 +19,10 @@ import javax.annotation.Nullable;
 @SideOnly(Side.CLIENT)
 public class SoundHandler {
 	
-	protected static final Minecraft MC = Minecraft.getMinecraft();
 	protected static final Object2ObjectMap<Vec3f, ISound> BLOCK_SOUND_MAP = new Object2ObjectOpenHashMap<>();
 	
-	public static ISound startBlockSound(SoundEvent soundEvent, BlockPos pos, float volume, float pitch) {
-		// First, check to see if there's already a sound playing at the desired location
-		Vec3f vec = new Vec3f(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
-		ISound sound = BLOCK_SOUND_MAP.get(vec);
-		if (sound == null || !MC.getSoundHandler().isSoundPlaying(sound)) {
-			if (sound != null) {
-				MC.getSoundHandler().stopSound(sound);
-			}
-			
-			// No sound playing, start one up
-			// We assume that the sound will play until explicitly stopped
-			sound = new PositionedSoundRecord(soundEvent.getSoundName(), SoundCategory.BLOCKS, volume, pitch, true, 0, ISound.AttenuationType.LINEAR, vec.x, vec.y, vec.z) {
-				
-				@Override
-				public float getVolume() {
-					if (sound == null) {
-						createAccessor(MC.getSoundHandler());
-					}
-					return super.getVolume();
-				}
-				
-				@Override
-				public float getPitch() {
-					if (sound == null) {
-						createAccessor(MC.getSoundHandler());
-					}
-					return super.getPitch();
-				}
-			};
-			
-			// Start the sound, firing a PlaySoundEvent
-			MC.getSoundHandler().playSound(sound);
-			
-			// N.B. By the time playSound returns, our expectation is that our wrapping-detector handler has fired
-			// and dealt with any muting interceptions and, CRITICALLY, updated the soundMap with the final ISound.
-			sound = BLOCK_SOUND_MAP.get(vec);
-		}
-		return sound;
-	}
-	
-	public static void stopBlockSound(BlockPos pos) {
-		Vec3f vec = new Vec3f(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
-		ISound sound = BLOCK_SOUND_MAP.get(vec);
-		if (sound != null) {
-			MC.getSoundHandler().stopSound(sound);
-			BLOCK_SOUND_MAP.remove(vec);
-		}
-	}
-	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onPlayBlockSound(PlaySoundEvent event) {
+	public void onPlayBlockSound(PlaySoundEvent event) {
 		// Ignore any sound event which is null or is happening in a muffled check
 		ISound resultSound = event.getResultSound();
 		if (resultSound == null) {
@@ -88,7 +38,7 @@ public class SoundHandler {
 		
 		// Make sure sound accessor is not null
 		if (resultSound.getSound() == null) {
-			resultSound.createAccessor(MC.getSoundHandler());
+			resultSound.createAccessor(Minecraft.getMinecraft().getSoundHandler());
 		}
 		
 		// At this point, we've got a known block sound
@@ -97,6 +47,57 @@ public class SoundHandler {
 		
 		// Finally, update our soundMap so that we can actually have a shot at stopping this sound
 		BLOCK_SOUND_MAP.put(new Vec3f(resultSound.getXPosF(), resultSound.getYPosF(), resultSound.getZPosF()), resultSound);
+	}
+	
+	public static ISound startBlockSound(SoundEvent soundEvent, BlockPos pos, float volume, float pitch) {
+		net.minecraft.client.audio.SoundHandler sounds = Minecraft.getMinecraft().getSoundHandler();
+		
+		// First, check to see if there's already a sound playing at the desired location
+		Vec3f vec = new Vec3f(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+		ISound sound = BLOCK_SOUND_MAP.get(vec);
+		if (sound == null || !sounds.isSoundPlaying(sound)) {
+			if (sound != null) {
+				sounds.stopSound(sound);
+			}
+			
+			// No sound playing, start one up
+			// We assume that the sound will play until explicitly stopped
+			sound = new PositionedSoundRecord(soundEvent.getSoundName(), SoundCategory.BLOCKS, volume, pitch, true, 0, ISound.AttenuationType.LINEAR, vec.x, vec.y, vec.z) {
+				
+				@Override
+				public float getVolume() {
+					if (sound == null) {
+						createAccessor(sounds);
+					}
+					return super.getVolume();
+				}
+				
+				@Override
+				public float getPitch() {
+					if (sound == null) {
+						createAccessor(sounds);
+					}
+					return super.getPitch();
+				}
+			};
+			
+			// Start the sound, firing a PlaySoundEvent
+			sounds.playSound(sound);
+			
+			// N.B. By the time playSound returns, our expectation is that our wrapping-detector handler has fired
+			// and dealt with any muting interceptions and, CRITICALLY, updated the soundMap with the final ISound.
+			sound = BLOCK_SOUND_MAP.get(vec);
+		}
+		return sound;
+	}
+	
+	public static void stopBlockSound(BlockPos pos) {
+		Vec3f vec = new Vec3f(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+		ISound sound = BLOCK_SOUND_MAP.get(vec);
+		if (sound != null) {
+			Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
+			BLOCK_SOUND_MAP.remove(vec);
+		}
 	}
 	
 	protected static class BlockSound implements ISound {

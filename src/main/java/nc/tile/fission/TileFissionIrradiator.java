@@ -230,10 +230,15 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	}
 	
 	@Override
-	public boolean onPortRefresh() {
-		refreshAll();
-		
-		return isMultiblockAssembled() && getMultiblock().isReactorOn && !isProcessing && isProcessing(false);
+	public boolean onPortRefresh(boolean simulateMultiblockRefresh) {
+		if (simulateMultiblockRefresh) {
+			FissionReactor reactor = getMultiblock();
+			return reactor != null && reactor.isReactorOn && cluster == null && isProcessing(false);
+		}
+		else {
+			refreshAll();
+			return false;
+		}
 	}
 	
 	// Ticking
@@ -250,7 +255,8 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	@Override
 	public void update() {
 		if (!world.isRemote) {
-			boolean shouldRefresh = isMultiblockAssembled() && getMultiblock().isReactorOn && !isProcessing(true) && isProcessing(false);
+			FissionReactor reactor = getMultiblock();
+			boolean shouldRefresh = reactor != null && reactor.isReactorOn && cluster == null && isProcessing(false);
 			
 			if (onTick()) {
 				markDirty();
@@ -417,7 +423,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	}
 	
 	public boolean readyToProcess(boolean checkCluster) {
-		return canProcessInputs && hasConsumed && isMultiblockAssembled() && !(checkCluster && cluster == null);
+		return canProcessInputs && hasConsumed && isMultiblockAssembled() && (!checkCluster || cluster != null);
 	}
 	
 	@Override

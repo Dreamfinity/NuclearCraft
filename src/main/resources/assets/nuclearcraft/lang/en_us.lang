@@ -2526,6 +2526,15 @@ jei.nuclearcraft.exchanger_horizontal_bonus=Horizontal Flow Bonus:
 jei.nuclearcraft.exchanger_upward_bonus=Upward Flow Bonus:
 jei.nuclearcraft.exchanger_downward_bonus=Downward Flow Bonus:
 
+jei.nuclearcraft.condenser_fluid_temp_in=Input Temperature:
+jei.nuclearcraft.condenser_fluid_temp_out=Output Temperature:
+jei.nuclearcraft.condenser_cooling_required=Cooling Required:
+jei.nuclearcraft.condenser_horizontal_bonus=Horizontal Flow Bonus:
+jei.nuclearcraft.condenser_upward_bonus=Upward Flow Bonus:
+jei.nuclearcraft.condenser_downward_bonus=Downward Flow Bonus:
+
+jei.nuclearcraft.condenser_dissipation_fluid_temp=Temperature:
+
 jei.nuclearcraft.turbine_energy_density=Base Energy Density:
 jei.nuclearcraft.turbine_expansion=Fluid Expansion:
 jei.nuclearcraft.turbine_spin_up_multiplier=Spin-up Multiplier:
@@ -2787,7 +2796,9 @@ gui.nc.config.fission_heat_damage.comment=Can hot fission components hurt the pl
 gui.nc.config.fission_neutron_reach=Neutron Radiation Reach
 gui.nc.config.fission_neutron_reach.comment=Maximum number of moderator blocks that can be between two cells for neutron radiation to be shared between them.
 gui.nc.config.fission_heat_dissipation=Reactor Heat Dissipation
-gui.nc.config.fission_heat_dissipation.comment=Sets whether fission reactors dissipate heat while active and idle, respectively.
+gui.nc.config.fission_heat_dissipation.comment=Sets whether fission reactors dissipate heat while idle and active, respectively.
+gui.nc.config.fission_heat_dissipation_rate=Reactor Heat Dissipation Rate
+gui.nc.config.fission_heat_dissipation_rate.comment=Controls the rate at which fission reactors dissipate heat.
 gui.nc.config.fission_emergency_cooling_multiplier=Emergency Cooling Multiplier
 gui.nc.config.fission_emergency_cooling_multiplier.comment=Sets the amount of heat absorbed per mB of emergency coolant.
 gui.nc.config.fission_sound_volume=Fission Sound Volume
@@ -3377,11 +3388,11 @@ nuclearcraft.multiblock_validation.heat_exchanger.blocked_inlet=Shell inlet must
 nuclearcraft.multiblock_validation.heat_exchanger.blocked_outlet=Shell outlet must not be blocked by baffle for the heat exchanger to form
 nuclearcraft.multiblock_validation.heat_exchanger.dangling_tube=Tubes must not have dangling connections for the heat exchanger to form
 nuclearcraft.multiblock_validation.heat_exchanger.invalid_network=Tube networks must have at least one inlet and one outlet for the heat exchanger to form
-nuclearcraft.multiblock_validation.heat_exchanger.blocked_shell=Shell interior must be completely connected for the heat exchanger to form
+nuclearcraft.multiblock_validation.heat_exchanger.blocked_shell=Each shell inlet must have an available shell outlet for the heat exchanger to form
 
 nuclearcraft.multiblock_validation.condenser.dangling_tube=Tubes must not have dangling connections for the condenser to form
 nuclearcraft.multiblock_validation.condenser.invalid_network=Tube networks must have at least one inlet and one outlet for the condenser to form
-nuclearcraft.multiblock_validation.condenser.blocked_shell=Shell interior must be completely open and connected for the condenser to form
+nuclearcraft.multiblock_validation.condenser.blocked_shell=Shell interior must be completely connected for the condenser to form
 
 nuclearcraft.multiblock_validation.turbine.need_bearings=There must be two sets of rotor bearings in opposing walls of the turbine for it to form
 nuclearcraft.multiblock_validation.turbine.bearings_side_square=The walls housing the rotor bearings must be square for the turbine to form
@@ -3626,6 +3637,8 @@ nuclearcraft.salt_fission.jei_name=Molten Salt Fission
 nuclearcraft.fission_emergency_cooling.jei_name=Fission Emergency Cooling
 nuclearcraft.coolant_heater.jei_name=Molten Salt Cooling
 nuclearcraft.heat_exchanger.jei_name=Heat Exchanger
+nuclearcraft.condenser.jei_name=Condenser
+nuclearcraft.condenser_dissipation_fluid.jei_name=Condenser Dissipation Fluid
 nuclearcraft.turbine.jei_name=Turbine
 
 advancement.nuclearcraft.root.name=NuclearCraft

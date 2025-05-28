@@ -57,7 +57,7 @@ public class GuiCondenserController extends GuiMultiblockController<HeatExchange
 		String tubeInputRate = Lang.localize("gui.nc.container.heat_exchanger_controller.tube_input") + " " + UnitHelper.prefix(Math.round(multiblock.tubeInputRateFP), 5, "B/t", -1);
 		fontRenderer.drawString(tubeInputRate, xSize / 2 - fontRenderer.getStringWidth(tubeInputRate) / 2, 34, fontColor);
 		
-		String heatDissipationRate = Lang.localize("gui.nc.container.heat_exchanger_controller.heat_dissipation_rate") + " " + UnitHelper.prefix(Math.round(multiblock.heatDissipationRateFP), 5, "H/t");
+		String heatDissipationRate = Lang.localize("gui.nc.container.heat_exchanger_controller.heat_dissipation_rate") + " " + UnitHelper.prefix(Math.round(multiblock.heatTransferRateFP), 5, "H/t");
 		fontRenderer.drawString(heatDissipationRate, xSize / 2 - fontRenderer.getStringWidth(heatDissipationRate) / 2, 46, fontColor);
 		
 		String meanTempDiff = Lang.localize("gui.nc.container.heat_exchanger_controller.mean_temp_diff") + " " + UnitHelper.prefix(multiblock.activeContactCount == 0 ? 0D : Math.round(multiblock.totalTempDiff / multiblock.activeContactCount), 5, "K");

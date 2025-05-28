@@ -15,7 +15,6 @@ public class SaltFissionVesselBunch {
 	
 	public long openFaces = 0L;
 	
-	// TODO
 	public void init() {
 		if (!initialized) {
 			for (TileSaltFissionVessel vessel : vesselMap.values()) {

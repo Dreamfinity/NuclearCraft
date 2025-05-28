@@ -34,8 +34,6 @@ public class HeatExchangerRecipes extends BasicRecipeHandler {
 			addRecipe(fluidStack("exhaust_steam", 1), fluidStack("low_pressure_steam", 1), 1D, 400, 550);
 		}
 		
-		addRecipe(fluidStack("low_pressure_steam", 16), fluidStack("condensate_water", 1), 32D, 550, 350, false, -1, 0.5D);
-		
 		addRecipe(fluidStack("low_quality_steam", 32), fluidStack("condensate_water", 1), 2D, 350, 350, false, -1, 0.5D);
 		
 		addRecipe(fluidStack("condensate_water", 1), fluidStack("preheated_water", 1), 8D, 350, 400, false, 0, 0.5D);

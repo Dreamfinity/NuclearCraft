@@ -7,7 +7,7 @@ import nc.recipe.NCRecipes;
 import nc.tile.hx.*;
 import nc.tile.internal.fluid.Tank;
 import nc.tile.multiblock.TilePartAbstract.SyncReason;
-import nc.util.MaterialHelper;
+import nc.util.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -19,6 +19,8 @@ import java.util.*;
 import java.util.function.LongSupplier;
 
 public class CondenserLogic extends HeatExchangerLogic {
+	
+	public static final int BASE_MAX_INPUT = 32000, BASE_MAX_OUTPUT = 8000;
 	
 	public CondenserLogic(HeatExchanger exchanger) {
 		super(exchanger);
@@ -33,20 +35,37 @@ public class CondenserLogic extends HeatExchangerLogic {
 		return "condenser";
 	}
 	
+	@Override
 	public boolean isCondenser() {
 		return true;
 	}
 	
+	@Override
+	protected int getTubeInputTankDensity() {
+		return BASE_MAX_INPUT;
+	}
+	
+	@Override
+	protected int getTubeOutputTankDensity() {
+		return BASE_MAX_OUTPUT;
+	}
+	
+	protected Set<String> getShellValidFluids() {
+		return NCRecipes.condenser_dissipation_fluid.validFluids.get(0);
+	}
+	
+	protected Set<String> getTubeValidFluids() {
+		return NCRecipes.condenser.validFluids.get(0);
+	}
+	
 	// Multiblock Methods
 	
+	@Override
 	protected void onExchangerFormed() {
 		super.onExchangerFormed();
 	}
 	
-	protected void setupExchanger() {
-		super.setupExchanger();
-	}
-	
+	@Override
 	public void onExchangerBroken() {
 		super.onExchangerBroken();
 	}
@@ -85,7 +104,7 @@ public class CondenserLogic extends HeatExchangerLogic {
 		
 		for (int x = multiblock.getMinInteriorX(), maxX = multiblock.getMaxInteriorX(); x <= maxX; ++x) {
 			for (int y = multiblock.getMinInteriorY(), maxY = multiblock.getMaxInteriorY(); y <= maxY; ++y) {
-				for (int z = multiblock.getMinInteriorX(), maxZ = multiblock.getMaxInteriorZ(); z <= maxZ; ++z) {
+				for (int z = multiblock.getMinInteriorZ(), maxZ = multiblock.getMaxInteriorZ(); z <= maxZ; ++z) {
 					BlockPos pos = new BlockPos(x, y, z);
 					if (!tubeMap.containsKey(pos.toLong()) && !MaterialHelper.isEmpty(getWorld().getBlockState(pos).getMaterial())) {
 						multiblock.setLastError(Global.MOD_ID + ".multiblock_validation.condenser.blocked_shell", pos);
@@ -197,7 +216,7 @@ public class CondenserLogic extends HeatExchangerLogic {
 	
 	@Override
 	public boolean onUpdateServer() {
-		multiblock.shellRecipe = NCRecipes.heat_exchanger.getRecipeInfoFromInputs(Collections.emptyList(), multiblock.shellTanks.subList(0, 1));
+		multiblock.shellRecipe = NCRecipes.condenser_dissipation_fluid.getRecipeInfoFromInputs(Collections.emptyList(), multiblock.shellTanks.subList(0, 1));
 		
 		return super.onUpdateServer();
 	}
@@ -230,7 +249,7 @@ public class CondenserLogic extends HeatExchangerLogic {
 	
 	@Override
 	public CondenserUpdatePacket getMultiblockUpdatePacket() {
-		return new CondenserUpdatePacket(multiblock.controller.getTilePos(), multiblock.isExchangerOn, multiblock.totalNetworkCount, multiblock.activeNetworkCount, multiblock.activeTubeCount, multiblock.activeContactCount, multiblock.tubeInputRateFP, multiblock.shellInputRateFP, multiblock.heatTransferRateFP, multiblock.heatDissipationRateFP, multiblock.totalTempDiff);
+		return new CondenserUpdatePacket(multiblock.controller.getTilePos(), multiblock.isExchangerOn, multiblock.totalNetworkCount, multiblock.activeNetworkCount, multiblock.activeTubeCount, multiblock.activeContactCount, multiblock.tubeInputRateFP, multiblock.shellInputRateFP, multiblock.heatTransferRateFP, multiblock.totalTempDiff);
 	}
 	
 	@Override

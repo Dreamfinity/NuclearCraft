@@ -39,7 +39,8 @@ public class TileFissionComputerPort extends TileFissionPart implements SimpleCo
 	@Callback(direct = true)
 	@Optional.Method(modid = "opencomputers")
 	public Object[] isReactorOn(Context context, Arguments args) {
-		return new Object[] {isMultiblockAssembled() && getMultiblock().isReactorOn};
+		FissionReactor reactor = getMultiblock();
+		return new Object[] {reactor != null && reactor.isReactorOn};
 	}
 	
 	@Callback(direct = true)

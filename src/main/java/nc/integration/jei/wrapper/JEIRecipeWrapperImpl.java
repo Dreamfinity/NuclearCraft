@@ -1147,7 +1147,7 @@ public class JEIRecipeWrapperImpl {
 			List<String> tooltip = new ArrayList<>();
 			
 			if (showTooltip(mouseX, mouseY)) {
-				tooltip.add(TextFormatting.BLUE + HEATING_REQUIRED + " " + TextFormatting.WHITE + UnitHelper.prefix(getEmergencyCoolingHeatPerInputMB(), 5, "H"));
+				tooltip.add(TextFormatting.YELLOW + HEATING_REQUIRED + " " + TextFormatting.WHITE + UnitHelper.prefix(getEmergencyCoolingHeatPerInputMB(), 5, "H"));
 			}
 			
 			return tooltip;
@@ -1242,6 +1242,105 @@ public class JEIRecipeWrapperImpl {
 		private static final String HORIZONTAL_BONUS = Lang.localize("jei.nuclearcraft.exchanger_horizontal_bonus");
 		private static final String UPWARD_BONUS = Lang.localize("jei.nuclearcraft.exchanger_upward_bonus");
 		private static final String DOWNWARD_BONUS = Lang.localize("jei.nuclearcraft.exchanger_downward_bonus");
+	}
+	
+	public static class CondenserRecipeWrapper extends JEISimpleRecipeWrapper<CondenserRecipeWrapper> {
+		
+		public CondenserRecipeWrapper(IGuiHelper guiHelper, JEISimpleCategoryInfo<CondenserRecipeWrapper> categoryInfo, BasicRecipe recipe) {
+			super(guiHelper, categoryInfo, recipe);
+		}
+		
+		@Override
+		protected int getProgressArrowTime() {
+			return recipe == null ? 0 : NCMath.toInt(4D * recipe.getCondenserCoolingRequired());
+		}
+		
+		protected double getCondenserCoolingRequired() {
+			if (recipe == null) {
+				return 1D;
+			}
+			return recipe.getCondenserCoolingRequired();
+		}
+		
+		public int getCondenserInputTemperature() {
+			if (recipe == null) {
+				return 300;
+			}
+			return recipe.getCondenserInputTemperature();
+		}
+		
+		public int getCondenserOutputTemperature() {
+			if (recipe == null) {
+				return 300;
+			}
+			return recipe.getCondenserOutputTemperature();
+		}
+		
+		public int getCondenserPreferredFlowDirection() {
+			if (recipe == null) {
+				return 0;
+			}
+			return recipe.getCondenserPreferredFlowDirection();
+		}
+		
+		public double getCondenserFlowDirectionBonus() {
+			if (recipe == null) {
+				return 0D;
+			}
+			return recipe.getCondenserFlowDirectionBonus();
+		}
+		
+		@Override
+		public List<String> getTooltipStrings(int mouseX, int mouseY) {
+			List<String> tooltip = new ArrayList<>();
+			
+			if (showTooltip(mouseX, mouseY)) {
+				tooltip.add(TextFormatting.RED + INPUT_TEMPERATURE + TextFormatting.WHITE + " " + getCondenserInputTemperature() + "K");
+				tooltip.add(TextFormatting.AQUA + OUTPUT_TEMPERATURE + TextFormatting.WHITE + " " + getCondenserOutputTemperature() + "K");
+				tooltip.add(TextFormatting.BLUE + COOLING_REQUIRED + TextFormatting.WHITE + " " + UnitHelper.prefix(getCondenserCoolingRequired(), 5, "H"));
+				
+				double flowDirectionBonus = getCondenserFlowDirectionBonus();
+				if (flowDirectionBonus != 0D) {
+					int preferredFlowDirection = getCondenserPreferredFlowDirection();
+					tooltip.add(TextFormatting.LIGHT_PURPLE + (preferredFlowDirection == 0 ? HORIZONTAL_BONUS : (preferredFlowDirection > 0 ? UPWARD_BONUS : DOWNWARD_BONUS)) + TextFormatting.WHITE + " " + NCMath.pcDecimalPlaces(flowDirectionBonus, 1));
+				}
+			}
+			
+			return tooltip;
+		}
+		
+		private static final String INPUT_TEMPERATURE = Lang.localize("jei.nuclearcraft.condenser_fluid_temp_in");
+		private static final String OUTPUT_TEMPERATURE = Lang.localize("jei.nuclearcraft.condenser_fluid_temp_out");
+		private static final String COOLING_REQUIRED = Lang.localize("jei.nuclearcraft.condenser_cooling_required");
+		private static final String HORIZONTAL_BONUS = Lang.localize("jei.nuclearcraft.condenser_horizontal_bonus");
+		private static final String UPWARD_BONUS = Lang.localize("jei.nuclearcraft.condenser_upward_bonus");
+		private static final String DOWNWARD_BONUS = Lang.localize("jei.nuclearcraft.condenser_downward_bonus");
+	}
+	
+	public static class CondenserDissipationFluidRecipeWrapper extends JEISimpleRecipeWrapper<CondenserDissipationFluidRecipeWrapper> {
+		
+		public CondenserDissipationFluidRecipeWrapper(IGuiHelper guiHelper, JEISimpleCategoryInfo<CondenserDissipationFluidRecipeWrapper> categoryInfo, BasicRecipe recipe) {
+			super(guiHelper, categoryInfo, recipe);
+		}
+		
+		@Override
+		protected int getProgressArrowTime() {
+			return 1;
+		}
+		
+		protected int getCondenserDissipationFluidTemperature() {
+			if (recipe == null) {
+				return 300;
+			}
+			return recipe.getCondenserDissipationFluidTemperature();
+		}
+		
+		@Override
+		public void addFluidIngredientTooltip(List<String> tooltip, IFluidIngredient ingredient) {
+			tooltip.add(TextFormatting.AQUA + TEMPERATURE + TextFormatting.WHITE + " " + getCondenserDissipationFluidTemperature() + "K");
+		}
+		
+		private static final String TEMPERATURE = Lang.localize("jei.nuclearcraft.condenser_dissipation_fluid_temp");
 	}
 	
 	public static class TurbineRecipeWrapper extends JEISimpleRecipeWrapper<TurbineRecipeWrapper> {

@@ -1132,6 +1132,61 @@ public class CTRecipes {
 		}
 	}
 	
+	@ZenClass("mods.nuclearcraft.Condenser")
+	@ZenRegister
+	public static class CondenserMethods {
+		
+		@ZenMethod
+		public static BasicRecipeHandler getRecipeHandler() {
+			return NCRecipes.condenser;
+		}
+		
+		@ZenMethod
+		public static void addRecipe(IIngredient fluidInput, IIngredient fluidOutput, double coolingRequired, int temperatureIn, int temperatureOut, @Optional int preferredFlowDirection, @Optional double flowDirectionBonus) {
+			getRecipeHandler().ctAddRecipe(fluidInput, fluidOutput, coolingRequired, temperatureIn, temperatureOut, preferredFlowDirection, flowDirectionBonus);
+		}
+		
+		@ZenMethod
+		public static void removeRecipeWithInput(IIngredient fluidInput) {
+			getRecipeHandler().ctRemoveRecipeWithInput(fluidInput);
+		}
+		
+		@ZenMethod
+		public static void removeRecipeWithOutput(IIngredient fluidOutput) {
+			getRecipeHandler().ctRemoveRecipeWithOutput(fluidOutput);
+		}
+		
+		@ZenMethod
+		public static void removeAllRecipes() {
+			getRecipeHandler().ctRemoveAllRecipes();
+		}
+	}
+	
+	@ZenClass("mods.nuclearcraft.CondenserDissipationFluid")
+	@ZenRegister
+	public static class CondenserDissipationFluidMethods {
+		
+		@ZenMethod
+		public static BasicRecipeHandler getRecipeHandler() {
+			return NCRecipes.condenser_dissipation_fluid;
+		}
+		
+		@ZenMethod
+		public static void add(IIngredient fluid, int temperature) {
+			getRecipeHandler().ctAddRecipe(fluid, temperature);
+		}
+		
+		@ZenMethod
+		public static void remove(IIngredient fluid) {
+			getRecipeHandler().ctRemoveRecipeWithInput(fluid);
+		}
+		
+		@ZenMethod
+		public static void removeAll() {
+			getRecipeHandler().ctRemoveAllRecipes();
+		}
+	}
+	
 	@ZenClass("mods.nuclearcraft.Turbine")
 	@ZenRegister
 	public static class TurbineMethods {

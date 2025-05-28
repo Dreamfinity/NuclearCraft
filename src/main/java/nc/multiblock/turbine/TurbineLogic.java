@@ -268,7 +268,7 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 		if (multiblock.controller != null) {
 			multiblock.controller.setActivity(false);
 		}
-		multiblock.power = multiblock.rawPower = multiblock.rawLimitPower = multiblock.rawMaxPower = multiblock.conductivity = multiblock.rotorEfficiency = 0D;
+		multiblock.power = multiblock.rawPower = multiblock.conductivity = multiblock.rotorEfficiency = 0D;
 		multiblock.angVel = multiblock.rotorAngle = 0F;
 		multiblock.flowDir = null;
 		multiblock.shaftWidth = multiblock.inertia = multiblock.bladeLength = multiblock.noBladeSets = multiblock.recipeInputRate = 0;
@@ -689,10 +689,6 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 	@Override
 	public void onAssimilate(Turbine assimilated) {
 		multiblock.energyStorage.mergeEnergyStorage(assimilated.energyStorage);
-		multiblock.rawPower += assimilated.rawPower;
-		multiblock.rawLimitPower += assimilated.rawLimitPower;
-		multiblock.rawMaxPower += assimilated.rawMaxPower;
-		assimilated.rawPower = assimilated.rawLimitPower = assimilated.rawMaxPower = 0D;
 	}
 	
 	@Override
@@ -709,41 +705,55 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 		boolean flag = true, wasProcessing = multiblock.isProcessing;
 		refreshRecipe();
 		
+		double prevRawPower = multiblock.rawPower;
+		int prevInputRate = multiblock.recipeInputRate;
+		
+		Tank inputTank = multiblock.tanks.get(0);
+		int maxRecipeRateMultiplier = getMaxRecipeRateMultiplier();
+		double throughputMult = 1D + (turbine_tension_throughput_factor - 1D) * inputTank.getFluidAmountFraction();
+		multiblock.recipeInputRate = Math.min(inputTank.getFluidAmount(), NCMath.toInt(throughputMult * maxRecipeRateMultiplier));
+		
+		double rawLimitPower = getRawLimitProcessPower(multiblock.recipeInputRate);
+		double rawMaxPower = getRawLimitProcessPower(maxRecipeRateMultiplier);
+		
+		multiblock.isProcessing = canProcessInputs();
+		
+		if (multiblock.isProcessing) {
+			multiblock.rawPower = getNewRawProcessPower(prevRawPower, rawLimitPower, true);
+		}
+		else {
+			multiblock.rawPower = getNewRawProcessPower(prevRawPower, 0D, false);
+		}
+		
+		if (multiblock.isProcessing) {
+			produceProducts();
+		}
+		
 		setRotorEfficiency();
 		setEffectiveMaxLength();
 		setInputRatePowerBonus();
 		
-		double previousRawPower = multiblock.rawPower, previousRawLimitPower = multiblock.rawLimitPower, previousRawMaxPower = multiblock.rawMaxPower;
-		multiblock.rawLimitPower = getRawLimitProcessPower(multiblock.recipeInputRate);
-		multiblock.rawMaxPower = getRawLimitProcessPower(getMaxRecipeRateMultiplier());
-		
-		boolean canProcess = canProcessInputs();
-		if (canProcess) {
-			multiblock.isProcessing = true;
-			produceProducts();
-			multiblock.rawPower = getNewRawProcessPower(previousRawPower, multiblock.rawLimitPower, true);
-		}
-		else {
-			multiblock.isProcessing = false;
-			multiblock.rawMaxPower = previousRawMaxPower;
-			multiblock.rawPower = getNewRawProcessPower(previousRawPower, previousRawLimitPower, false);
-		}
-		
 		multiblock.power = multiblock.rawPower * multiblock.conductivity * multiblock.rotorEfficiency * getExpansionIdealityMultiplier(multiblock.idealTotalExpansionLevel, multiblock.totalExpansionLevel) * getThroughputEfficiency() * multiblock.powerBonus;
-		multiblock.angVel = multiblock.rawMaxPower == 0D ? 0F : (float) (turbine_render_rotor_speed * multiblock.rawPower / multiblock.rawMaxPower);
+		multiblock.angVel = rawMaxPower == 0D ? 0F : (float) (turbine_render_rotor_speed * multiblock.rawPower / rawMaxPower);
+		
+		if (!multiblock.isProcessing) {
+			multiblock.recipeInputRate = 0;
+		}
+		
+		multiblock.recipeInputRateFP = NCMath.getNextFP(multiblock.recipeInputRateFP, prevInputRate, multiblock.recipeInputRate);
 		
 		if (wasProcessing != multiblock.isProcessing && multiblock.controller != null) {
 			multiblock.sendMultiblockUpdatePacketToAll();
 		}
 		
-		int maxRecipeRateMultiplier = getMaxRecipeRateMultiplier();
-		double tensionFactor = maxRecipeRateMultiplier <= 0 ? 0D : (multiblock.recipeInputRate - maxRecipeRateMultiplier * (1D + turbine_tension_leniency)) / maxRecipeRateMultiplier;
+		double tensionFactor = !multiblock.isProcessing || maxRecipeRateMultiplier <= 0 ? 0D : (multiblock.recipeInputRate - maxRecipeRateMultiplier * (1D + turbine_tension_leniency)) / maxRecipeRateMultiplier;
 		if (tensionFactor > 0D) {
 			tensionFactor /= (turbine_tension_throughput_factor < 2D ? 1D : turbine_tension_throughput_factor - 1D);
 		}
 		else {
 			tensionFactor = -Math.sqrt(-tensionFactor);
 		}
+		
 		multiblock.bearingTension = Math.max(0D, multiblock.bearingTension + Math.min(1D, tensionFactor) / (1200D * getPartCount(TileTurbineRotorBearing.class)));
 		if (multiblock.bearingTension > 1D) {
 			bearingFailure();
@@ -811,8 +821,6 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 	
 	protected boolean canProcessInputs() {
 		if (!setRecipeStats() || !multiblock.isTurbineOn) {
-			multiblock.recipeInputRate = 0;
-			multiblock.recipeInputRateFP = 0D;
 			return false;
 		}
 		return canProduceProducts();
@@ -839,17 +847,7 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 			return false;
 		}
 		
-		Tank inputTank = multiblock.tanks.get(0), outputTank = multiblock.tanks.get(1);
-		
-		int prevInputRate = multiblock.recipeInputRate;
-		int inputTankAmount = inputTank.getFluidAmount();
-		double inputTankFraction = (double) inputTankAmount / (double) inputTank.getCapacity();
-		double throughputMult = 1D + (turbine_tension_throughput_factor - 1D) * inputTankFraction;
-		multiblock.recipeInputRate = Math.min(inputTankAmount, NCMath.toInt(throughputMult * getMaxRecipeRateMultiplier()));
-		
-		int recipeInputRateDiff = Math.abs(prevInputRate - multiblock.recipeInputRate);
-		double roundingFactor = Math.max(0D, 1.5D * Math.log1p(multiblock.recipeInputRate / (1D + recipeInputRateDiff)));
-		multiblock.recipeInputRateFP = (roundingFactor * multiblock.recipeInputRateFP + multiblock.recipeInputRate) / (1D + roundingFactor);
+		Tank outputTank = multiblock.tanks.get(1);
 		
 		if (!outputTank.isEmpty()) {
 			if (!outputTank.getFluid().isFluidEqual(fluidProduct.getStack())) {
@@ -859,6 +857,8 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 				return false;
 			}
 		}
+		
+		
 		return true;
 	}
 	
@@ -951,7 +951,8 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 	public double getThroughputEfficiency() {
 		double effectiveMinLength = multiblock.idealTotalExpansionLevel <= 1D || multiblock.maxBladeExpansionCoefficient <= 1D ? getMaximumInteriorLength() : Math.ceil(Math.log(multiblock.idealTotalExpansionLevel) / Math.log(multiblock.maxBladeExpansionCoefficient));
 		double absoluteLeniency = effectiveMinLength * multiblock.getMinimumBladeArea() * turbine_mb_per_blade;
-		double throughputRatio = getMaxRecipeRateMultiplier() == 0 ? 1D : Math.min(1D, (multiblock.recipeInputRateFP + absoluteLeniency) / getMaxRecipeRateMultiplier());
+		int maxRecipeRateMultiplier = getMaxRecipeRateMultiplier();
+		double throughputRatio = maxRecipeRateMultiplier == 0 ? 1D : Math.min(1D, (multiblock.recipeInputRateFP + absoluteLeniency) / maxRecipeRateMultiplier);
 		return throughputRatio >= turbine_throughput_leniency_params[1] ? 1D : (1D - turbine_throughput_leniency_params[0]) * Math.sin(throughputRatio * Math.PI / (2D * turbine_throughput_leniency_params[1])) + turbine_throughput_leniency_params[0];
 	}
 	
@@ -1080,13 +1081,17 @@ public class TurbineLogic extends MultiblockLogic<Turbine, TurbineLogic, ITurbin
 			double speedY = multiblock.flowDir == EnumFacing.DOWN ? -flowSpeed : multiblock.flowDir == EnumFacing.UP ? flowSpeed : offsetY;
 			double speedZ = multiblock.flowDir == EnumFacing.NORTH ? -flowSpeed : multiblock.flowDir == EnumFacing.SOUTH ? flowSpeed : offsetZ;
 			
-			for (Iterable<MutableBlockPos> iter : multiblock.inputPlane) {
-				if (iter != null) {
-					for (BlockPos pos : iter) {
-						if (rand.nextDouble() < turbine_particles * multiblock.recipeInputRateFP / getMaxRecipeRateMultiplier()) {
-							double[] spawnPos = particleSpawnPos(pos);
-							if (spawnPos != null) {
-								getWorld().spawnParticle(EnumParticleTypes.getByName(multiblock.particleEffect), false, spawnPos[0], spawnPos[1], spawnPos[2], speedX, speedY, speedZ);
+			int maxRecipeRateMultiplier = getMaxRecipeRateMultiplier();
+			
+			if (maxRecipeRateMultiplier > 0) {
+				for (Iterable<MutableBlockPos> iter : multiblock.inputPlane) {
+					if (iter != null) {
+						for (BlockPos pos : iter) {
+							if (rand.nextDouble() < turbine_particles * multiblock.recipeInputRateFP / maxRecipeRateMultiplier) {
+								double[] spawnPos = particleSpawnPos(pos);
+								if (spawnPos != null) {
+									getWorld().spawnParticle(EnumParticleTypes.getByName(multiblock.particleEffect), false, spawnPos[0], spawnPos[1], spawnPos[2], speedX, speedY, speedZ);
+								}
 							}
 						}
 					}

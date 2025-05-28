@@ -2,7 +2,7 @@ package nc.handler;
 
 import nc.entity.EntityFeralGhoul;
 import nc.init.*;
-import nc.render.BlockHighlightHandler;
+import nc.render.*;
 import nc.render.entity.RenderFeralGhoul;
 import nc.render.tile.*;
 import nc.tile.hx.*;
@@ -37,6 +37,7 @@ public class RenderHandler {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFeralGhoul.class, RenderFeralGhoul::new);
 		
 		MinecraftForge.EVENT_BUS.register(new BlockHighlightHandler());
+		MinecraftForge.EVENT_BUS.register(new BlockRayTraceHandler());
 	}
 	
 	protected static class TextureStitchHandler {

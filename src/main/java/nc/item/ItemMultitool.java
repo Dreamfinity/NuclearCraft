@@ -67,7 +67,7 @@ public class ItemMultitool extends NCItem implements IToolWrench, IToolHammer {
 						boolean multitoolUsed = multitoolTile.onUseMultitool(stack, (EntityPlayerMP) player, world, facing, hitX, hitY, hitZ);
 						nbt.setBoolean("multitoolUsed", multitoolUsed);
 						if (multitoolUsed) {
-							multitoolTile.markDirtyAndNotify();
+							multitoolTile.markDirtyAndNotify(true);
 							playUseSound(world, player);
 							return EnumActionResult.SUCCESS;
 						}
@@ -118,13 +118,13 @@ public class ItemMultitool extends NCItem implements IToolWrench, IToolHammer {
 	
 	@Override
 	@Optional.Method(modid = "buildcraftcore")
-	public boolean canWrench(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {
+	public boolean canWrench(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult ray) {
 		return isMultitool(wrench);
 	}
 	
 	@Override
 	@Optional.Method(modid = "buildcraftcore")
-	public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult rayTrace) {}
+	public void wrenchUsed(EntityPlayer player, EnumHand hand, ItemStack wrench, RayTraceResult ray) {}
 	
 	// IToolHammer
 	
@@ -175,8 +175,8 @@ public class ItemMultitool extends NCItem implements IToolWrench, IToolHammer {
 		MULTITOOL_RIGHT_CLICK_LOGIC.add((itemMultitool, world, player, hand, heldItem) -> {
 			NBTTagCompound nbt = NBTHelper.getStackNBT(heldItem, "ncMultitool");
 			if (nbt != null && player.isSneaking() && !nbt.isEmpty() && !nbt.getBoolean("multitoolUsed")) {
-				RayTraceResult rayTraceResult = itemMultitool.rayTrace(world, player, false);
-				if (rayTraceResult == null || rayTraceResult.typeOfHit != RayTraceResult.Type.BLOCK || !(world.getTileEntity(rayTraceResult.getBlockPos()) instanceof IMultitoolLogic)) {
+				RayTraceResult ray = itemMultitool.rayTrace(world, player, false);
+				if (ray == null || ray.typeOfHit != RayTraceResult.Type.BLOCK || !(world.getTileEntity(ray.getBlockPos()) instanceof IMultitoolLogic)) {
 					NBTHelper.clearStackNBT(heldItem, "ncMultitool");
 					player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.clear_info")));
 					return itemMultitool.actionResult(true, heldItem);

@@ -46,7 +46,7 @@ public class ClientProxy extends CommonProxy {
 	public void init(FMLInitializationEvent event) {
 		super.init(event);
 		
-		MinecraftForge.EVENT_BUS.register(SoundHandler.class);
+		MinecraftForge.EVENT_BUS.register(new SoundHandler());
 	}
 	
 	@Override

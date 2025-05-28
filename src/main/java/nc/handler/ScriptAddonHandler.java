@@ -1,7 +1,6 @@
 package nc.handler;
 
 import it.unimi.dsi.fastutil.objects.*;
-import nc.integration.crafttweaker.CTHelper;
 import nc.util.*;
 import org.apache.commons.io.FileUtils;
 
@@ -12,6 +11,8 @@ public class ScriptAddonHandler {
 	
 	private static boolean initialized = false;
 	private static boolean cotCopied = false;
+	
+	public static final ObjectSet<String> LOADED_SCRIPT_ADDONS = new ObjectOpenHashSet<>();
 	
 	public static final ObjectSet<File> SCRIPT_ADDON_DIRS = new ObjectOpenHashSet<>();
 	
@@ -111,7 +112,7 @@ public class ScriptAddonHandler {
 		}
 		
 		String addonID = removeVersionSuffix(dirName);
-		CTHelper.LOADED_SCRIPT_ADDONS.add(addonID.toLowerCase(Locale.ROOT));
+		LOADED_SCRIPT_ADDONS.add(addonID.toLowerCase(Locale.ROOT));
 		
 		for (File f : dir.listFiles()) {
 			if (f.isDirectory()) {

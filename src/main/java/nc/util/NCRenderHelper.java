@@ -1,10 +1,13 @@
 package nc.util;
 
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.*;
+import net.minecraftforge.fml.relauncher.*;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class NCRenderHelper {
 	
 	public static final float PIXEL = 0.0625F;
@@ -65,5 +68,12 @@ public class NCRenderHelper {
 		buffer.pos(oX + x1, oY + y1, oZ + z1).color(r, g, b, a).endVertex();
 		buffer.pos(oX + x1 + x3, oY + y1 + y3, oZ + z1 + z3).color(r, g, b, a).endVertex();
 		buffer.pos(oX + x3, oY + y3, oZ + z3).color(r, g, b, a).endVertex();
+	}
+	
+	public static Vec3d getPlayerPos(EntityPlayerSP player, float partialTicks) {
+		double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
+		double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
+		double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
+		return new Vec3d(x, y, z);
 	}
 }

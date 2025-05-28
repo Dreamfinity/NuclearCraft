@@ -6,7 +6,7 @@ import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.*;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.oredict.IOreDictEntry;
-import it.unimi.dsi.fastutil.objects.*;
+import nc.handler.ScriptAddonHandler;
 import nc.integration.crafttweaker.ingredient.*;
 import nc.recipe.RecipeHelper;
 import nc.recipe.ingredient.*;
@@ -150,10 +150,8 @@ public class CTHelper {
 	
 	// ZenScript
 	
-	public static final ObjectSet<String> LOADED_SCRIPT_ADDONS = new ObjectOpenHashSet<>();
-	
 	@ZenMethod
 	public static boolean isScriptAddonLoaded(String addonID) {
-		return LOADED_SCRIPT_ADDONS.contains(addonID.toLowerCase(Locale.ROOT));
+		return ScriptAddonHandler.LOADED_SCRIPT_ADDONS.contains(addonID.toLowerCase(Locale.ROOT));
 	}
 }

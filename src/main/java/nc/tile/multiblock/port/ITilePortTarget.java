@@ -14,5 +14,5 @@ public interface ITilePortTarget<MULTIBLOCK extends Multiblock<MULTIBLOCK, T> & 
 	
 	void refreshMasterPort();
 	
-	boolean onPortRefresh();
+	boolean onPortRefresh(boolean simulateMultiblockRefresh);
 }

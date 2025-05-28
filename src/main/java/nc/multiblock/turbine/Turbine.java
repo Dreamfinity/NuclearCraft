@@ -46,13 +46,13 @@ public class Turbine extends CuboidalMultiblock<Turbine, ITurbinePart> implement
 	public static final int BASE_MAX_ENERGY = 16000, BASE_MAX_INPUT = 1000, BASE_MAX_OUTPUT = 4000;
 	
 	public final EnergyStorage energyStorage = new EnergyStorage(BASE_MAX_ENERGY);
-	public final List<Tank> tanks = Lists.newArrayList(new Tank(BASE_MAX_INPUT, NCRecipes.getValidFluids("turbine").get(0)), new Tank(BASE_MAX_OUTPUT, null));
+	public final List<Tank> tanks = Lists.newArrayList(new Tank(BASE_MAX_INPUT, NCRecipes.turbine.validFluids.get(0)), new Tank(BASE_MAX_OUTPUT, null));
 	
 	public RecipeInfo<BasicRecipe> recipeInfo;
 	
 	public boolean isTurbineOn, computerActivated, isProcessing;
 	public double power = 0D, conductivity = 0D, rotorEfficiency = 0D, powerBonus = 0D;
-	public double rawPower = 0D, rawLimitPower = 0D, rawMaxPower = 0D;
+	public double rawPower = 0D;
 	
 	public EnumFacing flowDir = null;
 	public int shaftWidth = 0, inertia = 0, bladeLength = 0, noBladeSets = 0, recipeInputRate = 0, dynamoCoilCount = 0, dynamoCoilCountOpposite = 0;
@@ -331,8 +331,6 @@ public class Turbine extends CuboidalMultiblock<Turbine, ITurbinePart> implement
 		data.setBoolean("isProcessing", isProcessing);
 		data.setDouble("power", power);
 		data.setDouble("rawPower", rawPower);
-		data.setDouble("rawLimitPower", rawLimitPower);
-		data.setDouble("rawMaxPower", rawMaxPower);
 		
 		data.setInteger("flowDir", flowDir == null ? -1 : flowDir.getIndex());
 		
@@ -382,8 +380,6 @@ public class Turbine extends CuboidalMultiblock<Turbine, ITurbinePart> implement
 		isProcessing = data.getBoolean("isProcessing");
 		power = data.getDouble("power");
 		rawPower = data.getDouble("rawPower");
-		rawLimitPower = data.getDouble("rawLimitPower");
-		rawMaxPower = data.getDouble("rawMaxPower");
 		
 		flowDir = data.getInteger("flowDir") < 0 ? null : EnumFacing.VALUES[data.getInteger("flowDir")];
 		

@@ -1,8 +1,10 @@
 package nc.tile;
 
+import nc.ModCheck;
 import nc.block.property.BlockProperties;
 import nc.block.tile.*;
 import nc.capability.radiation.source.IRadiationSource;
+import nc.util.MekanismHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -134,7 +136,16 @@ public interface ITile {
 	}
 	
 	default void notifyNeighborsOfStateChange() {
-		getTileWorld().notifyNeighborsOfStateChange(getTilePos(), getTileBlockType(), true);
+		World world = getTileWorld();
+		BlockPos pos = getTilePos();
+		
+		world.notifyNeighborsOfStateChange(pos, getTileBlockType(), true);
+		
+		if (ModCheck.mekanismLoaded()) {
+			for (EnumFacing side : EnumFacing.VALUES) {
+				MekanismHelper.markTransmitterDirty(world, pos, side);
+			}
+		}
 	}
 	
 	/**

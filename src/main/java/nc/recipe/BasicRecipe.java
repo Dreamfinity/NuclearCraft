@@ -347,6 +347,39 @@ public class BasicRecipe implements IRecipe {
 		return Math.max(0D, 1D + flowDirectionBonus * (flowProjection > 0.5D ? 1D : (flowProjection > -0.5D ? 0D : -1D)));
 	}
 	
+	// Condenser
+	
+	public double getCondenserCoolingRequired() {
+		return (double) extras.get(0);
+	}
+	
+	public int getCondenserInputTemperature() {
+		return (int) extras.get(1);
+	}
+	
+	public int getCondenserOutputTemperature() {
+		return (int) extras.get(2);
+	}
+	
+	public int getCondenserPreferredFlowDirection() {
+		return (int) extras.get(3);
+	}
+	
+	public double getCondenserFlowDirectionBonus() {
+		return (double) extras.get(4);
+	}
+	
+	public double getCondenserFlowDirectionMultiplier(Vec3d flowDir) {
+		int preferredFlowDirection = getCondenserPreferredFlowDirection();
+		double flowDirectionBonus = getCondenserFlowDirectionBonus();
+		double flowProjection = preferredFlowDirection == 0 ? Math.sqrt(flowDir.x * flowDir.x + flowDir.z * flowDir.z) : (preferredFlowDirection > 0 ? flowDir.y : -flowDir.y);
+		return Math.max(0D, 1D + flowDirectionBonus * (flowProjection > 0.5D ? 1D : (flowProjection > -0.5D ? 0D : -1D)));
+	}
+	
+	public int getCondenserDissipationFluidTemperature() {
+		return (int) extras.get(0);
+	}
+	
 	// Turbine
 	
 	public double getTurbinePowerPerMB() {

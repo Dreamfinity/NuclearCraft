@@ -1,6 +1,6 @@
 package nc.tile.fission;
 
-public interface IFissionSpecialComponent extends IFissionComponent {
+public interface IFissionSpecialPart extends IFissionPart {
 	
 	/**
 	 * Called after all flux and cluster-searching is complete.

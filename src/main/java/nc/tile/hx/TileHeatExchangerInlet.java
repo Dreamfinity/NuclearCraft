@@ -6,6 +6,7 @@ import nc.config.NCConfig;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.hx.*;
 import nc.recipe.*;
+import nc.recipe.multiblock.CondenserRecipes;
 import nc.tile.fluid.ITileFluid;
 import nc.tile.internal.fluid.*;
 import nc.tile.internal.processor.AbstractProcessorElement;
@@ -29,7 +30,7 @@ public class TileHeatExchangerInlet extends TileHeatExchangerPart implements ITi
 	
 	public @Nonnull NonNullList<ItemStack> inventoryStacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	
-	public final @Nonnull List<Tank> masterTanks = Lists.newArrayList(new Tank(HeatExchanger.BASE_MAX_INPUT, NCRecipes.getValidFluids("heat_exchanger").get(0)), new Tank(HeatExchanger.BASE_MAX_OUTPUT, null));
+	public final @Nonnull List<Tank> masterTanks = Lists.newArrayList(new Tank(HeatExchanger.BASE_MAX_INPUT, NCRecipes.heat_exchanger.validFluids.get(0)), new Tank(HeatExchanger.BASE_MAX_OUTPUT, null));
 	
 	private @Nonnull FluidConnection[] fluidConnections = ITileFluid.fluidConnectionAll(TankSorption.IN);
 	
@@ -44,6 +45,8 @@ public class TileHeatExchangerInlet extends TileHeatExchangerPart implements ITi
 	
 	public final AbstractProcessorElement processor = new AbstractProcessorElement() {
 		
+		double heatTransferRate;
+		
 		@Override
 		public World getWorld() {
 			return world;
@@ -51,7 +54,8 @@ public class TileHeatExchangerInlet extends TileHeatExchangerPart implements ITi
 		
 		@Override
 		public BasicRecipeHandler getRecipeHandler() {
-			return NCRecipes.heat_exchanger;
+			HeatExchangerLogic logic = getLogic();
+			return logic != null && logic.isCondenser() ? NCRecipes.condenser : NCRecipes.heat_exchanger;
 		}
 		
 		@Override
@@ -63,10 +67,18 @@ public class TileHeatExchangerInlet extends TileHeatExchangerPart implements ITi
 				isHeating = false;
 			}
 			else {
-				baseProcessTime = recipe.getHeatExchangerHeatDifference();
-				inputTemperature = recipe.getHeatExchangerInputTemperature();
-				outputTemperature = recipe.getHeatExchangerOutputTemperature();
-				isHeating = recipe.getHeatExchangerIsHeating();
+				if (getRecipeHandler() instanceof CondenserRecipes) {
+					baseProcessTime = recipe.getCondenserCoolingRequired();
+					inputTemperature = recipe.getCondenserInputTemperature();
+					outputTemperature = recipe.getCondenserOutputTemperature();
+					isHeating = false;
+				}
+				else {
+					baseProcessTime = recipe.getHeatExchangerHeatDifference();
+					inputTemperature = recipe.getHeatExchangerInputTemperature();
+					outputTemperature = recipe.getHeatExchangerOutputTemperature();
+					isHeating = recipe.getHeatExchangerIsHeating();
+				}
 			}
 		}
 		
@@ -134,16 +146,21 @@ public class TileHeatExchangerInlet extends TileHeatExchangerPart implements ITi
 		@Override
 		public double getSpeedMultiplier() {
 			HeatExchanger hx = getMultiblock();
-			if (isMasterShellInlet()) {
-				return hx.shellSpeedMultiplier;
+			if (hx == null) {
+				return 0D;
 			}
-			else {
-				if (hx.getLogic().isCondenser()) {
+			
+			boolean condenser = hx.getLogic().isCondenser(), masterShellInlet = isMasterShellInlet();
+			if (condenser) {
+				if (masterShellInlet) {
+					return 0D;
+				}
+				else {
 					if (isHeating || hx.shellRecipe == null) {
 						return 0D;
 					}
 					
-					int shellTemperature = hx.shellRecipe.recipe.getHeatExchangerInputTemperature();
+					int shellTemperature = hx.shellRecipe.recipe.getCondenserDissipationFluidTemperature();
 					if (outputTemperature < shellTemperature) {
 						return 0D;
 					}
@@ -156,80 +173,51 @@ public class TileHeatExchangerInlet extends TileHeatExchangerPart implements ITi
 					++hx.activeNetworkCount;
 					hx.activeTubeCount += network.usefulTubeCount;
 					
-					double tubeFlowDirectionMultiplier = recipeInfo.recipe.getHeatExchangerFlowDirectionMultiplier(network.tubeFlow);
+					double tubeFlowDirectionMultiplier = recipeInfo.recipe.getCondenserFlowDirectionMultiplier(network.tubeFlow);
 					
 					double heatTransferMultiplier = absMeanTempDiff * tubeFlowDirectionMultiplier * hx.shellTanks.get(0).getFluidAmountFraction();
-					hx.heatDissipationRate += heatTransferMultiplier * network.baseCoolingMultiplier;
-					return heatTransferMultiplier * network.baseCoolingMultiplier;
+					return heatTransferRate = heatTransferMultiplier * network.baseCoolingMultiplier;
 				}
-				
-				RecipeInfo<BasicRecipe> shellRecipeInfo = hx.masterShellInlet.processor.recipeInfo;
-				if (shellRecipeInfo == null) {
-					return 0D;
-				}
-				
-				BasicRecipe shellRecipe = shellRecipeInfo.recipe;
-				boolean shellIsHeating = shellRecipe.getHeatExchangerIsHeating();
-				if (isHeating == shellIsHeating) {
-					return 0D;
-				}
-				
-				int shellInputTemperature = shellRecipe.getHeatExchangerInputTemperature();
-				int shellOutputTemperature = shellRecipe.getHeatExchangerOutputTemperature();
-				
-				boolean contraflow = network.isContraflow();
-				int inputEndShellTemperature = contraflow ? shellOutputTemperature : shellInputTemperature;
-				int outputEndShellTemperature = contraflow ? shellInputTemperature : shellOutputTemperature;
-				
-				int inletTemperatureDiff = inputTemperature - inputEndShellTemperature;
-				int outletTemperatureDiff = outputTemperature - outputEndShellTemperature;
-				int sumTempDiff = inletTemperatureDiff + outletTemperatureDiff;
-				if (sumTempDiff == 0) {
-					return 0D;
-				}
-				
-				boolean heating = sumTempDiff < 0;
-				if (isHeating != heating) {
-					return 0D;
-				}
-				
-				if ((inletTemperatureDiff > 0 && outletTemperatureDiff < 0) || (inletTemperatureDiff < 0 && outletTemperatureDiff > 0)) {
-					return 0D;
-					
-					/*if (heating) {
-						if (shellOutputTemperature < inputTemperature) {
-							return 0D;
-						}
-						
-						double absMeanTempDiff = getAbsMeanTempDiff(inputEndShellTemperature - inputTemperature, outputEndShellTemperature - inputTemperature);
-						hx.totalTempDiff += absMeanTempDiff * network.usefulTubeCount;
-						
-						hx.activeContactCount += network.usefulTubeCount;
-						
-						double heatTransferMultiplier = absMeanTempDiff * shellFlowDirectionMultiplier * getTanks().get(0).getFluidAmountFraction();
-						hx.heatDissipationRate += heatTransferMultiplier * network.baseCoolingMultiplier;
-						hx.shellSpeedMultiplier += heatTransferMultiplier * network.baseCoolingMultiplier;
-						return 0D;
-					}
-					else {
-						if (outputTemperature < shellInputTemperature) {
-							return 0D;
-						}
-						
-						double absMeanTempDiff = getAbsMeanTempDiff(inputTemperature - shellInputTemperature, outputTemperature - shellInputTemperature);
-						hx.totalTempDiff += absMeanTempDiff * network.usefulTubeCount;
-						
-						hx.activeContactCount += network.usefulTubeCount;
-						
-						++hx.activeNetworkCount;
-						hx.activeTubeCount += network.usefulTubeCount;
-						
-						double heatTransferMultiplier = absMeanTempDiff * tubeFlowDirectionMultiplier * hx.shellTanks.get(0).getFluidAmountFraction();
-						hx.heatDissipationRate += heatTransferMultiplier * network.baseCoolingMultiplier;
-						return heatTransferMultiplier * network.baseCoolingMultiplier;
-					}*/
+			}
+			else {
+				if (masterShellInlet) {
+					return hx.shellSpeedMultiplier;
 				}
 				else {
+					RecipeInfo<BasicRecipe> shellRecipeInfo = hx.masterShellInlet.processor.recipeInfo;
+					if (shellRecipeInfo == null) {
+						return 0D;
+					}
+					
+					BasicRecipe shellRecipe = shellRecipeInfo.recipe;
+					boolean shellIsHeating = shellRecipe.getHeatExchangerIsHeating();
+					if (isHeating == shellIsHeating) {
+						return 0D;
+					}
+					
+					int shellInputTemperature = shellRecipe.getHeatExchangerInputTemperature();
+					int shellOutputTemperature = shellRecipe.getHeatExchangerOutputTemperature();
+					
+					boolean contraflow = network.isContraflow();
+					int inputEndShellTemperature = contraflow ? shellOutputTemperature : shellInputTemperature;
+					int outputEndShellTemperature = contraflow ? shellInputTemperature : shellOutputTemperature;
+					
+					int inletTemperatureDiff = inputTemperature - inputEndShellTemperature;
+					int outletTemperatureDiff = outputTemperature - outputEndShellTemperature;
+					int sumTempDiff = inletTemperatureDiff + outletTemperatureDiff;
+					if (sumTempDiff == 0) {
+						return 0D;
+					}
+					
+					boolean heating = sumTempDiff < 0;
+					if (isHeating != heating) {
+						return 0D;
+					}
+					
+					if ((inletTemperatureDiff > 0 && outletTemperatureDiff < 0) || (inletTemperatureDiff < 0 && outletTemperatureDiff > 0)) {
+						return 0D;
+					}
+					
 					double absMeanTempDiff = getAbsMeanTempDiff(inletTemperatureDiff, outletTemperatureDiff);
 					hx.totalTempDiff += absMeanTempDiff * network.usefulTubeCount;
 					
@@ -242,7 +230,7 @@ public class TileHeatExchangerInlet extends TileHeatExchangerPart implements ITi
 					double shellFlowDirectionMultiplier = shellRecipe.getHeatExchangerFlowDirectionMultiplier(network.shellFlow);
 					double heatTransferMultiplier = absMeanTempDiff * tubeFlowDirectionMultiplier * shellFlowDirectionMultiplier;
 					
-					hx.heatTransferRate += heatTransferMultiplier * network.baseCoolingMultiplier;
+					heatTransferRate = heatTransferMultiplier * network.baseCoolingMultiplier;
 					hx.shellSpeedMultiplier += heatTransferMultiplier * (heating ? network.baseCoolingMultiplier : network.baseHeatingMultiplier);
 					return heatTransferMultiplier * (heating ? network.baseHeatingMultiplier : network.baseCoolingMultiplier);
 				}
@@ -257,26 +245,46 @@ public class TileHeatExchangerInlet extends TileHeatExchangerPart implements ITi
 		
 		@Override
 		public void produceProducts() {
+			int consumedAmount = consumedTanks.get(0).getFluidAmount();
+			
 			if (isMasterShellInlet()) {
-				getMultiblock().shellInputRate += consumedTanks.get(0).getFluidAmount();
+				getMultiblock().shellInputRate += consumedAmount;
 			}
 			else {
-				getMultiblock().tubeInputRate += consumedTanks.get(0).getFluidAmount();
+				getMultiblock().tubeInputRate += consumedAmount;
 			}
+			
 			super.produceProducts();
 		}
 		
 		@Override
 		public void onResumeProcessingState() {
-			if (isMasterShellInlet()) {
-				getMultiblock().packetFlag |= 1;
-			}
+			getMultiblock().packetFlag |= 1;
 		}
 		
 		@Override
 		public void onChangeProcessingState() {
-			if (isMasterShellInlet()) {
-				getMultiblock().packetFlag |= 2;
+			getMultiblock().packetFlag |= isMasterShellInlet() ? 2 : 1;
+		}
+		
+		@Override
+		public void process() {
+			heatTransferRate = 0D;
+			
+			double speedMultiplier = getSpeedMultiplier();
+			double maxProcessCount = speedMultiplier / baseProcessTime;
+			
+			time += speedMultiplier;
+			
+			int processCount = 0;
+			while (time >= baseProcessTime) {
+				finishProcess();
+				++processCount;
+			}
+			
+			HeatExchanger hx = getMultiblock();
+			if (hx != null) {
+				hx.heatTransferRate += heatTransferRate * (processCount == 0 ? 1D : processCount / maxProcessCount);
 			}
 		}
 		

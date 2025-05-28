@@ -31,8 +31,8 @@ public class ItemGeigerCounter extends NCItem implements IBauble {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		if (worldIn.isRemote) {
-			RayTraceResult rayTrace = Minecraft.getMinecraft().objectMouseOver;
-			if (!(rayTrace != null && rayTrace.typeOfHit == Type.ENTITY)) {
+			RayTraceResult ray = Minecraft.getMinecraft().objectMouseOver;
+			if (ray == null || ray.typeOfHit != RayTraceResult.Type.ENTITY) {
 				IEntityRads playerRads = RadiationHelper.getEntityRadiation(playerIn);
 				if (playerRads != null) {
 					playerIn.sendMessage(new TextComponentString(RadiationHelper.getRadsTextColor(playerRads) + RADIATION + " " + (playerRads.isTotalRadsNegligible() ? "0 Rad" : RadiationHelper.radsPrefix(playerRads.getTotalRads(), false)) + " [" + Math.round(playerRads.getRadsPercentage()) + "%], " + RadiationHelper.getRawRadiationTextColor(playerRads) + (playerRads.isRawRadiationNegligible() ? "0 Rad/t" : RadiationHelper.radsPrefix(playerRads.getRawRadiationLevel(), true))));

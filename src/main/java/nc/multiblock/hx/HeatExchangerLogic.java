@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSet;
 import nc.Global;
 import nc.multiblock.*;
 import nc.network.multiblock.*;
+import nc.recipe.NCRecipes;
 import nc.tile.hx.*;
 import nc.tile.internal.fluid.Tank;
 import nc.tile.internal.fluid.Tank.TankInfo;
@@ -40,6 +41,30 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 	
 	public boolean isCondenser() {
 		return false;
+	}
+	
+	protected int getShellInputTankDensity() {
+		return HeatExchanger.BASE_MAX_INPUT;
+	}
+	
+	protected int getShellOutputTankDensity() {
+		return HeatExchanger.BASE_MAX_OUTPUT;
+	}
+	
+	protected int getTubeInputTankDensity() {
+		return HeatExchanger.BASE_MAX_INPUT;
+	}
+	
+	protected int getTubeOutputTankDensity() {
+		return HeatExchanger.BASE_MAX_OUTPUT;
+	}
+	
+	protected Set<String> getShellValidFluids() {
+		return NCRecipes.heat_exchanger.validFluids.get(0);
+	}
+	
+	protected Set<String> getTubeValidFluids() {
+		return NCRecipes.heat_exchanger.validFluids.get(0);
 	}
 	
 	// Multiblock Size Limits
@@ -81,11 +106,15 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 	
 	protected void setupExchanger() {
 		int volume = multiblock.getExteriorVolume();
-		multiblock.shellTanks.get(0).setCapacity(HeatExchanger.BASE_MAX_INPUT * volume);
-		multiblock.shellTanks.get(1).setCapacity(HeatExchanger.BASE_MAX_OUTPUT * volume);
+		multiblock.shellTanks.get(0).setCapacity(getShellInputTankDensity() * volume);
+		multiblock.shellTanks.get(1).setCapacity(getShellOutputTankDensity() * volume);
+		
+		multiblock.shellTanks.get(0).setAllowedFluids(getShellValidFluids());
 		
 		Long2ObjectMap<TileHeatExchangerTube> tubeMap = getPartMap(TileHeatExchangerTube.class);
 		Long2ObjectMap<TileHeatExchangerInlet> inletMap = getPartMap(TileHeatExchangerInlet.class);
+		
+		Set<String> tubeValidFluids = getTubeValidFluids();
 		
 		for (HeatExchangerTubeNetwork network : multiblock.networks) {
 			for (long inletPosLong : network.inletPosLongSet) {
@@ -96,10 +125,16 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 			
 			List<Tank> tanks = network.getTanks();
 			int capacityMult = network.tubePosLongSet.size() + 2;
-			tanks.get(0).setCapacity(HeatExchanger.BASE_MAX_INPUT * capacityMult);
-			tanks.get(1).setCapacity(HeatExchanger.BASE_MAX_OUTPUT * capacityMult);
+			tanks.get(0).setCapacity(getTubeInputTankDensity() * capacityMult);
+			tanks.get(1).setCapacity(getTubeOutputTankDensity() * capacityMult);
+			
+			tanks.get(0).setAllowedFluids(tubeValidFluids);
 			
 			network.setFlowStats(tubeMap);
+		}
+		
+		for (TileHeatExchangerInlet inlet : inletMap.values()) {
+			inlet.markDirtyAndNotify(true);
 		}
 		
 		multiblock.totalNetworkCount = multiblock.networks.size();
@@ -261,7 +296,9 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 			return false;
 		}
 		
-		Long shellStartPosLong = null;
+		LongSet shellPosLongSet = new LongOpenHashSet();
+		LongList shellPosLongStack = new LongArrayList();
+		LongSupplier popShellPosLong = () -> shellPosLongStack.removeLong(shellPosLongStack.size() - 1);
 		
 		for (long inletPosLong : shellInletPosLongSet) {
 			BlockPos inletPos = BlockPos.fromLong(inletPosLong);
@@ -271,9 +308,8 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 				return false;
 			}
 			
-			if (shellStartPosLong == null) {
-				shellStartPosLong = clampedPosLong;
-			}
+			shellPosLongSet.add(clampedPosLong);
+			shellPosLongStack.add(clampedPosLong);
 			
 			if (multiblock.masterShellInlet == null) {
 				multiblock.masterShellInlet = inletMap.get(inletPosLong);
@@ -288,13 +324,6 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 				return false;
 			}
 		}
-		
-		LongSet shellPosLongSet = new LongOpenHashSet();
-		LongList shellPosLongStack = new LongArrayList();
-		LongSupplier popShellPosLong = () -> shellPosLongStack.removeLong(shellPosLongStack.size() - 1);
-		
-		shellPosLongSet.add(shellStartPosLong);
-		shellPosLongStack.add(shellStartPosLong);
 		
 		while (!shellPosLongStack.isEmpty()) {
 			long nextPosLong = popShellPosLong.getAsLong();
@@ -377,7 +406,6 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 		double prevTubeInputRate = multiblock.tubeInputRate;
 		double prevShellInputRate = multiblock.shellInputRate;
 		double prevHeatTransferRate = multiblock.heatTransferRate;
-		double prevHeatDissipationRate = multiblock.heatDissipationRate;
 		
 		multiblock.refreshFlag = false;
 		multiblock.packetFlag = 0;
@@ -389,27 +417,14 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 		multiblock.tubeInputRate = 0D;
 		multiblock.shellInputRate = 0D;
 		multiblock.heatTransferRate = 0D;
-		multiblock.heatDissipationRate = 0D;
 		multiblock.totalTempDiff = 0D;
 		
 		int[] inletUpdates = multiblock.getMasterInlets().mapToInt(x -> x.processor.onTick() ? 1 : 0).toArray();
 		boolean shouldUpdate = multiblock.refreshFlag || Arrays.stream(inletUpdates).anyMatch(x -> x != 0);
 		
-		double tubeInputRateDiff = Math.abs(prevTubeInputRate - multiblock.tubeInputRate);
-		double tubeInputRateRoundingFactor = Math.max(0D, 1.5D * Math.log1p(multiblock.tubeInputRate / (1D + prevTubeInputRate)));
-		multiblock.tubeInputRateFP = (tubeInputRateRoundingFactor * multiblock.tubeInputRateFP + multiblock.tubeInputRate) / (1D + tubeInputRateRoundingFactor);
-		
-		double shellInputRateDiff = Math.abs(prevShellInputRate - multiblock.shellInputRate);
-		double shellInputRateRoundingFactor = Math.max(0D, 1.5D * Math.log1p(multiblock.shellInputRate / (1D + prevShellInputRate)));
-		multiblock.shellInputRateFP = (shellInputRateRoundingFactor * multiblock.shellInputRateFP + multiblock.shellInputRate) / (1D + shellInputRateRoundingFactor);
-		
-		double heatTransferRateDiff = Math.abs(prevHeatTransferRate - multiblock.heatTransferRate);
-		double heatTransferRateRoundingFactor = Math.max(0D, 1.5D * Math.log1p(multiblock.heatTransferRate / (1D + prevHeatTransferRate)));
-		multiblock.heatTransferRateFP = (heatTransferRateRoundingFactor * multiblock.heatTransferRateFP + multiblock.heatTransferRate) / (1D + heatTransferRateRoundingFactor);
-		
-		double heatDissipationRateDiff = Math.abs(prevHeatDissipationRate - multiblock.heatDissipationRate);
-		double heatDissipationRateRoundingFactor = Math.max(0D, 1.5D * Math.log1p(multiblock.heatDissipationRate / (1D + prevHeatDissipationRate)));
-		multiblock.heatDissipationRateFP = (heatDissipationRateRoundingFactor * multiblock.heatDissipationRateFP + multiblock.heatDissipationRate) / (1D + heatDissipationRateRoundingFactor);
+		multiblock.tubeInputRateFP = NCMath.getNextFP(multiblock.tubeInputRateFP, prevTubeInputRate, multiblock.tubeInputRate);
+		multiblock.shellInputRateFP = NCMath.getNextFP(multiblock.shellInputRateFP, prevShellInputRate, multiblock.shellInputRate);
+		multiblock.heatTransferRateFP = NCMath.getNextFP(multiblock.heatTransferRateFP, prevHeatTransferRate, multiblock.heatTransferRate);
 		
 		if (shouldUpdate) {
 			refreshAll();
@@ -491,7 +506,7 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 	
 	@Override
 	public HeatExchangerUpdatePacket getMultiblockUpdatePacket() {
-		return new HeatExchangerUpdatePacket(multiblock.controller.getTilePos(), multiblock.isExchangerOn, multiblock.totalNetworkCount, multiblock.activeNetworkCount, multiblock.activeTubeCount, multiblock.activeContactCount, multiblock.tubeInputRateFP, multiblock.shellInputRateFP, multiblock.heatTransferRateFP, multiblock.heatDissipationRateFP, multiblock.totalTempDiff);
+		return new HeatExchangerUpdatePacket(multiblock.controller.getTilePos(), multiblock.isExchangerOn, multiblock.totalNetworkCount, multiblock.activeNetworkCount, multiblock.activeTubeCount, multiblock.activeContactCount, multiblock.tubeInputRateFP, multiblock.shellInputRateFP, multiblock.heatTransferRateFP, multiblock.totalTempDiff);
 	}
 	
 	@Override
@@ -504,7 +519,6 @@ public class HeatExchangerLogic extends MultiblockLogic<HeatExchanger, HeatExcha
 		multiblock.tubeInputRateFP = message.tubeInputRateFP;
 		multiblock.shellInputRateFP = message.shellInputRateFP;
 		multiblock.heatTransferRateFP = message.heatTransferRateFP;
-		multiblock.heatDissipationRateFP = message.heatDissipationRateFP;
 		multiblock.totalTempDiff = message.totalTempDiff;
 	}
 	

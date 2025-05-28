@@ -471,6 +471,25 @@ mods.nuclearcraft.HeatExchanger.removeRecipeWithInput(ILiquidStack fluidInput);
 mods.nuclearcraft.HeatExchanger.removeRecipeWithOutput(ILiquidStack fluidOutput);
 
 
+Condenser:
+----------
+
+mods.nuclearcraft.Condenser.addRecipe(ILiquidStack fluidInput, ILiquidStack fluidOutput, double coolingRequired, int temperatureIn, int temperatureOut, {int preferredFlowDirection = 0, double flowDirectionBonus = 0D});
+
+mods.nuclearcraft.Condenser.removeRecipeWithInput(ILiquidStack fluidInput);
+mods.nuclearcraft.Condenser.removeRecipeWithOutput(ILiquidStack fluidOutput);
+
+
+Condenser Dissipation Fluid:
+----------------------------
+
+mods.nuclearcraft.CondenserDissipationFluid.add(ILiquidStack fluid, int temperature);
+
+mods.nuclearcraft.CondenserDissipationFluid.remove(ILiquidStack fluid);
+
+mods.nuclearcraft.CondenserDissipationFluid.removeAll();
+
+
 Turbine:
 --------
 

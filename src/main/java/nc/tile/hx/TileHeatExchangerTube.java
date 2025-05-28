@@ -1,20 +1,25 @@
 package nc.tile.hx;
 
 import it.unimi.dsi.fastutil.objects.*;
+import nc.item.ItemMultitool;
 import nc.multiblock.cuboidal.CuboidalPartPositionType;
 import nc.multiblock.hx.*;
-import nc.util.Lang;
+import nc.tile.IRayTraceLogic;
+import nc.util.*;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.*;
 
 import javax.annotation.*;
 
-public class TileHeatExchangerTube extends TileHeatExchangerPart {
+public class TileHeatExchangerTube extends TileHeatExchangerPart implements IRayTraceLogic {
 	
 	public static final Object2DoubleMap<String> DYN_HEAT_TRANSFER_COEFFICIENT_MAP = new Object2DoubleOpenHashMap<>();
 	public static final Object2DoubleMap<String> DYN_HEAT_RETENTION_MULT_MAP = new Object2DoubleOpenHashMap<>();
@@ -124,6 +129,52 @@ public class TileHeatExchangerTube extends TileHeatExchangerPart {
 		}
 		
 		return super.onUseMultitool(multitool, player, world, facing, hitX, hitY, hitZ);
+	}
+	
+	// IRayTraceLogic
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void onPlayerMouseOver(EntityPlayerSP player, EnumFacing side, float partialTicks) {
+		if (side == null) {
+			return;
+		}
+		
+		if (!ItemMultitool.isMultitool(player.getHeldItemMainhand())) {
+			return;
+		}
+		
+		Vec3d playerPos = NCRenderHelper.getPlayerPos(player, partialTicks);
+		
+		float r = 1F, g = 0F, b = 0F;
+		
+		GlStateManager.color(r, g, b);
+		GlStateManager.glLineWidth(2);
+		
+		GlStateManager.disableDepth();
+		GlStateManager.disableTexture2D();
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(-playerPos.x, -playerPos.y, -playerPos.z);
+		
+		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
+		float p = 2F * NCRenderHelper.PIXEL, q = 1F - p;
+		
+		switch (side) {
+			case DOWN -> NCRenderHelper.renderFrame(x + p, y, z + p, q - p, p, q - p, r, g, b, 1F);
+			case UP -> NCRenderHelper.renderFrame(x + p, y + q, z + p, q - p, p, q - p, r, g, b, 1F);
+			case NORTH -> NCRenderHelper.renderFrame(x + p, y + p, z, q - p, q - p, p, r, g, b, 1F);
+			case SOUTH -> NCRenderHelper.renderFrame(x + p, y + p, z + q, q - p, q - p, p, r, g, b, 1F);
+			case WEST -> NCRenderHelper.renderFrame(x, y + p, z + p, p, q - p, q - p, r, g, b, 1F);
+			case EAST -> NCRenderHelper.renderFrame(x + q, y + p, z + p, p, q - p, q - p, r, g, b, 1F);
+		}
+		
+		Tessellator.getInstance().draw();
+		
+		GlStateManager.popMatrix();
+		
+		GlStateManager.enableTexture2D();
+		GlStateManager.enableDepth();
 	}
 	
 	// NBT

@@ -162,6 +162,10 @@ public class NCJEI implements IModPlugin {
 		return getBlockList(x -> x instanceof BlockHeatExchangerController || x instanceof BlockHeatExchangerTube);
 	}
 	
+	public static List<Object> getCondenserCrafters() {
+		return getBlockList(x -> x instanceof BlockCondenserController || x instanceof BlockHeatExchangerTube);
+	}
+	
 	public static List<Object> getTurbineCrafters() {
 		return getBlockList(x -> x instanceof BlockTurbineController || x instanceof IBlockRotorBlade);
 	}

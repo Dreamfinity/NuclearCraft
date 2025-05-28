@@ -160,6 +160,7 @@ public class NCConfig {
 	public static boolean fission_heat_damage;
 	public static int fission_neutron_reach;
 	public static boolean[] fission_heat_dissipation;
+	public static double fission_heat_dissipation_rate;
 	public static double fission_emergency_cooling_multiplier;
 	public static double fission_sound_volume;
 	
@@ -605,6 +606,7 @@ public class NCConfig {
 		fission_heat_damage = sync(CATEGORY_FISSION, "fission_heat_damage", false);
 		fission_neutron_reach = sync(CATEGORY_FISSION, "fission_neutron_reach", 4, 1, 255);
 		fission_heat_dissipation = sync(CATEGORY_FISSION, "fission_heat_dissipation", new boolean[] {true, false}, ARRAY);
+		fission_heat_dissipation_rate = sync(CATEGORY_FISSION, "fission_heat_dissipation_rate", 0D, 1D / 292032000D, 1D);
 		fission_emergency_cooling_multiplier = sync(CATEGORY_FISSION, "fission_emergency_cooling_multiplier", 1D, 0.001D, 255D);
 		fission_sound_volume = sync(CATEGORY_FISSION, "fission_sound_volume", 1D, 0D, 15D);
 		

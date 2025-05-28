@@ -317,4 +317,10 @@ public class NCMath {
 	public static int getComparatorSignal(double value, double max, double leeway) {
 		return value <= leeway ? 0 : value >= max - leeway ? 15 : toInt(1D + 14D * value / max);
 	}
+	
+	public static double getNextFP(double currentFP, double prev, double next) {
+		double diff = Math.abs(prev - next);
+		double roundingFactor = Math.max(0D, 1.5D * Math.log1p(next / (1D + diff)));
+		return (roundingFactor * currentFP + next) / (1D + roundingFactor);
+	}
 }

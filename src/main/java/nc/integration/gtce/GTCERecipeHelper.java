@@ -241,8 +241,22 @@ public class GTCERecipeHelper {
 		}
 	}
 	
-	private static final MethodWrapper<RecipeBuilder<?>> EUT_INT = new MethodWrapper<>(RecipeBuilder.class, "EUt", int.class);
-	private static final MethodWrapper<RecipeBuilder<?>> EUT_LONG = new MethodWrapper<>(RecipeBuilder.class, "EUt", long.class);
+	private static final MethodWrapper<RecipeBuilder<?>> EUT_INT, EUT_LONG;
+	
+	static {
+		MethodWrapper<RecipeBuilder<?>> eutInt = null, eutLong = null;
+		try {
+			eutInt = new MethodWrapper<>(RecipeBuilder.class, "EUt", int.class);
+		}
+		catch (Exception e) {
+			try {
+				eutLong = new MethodWrapper<>(RecipeBuilder.class, "EUt", long.class);
+			}
+			catch (Exception ignored) {}
+		}
+		EUT_INT = eutInt;
+		EUT_LONG = eutLong;
+	}
 	
 	@Optional.Method(modid = "gregtech")
 	private static RecipeBuilder<?> addStats(RecipeBuilder<?> builder, BasicRecipe recipe, int processPower, int processTime) {
@@ -253,17 +267,15 @@ public class GTCERecipeHelper {
 		
 		// Handle int and long power cases
 		
-		try {
+		if (EUT_INT != null) {
 			return EUT_INT.invoke(builder, NCMath.toInt(power));
 		}
-		catch (Exception intException) {
-			try {
-				return EUT_LONG.invoke(builder, power);
-			}
-			catch (Exception longException) {
-				NCUtil.getLogger().info("Failed to set EUt for GTCEu recipe: " + RecipeHelper.getRecipeString(recipe));
-				return builder;
-			}
+		else if (EUT_LONG != null) {
+			return EUT_LONG.invoke(builder, power);
+		}
+		else {
+			NCUtil.getLogger().info("Failed to set EUt for GTCEu recipe: " + RecipeHelper.getRecipeString(recipe));
+			return builder;
 		}
 	}
 	

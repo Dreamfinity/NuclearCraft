@@ -9,8 +9,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 
 import javax.annotation.Nullable;
 import java.util.*;
-
-import static nc.config.NCConfig.*;
+import java.util.Map.Entry;
 
 public class ElectricFurnaceRecipes extends BasicProcessorRecipeHandler {
 	
@@ -23,9 +22,9 @@ public class ElectricFurnaceRecipes extends BasicProcessorRecipeHandler {
 	
 	@Override
 	public void addRecipes() {
-		if (!default_processor_recipes_global || !default_processor_recipes[19]) {
+		/*if (!default_processor_recipes_global || !default_processor_recipes[19]) {
 			return;
-		}
+		}*/
 	}
 	
 	public static BasicRecipe getVanillaFurnaceRecipe(ItemStack input, ItemStack output) {
@@ -44,7 +43,16 @@ public class ElectricFurnaceRecipes extends BasicProcessorRecipeHandler {
 			return null;
 		}
 		
-		ItemStack output = FurnaceRecipes.instance().getSmeltingResult(input);
+		ItemStack output = ItemStack.EMPTY;
+		for (Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet()) {
+			ItemStack key = entry.getKey();
+			if (input.getItem() == key.getItem() && (key.getMetadata() == 32767 || input.getMetadata() == key.getMetadata())) {
+				input = key;
+				output = entry.getValue();
+				break;
+			}
+		}
+		
 		if (output.isEmpty()) {
 			return null;
 		}

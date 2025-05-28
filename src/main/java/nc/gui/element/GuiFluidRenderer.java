@@ -17,8 +17,6 @@ import javax.annotation.*;
 
 public class GuiFluidRenderer {
 	
-	private static final Minecraft MC = Minecraft.getMinecraft();
-	
 	private static @Nonnull TextureAtlasSprite getStillTexture(@Nonnull FluidStack fluidstack) {
 		
 		final Fluid fluid = fluidstack.getFluid();
@@ -33,12 +31,12 @@ public class GuiFluidRenderer {
 		if (iconKey == null) {
 			return getMissingSprite();
 		}
-		final TextureAtlasSprite textureEntry = MC.getTextureMapBlocks().getTextureExtry(iconKey.toString());
+		final TextureAtlasSprite textureEntry = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(iconKey.toString());
 		return textureEntry != null ? textureEntry : getMissingSprite();
 	}
 	
 	private static @Nonnull TextureAtlasSprite getMissingSprite() {
-		return MC.getTextureMapBlocks().getMissingSprite();
+		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 	}
 	
 	public static void renderGuiTank(FluidTank tank, double x, double y, double zLevel, double width, double height) {
@@ -67,7 +65,7 @@ public class GuiFluidRenderer {
 		int renderAmount = NCMath.toInt(Math.max(Math.min(height, amount * height / capacity), 1D));
 		int posY = NCMath.toInt(y + height - renderAmount);
 		
-		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		int color = fluid.getFluid().getColor(fluid);
 		GL11.glColor4ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF), (byte) alpha);
 		

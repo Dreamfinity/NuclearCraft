@@ -294,6 +294,33 @@ public class GSBasicRecipeBuilderImpl {
 		}
 	}
 	
+	public static class GSCondenserRecipeBuilder extends GSBasicRecipeBuilder<GSCondenserRecipeBuilder> {
+		
+		public GSCondenserRecipeBuilder(GSBasicRecipeRegistry registry) {
+			super(registry);
+		}
+		
+		public GSCondenserRecipeBuilder coolingRequired(double coolingRequired) {
+			return setExtra(0, coolingRequired);
+		}
+		
+		public GSCondenserRecipeBuilder temperatureIn(int temperatureIn) {
+			return setExtra(1, temperatureIn);
+		}
+		
+		public GSCondenserRecipeBuilder temperatureOut(int temperatureOut) {
+			return setExtra(2, temperatureOut);
+		}
+		
+		public GSCondenserRecipeBuilder preferredFlowDirection(int preferredFlowDirection) {
+			return setExtra(3, preferredFlowDirection);
+		}
+		
+		public GSCondenserRecipeBuilder flowDirectionBonus(double flowDirectionBonus) {
+			return setExtra(4, flowDirectionBonus);
+		}
+	}
+	
 	public static class GSTurbineRecipeBuilder extends GSBasicRecipeBuilder<GSTurbineRecipeBuilder> {
 		
 		public GSTurbineRecipeBuilder(GSBasicRecipeRegistry registry) {

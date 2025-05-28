@@ -41,7 +41,6 @@ public class GuiSaltFissionController extends GuiLogicMultiblockController<Fissi
 		drawHeatTooltip(mouseX, mouseY, 6, 103, 164, 6);
 	}
 	
-	// TODO
 	public List<String> heatInfo() {
 		List<String> info = new ArrayList<>();
 		info.add(TextFormatting.YELLOW + Lang.localize("gui.nc.container.fission_controller.heat_stored") + " " + TextFormatting.WHITE + UnitHelper.prefix(logic.heatBuffer.getHeatStored(), logic.heatBuffer.getHeatCapacity(), 5, "H"));
@@ -54,7 +53,6 @@ public class GuiSaltFissionController extends GuiLogicMultiblockController<Fissi
 		drawTooltip(heatInfo(), mouseX, mouseY, x, y, drawWidth, drawHeight);
 	}
 	
-	// TODO
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		int fontColor = multiblock.isReactorOn ? -1 : 15641088;
@@ -85,7 +83,6 @@ public class GuiSaltFissionController extends GuiLogicMultiblockController<Fissi
 		}
 	}
 	
-	// TODO
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);

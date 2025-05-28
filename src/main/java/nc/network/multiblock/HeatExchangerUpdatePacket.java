@@ -16,14 +16,13 @@ public class HeatExchangerUpdatePacket extends MultiblockUpdatePacket {
 	public double tubeInputRateFP;
 	public double shellInputRateFP;
 	public double heatTransferRateFP;
-	public double heatDissipationRateFP;
 	public double totalTempDiff;
 	
 	public HeatExchangerUpdatePacket() {
 		super();
 	}
 	
-	public HeatExchangerUpdatePacket(BlockPos pos, boolean isExchangerOn, int totalNetworkCount, int activeNetworkCount, int activeTubeCount, int activeContactCount, double tubeInputRateFP, double shellInputRateFP, double heatTransferRateFP, double heatDissipationRateFP, double totalTempDiff) {
+	public HeatExchangerUpdatePacket(BlockPos pos, boolean isExchangerOn, int totalNetworkCount, int activeNetworkCount, int activeTubeCount, int activeContactCount, double tubeInputRateFP, double shellInputRateFP, double heatTransferRateFP, double totalTempDiff) {
 		super(pos);
 		this.isExchangerOn = isExchangerOn;
 		this.totalNetworkCount = totalNetworkCount;
@@ -33,7 +32,6 @@ public class HeatExchangerUpdatePacket extends MultiblockUpdatePacket {
 		this.tubeInputRateFP = tubeInputRateFP;
 		this.shellInputRateFP = shellInputRateFP;
 		this.heatTransferRateFP = heatTransferRateFP;
-		this.heatDissipationRateFP = heatDissipationRateFP;
 		this.totalTempDiff = totalTempDiff;
 	}
 	
@@ -48,7 +46,6 @@ public class HeatExchangerUpdatePacket extends MultiblockUpdatePacket {
 		tubeInputRateFP = buf.readDouble();
 		shellInputRateFP = buf.readDouble();
 		heatTransferRateFP = buf.readDouble();
-		heatDissipationRateFP = buf.readDouble();
 		totalTempDiff = buf.readDouble();
 	}
 	
@@ -63,7 +60,6 @@ public class HeatExchangerUpdatePacket extends MultiblockUpdatePacket {
 		buf.writeDouble(tubeInputRateFP);
 		buf.writeDouble(shellInputRateFP);
 		buf.writeDouble(heatTransferRateFP);
-		buf.writeDouble(heatDissipationRateFP);
 		buf.writeDouble(totalTempDiff);
 	}
 	

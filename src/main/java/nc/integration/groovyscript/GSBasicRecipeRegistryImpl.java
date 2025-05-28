@@ -333,6 +333,41 @@ public class GSBasicRecipeRegistryImpl {
 	}
 	
 	@RegistryDescription
+	public static class GSCondenserRecipeRegistry extends GSBasicRecipeRegistry {
+		
+		public GSCondenserRecipeRegistry(String name) {
+			super(name);
+		}
+		
+		public GSCondenserRecipeBuilder builder() {
+			return new GSCondenserRecipeBuilder(this);
+		}
+	}
+	
+	@RegistryDescription
+	public static class GSCondenserDissipationFluidRecipeRegistry extends GSBasicRecipeRegistry {
+		
+		public GSCondenserDissipationFluidRecipeRegistry(String name) {
+			super(name);
+		}
+		
+		@MethodDescription(type = Type.ADDITION)
+		public void add(Object fluid, int temperature) {
+			addRecipeInternal(fluid, temperature);
+		}
+		
+		@MethodDescription(type = Type.REMOVAL)
+		public void remove(Object fluid) {
+			removeRecipeWithInputInternal(fluid);
+		}
+		
+		@MethodDescription(type = Type.REMOVAL)
+		public void removeAll() {
+			removeAllRecipesInternal();
+		}
+	}
+	
+	@RegistryDescription
 	public static class GSTurbineRecipeRegistry extends GSBasicRecipeRegistry {
 		
 		public GSTurbineRecipeRegistry(String name) {

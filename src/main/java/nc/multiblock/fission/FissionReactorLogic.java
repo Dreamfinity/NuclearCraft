@@ -274,8 +274,8 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 			return;
 		}
 		
-		for (IFissionSpecialComponent component : getParts(IFissionSpecialComponent.class)) {
-			component.postClusterSearch();
+		for (IFissionSpecialPart part : getParts(IFissionSpecialPart.class)) {
+			part.postClusterSearch();
 		}
 		
 		for (FissionCluster cluster : multiblock.clusterMap.values()) {
@@ -449,9 +449,9 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 		MultiblockRegistry.INSTANCE.addDirtyMultiblock(getWorld(), multiblock);
 	}
 	
-	// TODO - config
 	public long getHeatDissipation() {
-		return Math.max(1L, heatBuffer.getHeatStored() * multiblock.getExteriorSurfaceArea() / (NCMath.cube(6) * 672000L));
+		long heatStored = heatBuffer.getHeatStored();
+		return NCMath.clamp((long) (fission_heat_dissipation_rate * heatStored * multiblock.getExteriorSurfaceArea()), 1L, heatStored);
 	}
 	
 	public double getTemperature() {

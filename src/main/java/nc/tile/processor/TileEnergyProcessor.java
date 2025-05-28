@@ -481,7 +481,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	@Optional.Method(modid = "opencomputers")
 	public Object[] setItemInputSorption(Context context, Arguments args) {
 		setItemSorption(EnumFacing.VALUES[args.checkInteger(0)], info.itemInputSlots[args.checkInteger(1)], ItemSorption.fromInt(ItemSorption.Type.INPUT, args.checkInteger(2)));
-		markDirtyAndNotify();
+		markDirtyAndNotify(true);
 		return new Object[] {};
 	}
 	
@@ -489,7 +489,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	@Optional.Method(modid = "opencomputers")
 	public Object[] setFluidInputSorption(Context context, Arguments args) {
 		setTankSorption(EnumFacing.VALUES[args.checkInteger(0)], info.fluidInputTanks[args.checkInteger(1)], TankSorption.fromInt(TankSorption.Type.INPUT, args.checkInteger(2)));
-		markDirtyAndNotify();
+		markDirtyAndNotify(true);
 		return new Object[] {};
 	}
 	
@@ -497,7 +497,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	@Optional.Method(modid = "opencomputers")
 	public Object[] setItemOutputSorption(Context context, Arguments args) {
 		setItemSorption(EnumFacing.VALUES[args.checkInteger(0)], info.itemOutputSlots[args.checkInteger(1)], ItemSorption.fromInt(ItemSorption.Type.OUTPUT, args.checkInteger(2)));
-		markDirtyAndNotify();
+		markDirtyAndNotify(true);
 		return new Object[] {};
 	}
 	
@@ -505,7 +505,7 @@ public abstract class TileEnergyProcessor<TILE extends TileEnergyProcessor<TILE,
 	@Optional.Method(modid = "opencomputers")
 	public Object[] setFluidOutputSorption(Context context, Arguments args) {
 		setTankSorption(EnumFacing.VALUES[args.checkInteger(0)], info.fluidOutputTanks[args.checkInteger(1)], TankSorption.fromInt(TankSorption.Type.OUTPUT, args.checkInteger(2)));
-		markDirtyAndNotify();
+		markDirtyAndNotify(true);
 		return new Object[] {};
 	}
 	

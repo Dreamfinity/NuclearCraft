@@ -81,19 +81,22 @@ public abstract class TileFissionPort<PORT extends TileFissionPort<PORT, TARGET>
 		}
 	}
 	
-	// TODO - temporary ports
 	@Override
-	public void refreshTargets() {
+	public void refreshTargets(boolean simulateMultiblockRefresh) {
 		refreshTargetsFlag = false;
 		if (isMultiblockAssembled()) {
-			boolean refresh = false;
-			for (TARGET part : getTargets()) {
-				if (part.onPortRefresh()) {
-					refresh = true;
+			if (simulateMultiblockRefresh) {
+				for (TARGET part : getTargets()) {
+					if (part.onPortRefresh(true)) {
+						getMultiblock().refreshFlag = true;
+						break;
+					}
 				}
 			}
-			if (refresh) {
-				getMultiblock().refreshFlag = true;
+			else {
+				for (TARGET part : getTargets()) {
+					part.onPortRefresh(false);
+				}
 			}
 		}
 	}
@@ -109,7 +112,7 @@ public abstract class TileFissionPort<PORT extends TileFissionPort<PORT, TARGET>
 	public void update() {
 		if (!world.isRemote) {
 			if (refreshTargetsFlag) {
-				refreshTargets();
+				refreshTargets(false);
 			}
 		}
 	}
