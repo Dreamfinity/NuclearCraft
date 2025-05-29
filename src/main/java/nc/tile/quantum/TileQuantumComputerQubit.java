@@ -47,7 +47,7 @@ public class TileQuantumComputerQubit extends TileQuantumComputerPart implements
 	
 	public final void queueMeasurement() {
 		if (isMultiblockAssembled()) {
-			getMultiblock().getGateQueue().add(new QuantumGate.Measurement(getMultiblock(), new IntOpenHashSet(new int[] {id})));
+			getMultiblock().queue.add(new QuantumGateWrapper.Measurement(getMultiblock(), new int[] {id}));
 		}
 	}
 	
@@ -58,14 +58,14 @@ public class TileQuantumComputerQubit extends TileQuantumComputerPart implements
 			String mode = nbt.getString("qComputerQubitMode");
 			boolean s, l;
 			if ((s = mode.equals("set")) || (l = mode.equals("list"))) {
-				IntCollection idColl = s ? new IntOpenHashSet() : new IntArrayList();
+				IntCollection idColl = s ? new IntRBTreeSet() : new IntArrayList();
 				if (s) {
 					NBTHelper.readIntCollection(nbt, idColl, "qubitIDSet");
 					NBTHelper.writeIntCollection(nbt, new IntArrayList(), "qubitIDList");
 				}
 				else {
 					NBTHelper.readIntCollection(nbt, idColl, "qubitIDList");
-					NBTHelper.writeIntCollection(nbt, new IntOpenHashSet(), "qubitIDSet");
+					NBTHelper.writeIntCollection(nbt, new IntRBTreeSet(), "qubitIDSet");
 				}
 				
 				if (!player.isSneaking()) {

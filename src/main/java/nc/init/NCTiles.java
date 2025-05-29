@@ -87,6 +87,7 @@ public class NCTiles {
 		registerTile(Global.MOD_ID, "fission_power_port", TileFissionPowerPort.class);
 		registerTile(Global.MOD_ID, "fission_vent", TileFissionVent.class);
 		registerTile(Global.MOD_ID, "fission_irradiator", TileFissionIrradiator.class);
+		registerTile(Global.MOD_ID, "fission_cooler", TileFissionCooler.class);
 		
 		registerTile(Global.MOD_ID, "fission_source", TileFissionSource.class);
 		registerTileVariants(Global.MOD_ID, "fission_source", MetaEnums.NeutronSourceType.class);
@@ -97,6 +98,8 @@ public class NCTiles {
 		registerTile(Global.MOD_ID, "fission_computer_port", TileFissionComputerPort.class);
 		
 		registerTile(Global.MOD_ID, "fission_irradiator_port", TileFissionIrradiatorPort.class);
+		registerTile(Global.MOD_ID, "fission_cooler_port", TileFissionCoolerPort.class);
+		
 		registerTile(Global.MOD_ID, "fission_cell_port", TileFissionCellPort.class);
 		
 		registerTile(Global.MOD_ID, "fission_vessel_port", TileFissionVesselPort.class);

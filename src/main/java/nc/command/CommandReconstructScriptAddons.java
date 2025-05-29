@@ -35,7 +35,8 @@ public class CommandReconstructScriptAddons extends CommandBase {
 			if (ModCheck.craftTweakerLoaded() && args.length > 0 && "syntax".equals(args[0])) {
 				server.getCommandManager().executeCommand(sender, "/ct syntax");
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			sender.sendMessage(new TextComponentTranslation(TextFormatting.RED + Lang.localize("commands.nuclearcraft.reconstruct_script_addons.fail")));
 			NCUtil.getLogger().catching(e);
 		}

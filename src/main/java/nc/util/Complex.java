@@ -1,90 +1,85 @@
 package nc.util;
 
 public class Complex {
-	
-	public static double abs(double re, double im) {
-		return Math.hypot(re, im);
+
+	public double re, im;
+
+	public Complex(double re, double im) {
+		this.re = re;
+		this.im = im;
 	}
-	
-	public static double absSq(double re, double im) {
+
+	public double absSq() {
 		return re * re + im * im;
 	}
 	
-	public static double arg(double re, double im) {
+	public double abs() {
+		return Math.sqrt(absSq());
+	}
+	
+	public double arg() {
 		return Math.atan2(im, re);
 	}
 	
-	public static double[] multiply(double re1, double im1, double re2, double im2) {
-		return new double[] {re1 * re2 - im1 * im2, re1 * im2 + im1 * re2};
+	public static double absSq(double a, double b) {
+		return a * a + b * b;
 	}
 	
-	public static double[] reciprocal(double re, double im) {
-		double scale = absSq(re, im);
-		return new double[] {re / scale, -im / scale};
+	public static double abs(double a, double b) {
+		return Math.sqrt(absSq(a, b));
 	}
 	
-	public static double[] sqrt(double re, double im) {
+	public static double arg(double a, double b) {
+		return Math.atan2(a, b);
+	}
+
+	public void multiplyBy(double a, double b) {
+		double re = this.re, im = this.im;
+		this.re = re * a - im * b;
+		this.im = re * b + im * a;
+	}
+
+	public void divideBy(double a, double b) {
+		double re = this.re, im = this.im, absSq = a * a + b * b;
+		this.re = (re * a + im * b) / absSq;
+		this.im = (im * a - re * b) / absSq;
+	}
+
+	public static Complex multiply(double a, double b, double c, double d) {
+		return new Complex(a * c - b * d, a * d + b * c);
+	}
+
+	public static Complex divide(double a, double b, double c, double d) {
+		double absSq = c * c + d * d;
+		return new Complex((a * c + b * d) / absSq, (b * c - a * d) / absSq);
+	}
+
+	public static Complex sqrt(double re, double im) {
 		if (im == 0D) {
 			if (re >= 0D) {
-				return new double[] {Math.sqrt(re), 0D};
+				return new Complex(Math.sqrt(re), 0D);
 			}
 			else {
-				return new double[] {0D, Math.sqrt(-re)};
+				return new Complex(0D, Math.sqrt(-re));
 			}
 		}
-		double a = Math.sqrt((re + abs(re, im)) / 2D);
-		return new double[] {a, im / (2D * a)};
-	}
-	
-	public static double[] invSqrt(double re, double im) {
-		double sq = absSq(re, im);
-		return sqrt(re / sq, -im / sq);
-	}
-	
-	public static double[] divide(double re1, double im1, double re2, double im2) {
-		double scale = absSq(re2, im2);
-		return new double[] {(re1 * re2 + im1 * im2) / scale, (im1 * re2 - re1 * im2) / scale};
-	}
-	
-	public static double[] exp(double re, double im) {
-		return new double[] {Math.exp(re) * Math.cos(im), Math.exp(re) * Math.sin(im)};
-	}
-	
-	public static double[] sin(double re, double im) {
-		return new double[] {Math.sin(re) * Math.cosh(im), Math.cos(re) * Math.sinh(im)};
-	}
-	
-	public static double[] cos(double re, double im) {
-		return new double[] {Math.cos(re) * Math.cosh(im), -Math.sin(re) * Math.sinh(im)};
-	}
-	
-	public static double[] tan(double re, double im) {
-		return new double[] {Math.sin(re) * Math.cosh(im) / (Math.cos(re) * Math.cosh(im)), Math.cos(re) * Math.sinh(im) / (-Math.sin(re) * Math.sinh(im))};
-	}
-	
-	public static double[] normalize(double re, double im) {
-		double scale = abs(re, im);
-		return new double[] {re / scale, im / scale};
-	}
-	
-	public static double[] phase(double phi) {
-		return new double[] {Math.cos(phi), Math.sin(phi)};
-	}
-	
-	public static double[] phase_d(double phi) {
-		return new double[] {NCMath.cos_d(phi), NCMath.sin_d(phi)};
-	}
-	
-	public static String toString(double re, double im) {
-		if (im == 0) {
-			return Double.toString(re);
+		else {
+			double a = Math.sqrt(0.5D * (re + Math.sqrt(re * re + im * im)));
+			return new Complex(a, 0.5D * im / a);
 		}
-		if (re == 0) {
-			return im + "i";
+	}
+
+	public static Complex invSqrt(double re, double im) {
+		double absSq = re * re + im * im;
+		return sqrt(re / absSq, -im / absSq);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder().append(re);
+		if (im >= 0D) {
+			sb.append('+');
 		}
-		if (im < 0) {
-			return re + " - " + -im + "i";
-		}
-		return re + " + " + im + "i";
+		return sb.append(im).append('i').toString();
 	}
 }

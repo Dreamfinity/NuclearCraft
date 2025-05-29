@@ -216,6 +216,13 @@ public class ContainerProcessorImpl {
 		}
 	}
 	
+	public static class ContainerFissionCooler extends ContainerBasicProcessor<TileFissionCooler, FissionCoolerUpdatePacket> {
+		
+		public ContainerFissionCooler(EntityPlayer player, TileFissionCooler cooler) {
+			super(player, cooler);
+		}
+	}
+	
 	public static class ContainerSolidFissionCell extends ContainerBasicFilteredProcessor<TileSolidFissionCell, SolidFissionCellUpdatePacket> {
 		
 		public ContainerSolidFissionCell(EntityPlayer player, TileSolidFissionCell cell) {

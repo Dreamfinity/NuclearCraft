@@ -15,6 +15,7 @@ import nc.integration.tconstruct.*;
 import nc.integration.tconstruct.conarm.ConArmMaterials;
 import nc.item.ItemMultitool;
 import nc.multiblock.*;
+import nc.ncpf.NCPFWriter;
 import nc.radiation.*;
 import nc.radiation.environment.RadiationEnvironmentHandler;
 import nc.recipe.*;
@@ -187,6 +188,9 @@ public class CommonProxy {
 		for (RegistrationInfo info : CTRegistration.INFO_LIST) {
 			info.postInit();
 		}
+		
+		NCPFWriter.exportNCPF();
+		
 		CTRegistration.INFO_LIST.clear();
 	}
 	

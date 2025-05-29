@@ -18,11 +18,9 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.nio.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import static nc.config.NCConfig.*;
-import static nc.multiblock.quantum.QuantumGate.*;
 
 public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumComputerPart> {
 	
@@ -32,9 +30,9 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 	
 	protected TileQuantumComputerController controller;
 	
-	protected ComplexVector state, cache = null;
+	protected QuantumState state;
 	
-	protected Queue<QuantumGate<?>> queue = new ConcurrentLinkedQueue<>();
+	public final Queue<QuantumGateWrapper> queue = new ConcurrentLinkedQueue<>();
 	
 	public int codeStart = -1, codeType = -1;
 	protected StringBuilder codeBuilder;
@@ -44,7 +42,7 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 		for (Class<? extends IQuantumComputerPart> clazz : PART_CLASSES) {
 			partSuperMap.equip(clazz);
 		}
-		state = new ComplexVector(1);
+		state = new QuantumState(0);
 	}
 	
 	@Override
@@ -60,13 +58,15 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 	@Override
 	protected void onBlockAdded(IQuantumComputerPart newPart) {
 		onPartAdded(newPart);
-		refreshState(false);
+		refreshState();
+		markQubitsDirty();
 	}
 	
 	@Override
 	protected void onBlockRemoved(IQuantumComputerPart oldPart) {
 		onPartRemoved(oldPart);
-		refreshState(false);
+		refreshState();
+		markQubitsDirty();
 	}
 	
 	@Override
@@ -77,10 +77,6 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 	@Override
 	protected void onMachineRestored() {
 		onQuantumComputerFormed();
-	}
-	
-	public static int getMaxQubits() {
-		return Math.max(quantum_max_qubits_live, quantum_max_qubits_code);
 	}
 	
 	protected void onQuantumComputerFormed() {
@@ -149,9 +145,9 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 			return false;
 		}
 		
-		int q = qubitCount(), max = getMaxQubits();
-		if (q > max) {
-			setLastError(Global.MOD_ID + ".multiblock_validation.quantum_computer.too_many_qubits", null, q, max);
+		int qubits = getQubitCount();
+		if (qubits > NCConfig.quantum_max_qubits) {
+			setLastError(Global.MOD_ID + ".multiblock_validation.quantum_computer.too_many_qubits", null, qubits, NCConfig.quantum_max_qubits);
 			return false;
 		}
 		
@@ -164,11 +160,7 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 	}
 	
 	@Override
-	protected void onAssimilate(QuantumComputer assimilated) {
-		/*if (isAssembled()) {
-			onQuantumComputerFormed();
-		}*/
-	}
+	protected void onAssimilate(QuantumComputer assimilated) {}
 	
 	@Override
 	protected void onAssimilated(QuantumComputer assimilator) {}
@@ -177,55 +169,30 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 	protected boolean updateServer() {
 		boolean refresh = false;
 		
-		int q = qubitCount();
+		int qubits = getQubitCount();
 		if (codeStart >= 0) {
 			codeType = codeStart;
 			codeStart = -1;
 			codeBuilder = new StringBuilder();
 		}
 		
-		QuantumGate<?> gate = queue.poll();
+		QuantumGateWrapper gate = queue.poll();
 		if (gate != null) {
-			try {
-				tryLoadStateCache(dim(q));
-				QuantumGate<?> merger = gate, next;
-				while (merger != null) {
-					next = queue.peek();
-					
-					if (next == null) {
-						break;
+			if (codeType >= 0) {
+				if (qubits <= NCConfig.quantum_max_qubits) {
+					List<String> code = gate.getCode(codeType);
+					if (!code.isEmpty()) {
+						codeBuilder.append(IOHelper.NEW_LINE);
 					}
-					
-					merger = merger.merge(next);
-					if (merger != null) {
-						queue.poll();
-						gate = merger;
+					for (String line : code) {
+						codeBuilder.append(line);
+						codeBuilder.append(IOHelper.NEW_LINE);
 					}
 				}
-				
-				if (codeType >= 0) {
-					if (q <= quantum_max_qubits_code) {
-						List<String> code = gate.getCode(codeType);
-						if (!code.isEmpty()) {
-							codeBuilder.append(IOHelper.NEW_LINE);
-						}
-						for (String line : code) {
-							codeBuilder.append(line);
-							codeBuilder.append(IOHelper.NEW_LINE);
-						}
-					}
-				}
-				else if (q <= quantum_max_qubits_live) {
-					gate.run();
-					refresh = gate.shouldMarkDirty();
-				}
-			} catch (OutOfMemoryError e) {
-				if (controller != null) {
-					WORLD.removeTileEntity(controller.getPos());
-					WORLD.setBlockToAir(controller.getPos());
-				}
-				NCUtil.getLogger().fatal("The quantum computer with " + q + " qubits at " + getMiddleCoord().toString() + " has caused the game to run out of heap memory! The controller has been destroyed and so the multiblock has been disabled. It is HIGHLY recommended that the maximum qubit limits are lowered in the configs!");
-				throw new RuntimeException(e);
+			}
+			else if (qubits <= NCConfig.quantum_max_qubits) {
+				gate.run();
+				refresh = gate.shouldRefresh();
 			}
 		}
 		
@@ -242,46 +209,50 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 	
 	@Override
 	public void syncDataFrom(NBTTagCompound data, SyncReason syncReason) {
-		cache = ComplexVector.readFromNBT(data, "state");
+		if (data.hasKey("size")) {
+			int size = data.getInteger("size");
+			if (size <= NCConfig.quantum_max_qubits) {
+				state = new QuantumState(size);
+				ByteBuffer.wrap(data.getByteArray("vector")).asDoubleBuffer().get(state.vector);
+			}
+		}
 	}
 	
 	@Override
 	public void syncDataTo(NBTTagCompound data, SyncReason syncReason) {
-		if (qubitCount() <= quantum_max_qubits_live) {
-			state.writeToNBT(data, "state");
-		}
-	}
-	
-	protected boolean tryLoadStateCache(int dim) {
-		if (cache != null && cache.dim == dim) {
-			state = cache.normalize();
-			cache = null;
+		if (getQubitCount() <= NCConfig.quantum_max_qubits) {
+			data.setInteger("size", state.size);
 			
-			markQubitsDirty();
-			return true;
+			ByteBuffer byteBuf = ByteBuffer.allocate(state.dim << 4);
+			DoubleBuffer doubleBuf = byteBuf.asDoubleBuffer();
+			doubleBuf.put(state.vector);
+			data.setByteArray("vector", byteBuf.array());
 		}
-		return false;
 	}
 	
-	// Quantum Logic
+	// Qubit Logic
 	
 	public Collection<TileQuantumComputerQubit> getQubits() {
 		return getParts(TileQuantumComputerQubit.class);
 	}
 	
-	public int qubitCount() {
+	public int getQubitCount() {
 		return getPartCount(TileQuantumComputerQubit.class);
 	}
 	
-	protected void setQubitsRedstone(int o, IntList n) {
-		if (cache == null) {
-			for (TileQuantumComputerQubit qubit : getQubits()) {
-				if (n.contains(qubit.id)) {
-					boolean result = NCMath.getBit(o, qubitCount() - qubit.id - 1) == 1;
-					qubit.redstone = result;
-					qubit.measureColor = result ? 1F : -1F;
-					qubit.sendTileUpdatePacketToAll();
-				}
+	protected void setQubitsRedstone(int[] targets, boolean[] results) {
+		Int2IntMap idMap = new Int2IntOpenHashMap();
+		for (int i = 0, len = targets.length; i < len; ++i) {
+			idMap.put(targets[i], i);
+		}
+		
+		for (TileQuantumComputerQubit qubit : getQubits()) {
+			int id = qubit.id;
+			if (idMap.containsKey(id)) {
+				boolean result = results[idMap.get(id)];
+				qubit.redstone = result;
+				qubit.measureColor = result ? 1F : -1F;
+				qubit.sendTileUpdatePacketToAll();
 			}
 		}
 	}
@@ -293,396 +264,31 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 		}
 	}
 	
-	protected void checkStateDim(int dim) {
-		if (state.dim != dim && qubitCount() <= quantum_max_qubits_live) {
-			state = new ComplexVector(dim);
-		}
-	}
-	
-	protected void collapse(int dim, int o, IntSet i, IntSet n) {
-		if (i.size() <= 1) {
-			state.zero();
-			int j = 0;
-			for (int k : i) {
-				j = k;
-			}
-			state.re[j] = 1D;
-			state.im[j] = 0D;
-		}
-		else {
-			for (int j = 0; j < dim; ++j) {
-				if (!i.contains(j)) {
-					state.re[j] = state.im[j] = 0D;
-				}
-			}
-		}
-		state.normalize();
-		
-		setQubitsRedstone(o, list(n));
-		markQubitsDirty();
-	}
-	
-	protected void refreshState(boolean collapse) {
-		int q = qubitCount();
-		if (q > getMaxQubits()) {
-			return;
-		}
-		
-		int dim = dim(q);
-		checkStateDim(dim);
-		
-		if (collapse) {
-			collapse(dim, 0, set(0), set(CollectionHelper.increasingArray(q)));
-		}
-		
-		markQubitsDirty();
-	}
-	
-	public void measure(IntSet n) {
-		IntList _n = list(n);
-		int q = qubitCount(), dim = dim(q), o;
-		checkStateDim(dim);
-		
-		int[] z = new int[_n.size()];
-		for (int i = 0; i < _n.size(); ++i) {
-			z[i] = q - _n.getInt(i) - 1;
-		}
-		
-		Int2DoubleMap w = new Int2DoubleOpenHashMap();
-		Int2ObjectMap<IntSet> s = new Int2ObjectOpenHashMap<>();
-		IntList l = new IntArrayList();
-		IntSet j = null;
-		double a, sum = 0D;
-		for (int i = 0; i < dim; ++i) {
-			a = Complex.absSq(state.re[i], state.im[i]);
-			sum += a;
-			o = NCMath.onlyBits(i, z);
-			if (w.containsKey(o)) {
-				w.put(o, w.get(o) + a);
-				s.get(o).add(i);
-			}
-			else {
-				l.add(o);
-				w.put(o, a);
-				s.put(o, set(i));
-			}
-		}
-		
-		o = dim - 1;
-		sum *= rand.nextDouble();
-		for (int i : l) {
-			sum -= w.get(i);
-			if (sum < 0) {
-				o = i;
-				j = s.get(i);
-				break;
-			}
-		}
-		
-		collapse(dim, o, j == null ? set(dim - 1) : j, n);
-	}
-	
 	// Gates
 	
-	public Queue<QuantumGate<?>> getGateQueue() {
-		return queue;
-	}
-	
-	protected boolean invalid(IntList n) {
-		int q = qubitCount();
-		for (int i : n) {
-			if (i < 0 || i >= q) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	protected ComplexMatrix fallback() {
-		return id(qubitCount());
-	}
-	
-	protected void gate(ComplexMatrix m) {
-		checkStateDim(dim(qubitCount()));
-		state.map(m);
-	}
-	
-	protected ComplexMatrix single(ComplexMatrix m, IntList n) {
-		int q = qubitCount();
-		if (n.isEmpty()) {
-			return id(q);
-		}
-		
-		if (invalid(n)) {
-			return fallback();
-		}
-		
-		ComplexMatrix[] t = new ComplexMatrix[q];
-		for (int j = 0; j < q; ++j) {
-			t[j] = n.contains(j) ? m : I;
-		}
-		
-		return ComplexMatrix.tensorProduct(t);
-	}
-	
-	public void x(IntSet n) {
-		gate(single(X, list(n)));
-	}
-	
-	public void y(IntSet n) {
-		gate(single(Y, list(n)));
-	}
-	
-	public void z(IntSet n) {
-		gate(single(Z, list(n)));
-	}
-	
-	public void h(IntSet n) {
-		gate(single(H, list(n)));
-	}
-	
-	public void s(IntSet n) {
-		gate(single(S, list(n)));
-	}
-	
-	public void sdg(IntSet n) {
-		gate(single(Sdg, list(n)));
-	}
-	
-	public void t(IntSet n) {
-		gate(single(T, list(n)));
-	}
-	
-	public void tdg(IntSet n) {
-		gate(single(Tdg, list(n)));
-	}
-	
-	/**
-	 * Angle in degrees!
-	 */
-	public void p(double angle, IntSet n) {
-		gate(single(QuantumGate.p(angle), list(n)));
-	}
-	
-	/**
-	 * Angle in degrees!
-	 */
-	public void rx(double angle, IntSet n) {
-		gate(single(QuantumGate.rx(angle), list(n)));
-	}
-	
-	/**
-	 * Angle in degrees!
-	 */
-	public void ry(double angle, IntSet n) {
-		gate(single(QuantumGate.ry(angle), list(n)));
-	}
-	
-	/**
-	 * Angle in degrees!
-	 */
-	public void rz(double angle, IntSet n) {
-		gate(single(QuantumGate.rz(angle), list(n)));
-	}
-	
-	public void swap(IntList i_, IntList j_) {
-		if (i_.size() != j_.size()) {
-			return;
-		}
-		
-		// IntList _i = list(i_), _j = list(j_);
-		if (invalid(i_) || invalid(j_)) {
-			return;
-		}
-		
-		int q = qubitCount(), dim = dim(q), i, j, s;
-		checkStateDim(dim);
-		
-		double re, im;
-		for (int k = 0; k < dim; ++k) {
-			for (int a = 0; a < i_.size(); ++a) {
-				i = i_.getInt(a);
-				j = j_.getInt(a);
-				if (i == j) {
-					continue;
-				}
-				
-				i = q - i - 1;
-				j = q - j - 1;
-				if (NCMath.getBit(k, i) == 0 && NCMath.getBit(k, j) == 1) {
-					s = NCMath.swap(k, i, j);
-					re = state.re[k];
-					im = state.im[k];
-					state.re[k] = state.re[s];
-					state.im[k] = state.im[s];
-					state.re[s] = re;
-					state.im[s] = im;
-				}
-			}
+	public void refreshState() {
+		int qubits = getQubitCount();
+		if (state.size != qubits) {
+			state = new QuantumState(qubits);
 		}
 	}
 	
-	public ComplexMatrix control(ComplexMatrix g, IntList c, IntList t) {
-		int q = qubitCount();
-		if (t.isEmpty()) {
-			return id(q);
-		}
-		
-		if (c.isEmpty()) {
-			return single(g, t);
-		}
-		
-		if (invalid(c)) {
-			return fallback();
-		}
-		
-		for (int i : c) {
-			if (t.contains(i)) {
-				return id(q);
-			}
-		}
-		
-		int s = dim(c.size()), k;
-		ComplexMatrix m = new ComplexMatrix(dim(q));
-		ComplexMatrix[] e = new ComplexMatrix[q];
-		boolean b;
-		for (int i = 0; i < s; ++i) {
-			k = 0;
-			for (int j = 0; j < q; ++j) {
-				b = c.contains(j);
-				e[j] = b ? NCMath.getBit(i, c.size() - k - 1) == 1 ? P_1 : P_0 : t.contains(j) && i == s - 1 ? g : I;
-				if (b) {
-					++k;
-				}
-			}
-			m.add(ComplexMatrix.tensorProduct(e));
-		}
-		
-		return m;
+	public void measure(int[] targets) {
+		refreshState();
+		setQubitsRedstone(targets, state.measure(targets, true));
+		markQubitsDirty();
 	}
 	
-	public void cx(IntSet c, IntSet t) {
-		gate(control(X, list(c), list(t)));
+	public void reset() {
+		state = new QuantumState(getQubitCount());
 	}
 	
-	public void cy(IntSet c, IntSet t) {
-		gate(control(Y, list(c), list(t)));
+	public void gate(QuantumGate gate) {
+		refreshState();
+		state.update(gate);
 	}
 	
-	public void cz(IntSet c, IntSet t) {
-		gate(control(Z, list(c), list(t)));
-	}
-	
-	public void ch(IntSet c, IntSet t) {
-		gate(control(H, list(c), list(t)));
-	}
-	
-	public void cs(IntSet c, IntSet t) {
-		gate(control(S, list(c), list(t)));
-	}
-	
-	public void csdg(IntSet c, IntSet t) {
-		gate(control(Sdg, list(c), list(t)));
-	}
-	
-	public void ct(IntSet c, IntSet t) {
-		gate(control(T, list(c), list(t)));
-	}
-	
-	public void ctdg(IntSet c, IntSet t) {
-		gate(control(Tdg, list(c), list(t)));
-	}
-	
-	/**
-	 * Angle in degrees!
-	 */
-	public void cp(double angle, IntSet c, IntSet t) {
-		gate(control(QuantumGate.p(angle), list(c), list(t)));
-	}
-	
-	/**
-	 * Angle in degrees!
-	 */
-	public void crx(double angle, IntSet c, IntSet t) {
-		gate(control(QuantumGate.rx(angle), list(c), list(t)));
-	}
-	
-	/**
-	 * Angle in degrees!
-	 */
-	public void cry(double angle, IntSet c, IntSet t) {
-		gate(control(QuantumGate.ry(angle), list(c), list(t)));
-	}
-	
-	/**
-	 * Angle in degrees!
-	 */
-	public void crz(double angle, IntSet c, IntSet t) {
-		gate(control(QuantumGate.rz(angle), list(c), list(t)));
-	}
-	
-	// Don't know how to optimise this!
-	public void cswap(IntSet c_, IntList i_, IntList j_) {
-		if (c_.isEmpty()) {
-			swap(i_, j_);
-			return;
-		}
-		
-		if (i_.size() != j_.size()) {
-			return;
-		}
-		
-		if (invalid(i_) || invalid(j_)) {
-			return;
-		}
-		
-		for (int i : c_) {
-			if (i_.contains(i) || j_.contains(i)) {
-				return;
-			}
-		}
-		
-		IntList c = list(c_);
-		int s = dim(c.size()), q = qubitCount(), dim = dim(q), k, i, j, w;
-		checkStateDim(dim);
-		
-		ComplexMatrix m = new ComplexMatrix(dim), p;
-		ComplexMatrix[] e = new ComplexMatrix[q];
-		boolean b;
-		for (int u = 0; u < s; ++u) {
-			k = 0;
-			for (int v = 0; v < q; ++v) {
-				b = c.contains(v);
-				e[v] = b ? NCMath.getBit(u, c.size() - k - 1) == 1 ? P_1 : P_0 : I;
-				if (b) {
-					++k;
-				}
-			}
-			p = ComplexMatrix.tensorProduct(e);
-			if (u == s - 1) {
-				for (int l = 0; l < dim; ++l) {
-					for (int a = 0; a < i_.size(); ++a) {
-						i = i_.getInt(a);
-						j = j_.getInt(a);
-						if (i == j) {
-							continue;
-						}
-						
-						i = q - i - 1;
-						j = q - j - 1;
-						if (NCMath.getBit(l, i) == 0 && NCMath.getBit(l, j) == 1) {
-							w = NCMath.swap(l, i, j);
-							p.swap(l, l, w, l);
-							p.swap(w, w, l, w);
-						}
-					}
-				}
-			}
-			m.add(p);
-		}
-		
-		gate(m);
-	}
+	// Code Generation
 	
 	public void printCode(EntityPlayer player) {
 		if (codeType < 0) {
@@ -692,8 +298,8 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 		int cachedCodeType = codeType;
 		codeType = -1;
 		
-		int q = qubitCount();
-		if (q > quantum_max_qubits_code) {
+		int qubits = getQubitCount();
+		if (qubits > NCConfig.quantum_max_qubits) {
 			player.sendMessage(new TextComponentString(Lang.localize("info.nuclearcraft.multitool.quantum_computer.controller.code_exit_too_many_qubits")));
 			return;
 		}
@@ -707,16 +313,17 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 				return;
 			}
 			
-			File out = new File("nc_quantum/qasm/" + q + "_qubit_" + time + ".qasm");
+			File out = new File("nc_quantum/qasm/" + qubits + "_qubit_" + time + ".qasm");
 			
-			codeString = "OPENQASM 2.0;" + s + "include \"qelib1.inc\";" + d + "qreg q[" + q + "];" + s + "creg c[" + q + "];" + d + codeString;
+			codeString = "OPENQASM 2.0;" + s + "include \"qelib1.inc\";" + d + "qreg q[" + qubits + "];" + s + "creg c[" + qubits + "];" + d + codeString;
 			
 			try {
 				FileUtils.writeStringToFile(out, codeString);
 				ITextComponent link = new TextComponentString(out.getName());
 				link.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath())).setBold(true).setUnderlined(true);
 				player.sendMessage(new TextComponentTranslation("info.nuclearcraft.multitool.quantum_computer.controller.qasm_print", link));
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				NCUtil.getLogger().catching(e);
 				player.sendMessage(new TextComponentTranslation("info.nuclearcraft.multitool.quantum_computer.controller.qasm_error", out.getAbsolutePath()));
 			}
@@ -727,19 +334,19 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 				return;
 			}
 			
-			File out = new File("nc_quantum/qiskit/" + q + "_qubit_" + time + ".ipynb");
+			File out = new File("nc_quantum/qiskit/" + qubits + "_qubit_" + time + ".ipynb");
 			
 			codeString = "# Jupyter plot output mode" + s + "# %matplotlib inline" + d +
 					
 					"# Imports" + s + "import qiskit" + s + "from qiskit import IBMQ, QuantumCircuit, visualization" + s + "from qiskit.providers import ibmq" + s + "from qiskit.tools import monitor" + d +
 					
-					"# Number of qubits" + s + "qubits = " + q + d +
+					"# Number of qubits" + s + "qubits = " + qubits + d +
 					
 					"# Load IBMQ account" + s + "provider = IBMQ.load_account()" + d +
 					
 					"# Get backends" + s + "simulator = provider.get_backend('simulator_statevector')" + s + "device = provider.get_backend('ibmq_manila')" + s + "filtered = provider.backends(" + s + "    filters=lambda x:" + s + "    int(x.configuration().num_qubits) >= qubits" + s + "    and not x.configuration().simulator" + s + "    and x.status().operational" + s + ")" + s + "leastbusy = ibmq.least_busy(filtered) if len(filtered) > 0 else device" + d +
 					
-					"# Choice of backend" + s + "qc_backend = " + (q > 5 ? "simulator" : "device") + d +
+					"# Choice of backend" + s + "qc_backend = " + (qubits > 5 ? "simulator" : "device") + d +
 					
 					"# Construct circuit" + s + "qc = QuantumCircuit(qubits, qubits)" + d +
 					
@@ -760,7 +367,8 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 				ITextComponent link = new TextComponentString(out.getName());
 				link.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, out.getAbsolutePath())).setBold(true).setUnderlined(true);
 				player.sendMessage(new TextComponentTranslation("info.nuclearcraft.multitool.quantum_computer.controller.qiskit_print", link));
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				NCUtil.getLogger().catching(e);
 				player.sendMessage(new TextComponentTranslation("info.nuclearcraft.multitool.quantum_computer.controller.qiskit_error", out.getAbsolutePath()));
 			}

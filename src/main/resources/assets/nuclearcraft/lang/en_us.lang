@@ -3051,10 +3051,8 @@ gui.nc.config.category.quantum.tooltip=Configure quantum mechanical systems.
 
 gui.nc.config.quantum_dedicated_server=Enable on Dedicated Servers
 gui.nc.config.quantum_dedicated_server.comment=Will quantum computers form on dedicated servers? Disabled by default to prevent players using up server memory, and because generated code is not sent to clients but instead stored in the server's directory.
-gui.nc.config.quantum_max_qubits_live=Max Live Qubits
-gui.nc.config.quantum_max_qubits_live.comment=The maximum number of actively calculating qubits a single quantum computer multiblock can have. !!!WARNING!!! Allowing for complex circuits of more than seven qubits will begin to seriously impact performance and use up a huge amount of memory. Increase this limit with EXTREME caution!
-gui.nc.config.quantum_max_qubits_code=Max Coding Qubits
-gui.nc.config.quantum_max_qubits_code.comment=The maximum number of qubits a single quantum computer multiblock can have for generating code. !!!WARNING!!! Gates with more control qubits will take increasingly more work and memory to decompile into basic operations, thus will generate increasingly mode code. If generating QASM code, IBM Q Experience's circuit composer will begin to struggle to deal with more than a few hundred lines. Increase this limit with EXTREME caution!
+gui.nc.config.quantum_max_qubits=Max Qubits
+gui.nc.config.quantum_max_qubits.comment=The maximum number of qubits a single quantum computer multiblock can have.
 gui.nc.config.quantum_angle_precision=Gate Angle Precision
 gui.nc.config.quantum_angle_precision.comment=Controls the precision allowed for setting the working angle of gates by defining the number of available angles, uniformly distributed from 0 to 360 degrees.
 

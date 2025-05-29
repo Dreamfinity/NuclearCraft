@@ -1,9 +1,6 @@
 package nc.config;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import nc.*;
-import nc.multiblock.fission.FissionPlacement;
-import nc.multiblock.turbine.TurbinePlacement;
 import nc.network.config.ConfigUpdatePacket;
 import nc.radiation.RadSources;
 import nc.recipe.NCRecipes;
@@ -288,8 +285,7 @@ public class NCConfig {
 	public static double turbine_render_rotor_speed;
 	
 	public static boolean quantum_dedicated_server;
-	public static int quantum_max_qubits_live;
-	public static int quantum_max_qubits_code;
+	public static int quantum_max_qubits;
 	public static int quantum_angle_precision;
 	
 	public static int[] tool_mining_level;
@@ -458,7 +454,7 @@ public class NCConfig {
 	}
 	
 	public static void postInit() {
-		outputInfo();
+	
 	}
 	
 	public static void clientPreInit() {
@@ -735,8 +731,7 @@ public class NCConfig {
 		turbine_render_rotor_speed = sync(CATEGORY_TURBINE, "turbine_render_rotor_speed", 1D, 0D, 15D);
 		
 		quantum_dedicated_server = sync(CATEGORY_QUANTUM, "quantum_dedicated_server", false);
-		quantum_max_qubits_live = sync(CATEGORY_QUANTUM, "quantum_max_qubits_live", 7, 1, 14);
-		quantum_max_qubits_code = sync(CATEGORY_QUANTUM, "quantum_max_qubits_code", 16, 1, 32);
+		quantum_max_qubits = sync(CATEGORY_QUANTUM, "quantum_max_qubits", 16, 1, 24);
 		quantum_angle_precision = sync(CATEGORY_QUANTUM, "quantum_angle_precision", 16, 4, 1024);
 		
 		tool_mining_level = sync(CATEGORY_TOOL, "tool_mining_level", new int[] {2, 2, 3, 3, 3, 3, 4, 4}, 0, 15, ARRAY);
@@ -886,32 +881,6 @@ public class NCConfig {
 		
 		if (config.hasChanged()) {
 			config.save();
-		}
-	}
-	
-	protected static void outputInfo() {
-		File file = new File(Loader.instance().getConfigDir(), "nuclearcraft.info");
-		file.delete();
-		Configuration info = new Configuration(file);
-		
-		List<String> fissionPlacement = new ArrayList<>();
-		for (Object2ObjectMap.Entry<String, String> entry : FissionPlacement.RULE_MAP_RAW.object2ObjectEntrySet()) {
-			fissionPlacement.add(entry.getKey() + " -> " + entry.getValue());
-		}
-		
-		Property propertyFissionPlacement = info.get(CATEGORY_OUTPUT, "fission_placement", fissionPlacement.toArray(new String[0]));
-		propertyFissionPlacement.setLanguageKey("gui.nc.config.fission_placement");
-		
-		List<String> turbinePlacement = new ArrayList<>();
-		for (Object2ObjectMap.Entry<String, String> entry : TurbinePlacement.RULE_MAP_RAW.object2ObjectEntrySet()) {
-			turbinePlacement.add(entry.getKey() + " -> " + entry.getValue());
-		}
-		
-		Property propertyTurbinePlacement = info.get(CATEGORY_OUTPUT, "turbine_placement", turbinePlacement.toArray(new String[0]));
-		propertyTurbinePlacement.setLanguageKey("gui.nc.config.turbine_placement");
-		
-		if (info.hasChanged()) {
-			info.save();
 		}
 	}
 	

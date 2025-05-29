@@ -143,7 +143,7 @@ public interface ITile {
 		
 		if (ModCheck.mekanismLoaded()) {
 			for (EnumFacing side : EnumFacing.VALUES) {
-				MekanismHelper.markTransmitterDirty(world, pos, side);
+				MekanismHelper.updateTransmitter(world, pos, side);
 			}
 		}
 	}

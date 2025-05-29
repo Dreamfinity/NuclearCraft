@@ -34,7 +34,8 @@ public class IOHelper {
 		int signature = 0;
 		try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
 			signature = raf.readInt();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			NCUtil.getLogger().catching(e);
 		}
 		return signature == 0x504B0304 || signature == 0x504B0506 || signature == 0x504B0708;

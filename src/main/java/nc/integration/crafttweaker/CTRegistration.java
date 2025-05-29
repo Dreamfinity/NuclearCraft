@@ -67,6 +67,36 @@ public class CTRegistration {
 	public static final Object2ObjectMap<String, FissionFuelRegistrationInfo> FISSION_FUEL_INFO_MAP = new Object2ObjectLinkedOpenHashMap<>();
 	
 	@ZenMethod
+	public static void registerRTG(String rtgID, long power, double radiation) {
+		
+		Lazy<Block> rtg = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "rtg_" + rtgID, new BlockRTG(null) {
+			
+			@Override
+			public TileEntity createNewTileEntity(World world, int metadata) {
+				return new TileRTG(rtgID, power, radiation);
+			}
+		}));
+		
+		INFO_LIST.add(new RTGRegistrationInfo(rtg, rtgID, power, radiation));
+		CraftTweakerAPI.logInfo("Registered RTG with ID \"" + rtgID + "\", power " + power + " RF/t and radiation " + radiation + " Rad/t");
+	}
+	
+	@ZenMethod
+	public static void registerBattery(String batteryID, long capacity, int energyTier) {
+		
+		Lazy<Block> battery = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "battery_" + batteryID, new BlockBattery(null) {
+			
+			@Override
+			public TileEntity createNewTileEntity(World world, int metadata) {
+				return new TileBattery(batteryID, capacity, energyTier);
+			}
+		}));
+		
+		INFO_LIST.add(new BatteryRegistrationInfo(battery, batteryID, capacity, energyTier));
+		CraftTweakerAPI.logInfo("Registered battery with ID \"" + batteryID + "\", capacity " + capacity + " RF/t and energy tier " + energyTier);
+	}
+	
+	@ZenMethod
 	public static void registerFissionSink(String sinkID, int cooling, String rule) {
 		
 		Lazy<Block> sink = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "solid_fission_sink_" + sinkID, new BlockSolidFissionSink() {
@@ -224,36 +254,6 @@ public class CTRegistration {
 		
 		INFO_LIST.add(new TurbineStatorRegistrationInfo(stator, statorType));
 		CraftTweakerAPI.logInfo("Registered turbine rotor stator with ID \"" + statorID + "\" and expansion coefficient " + expansionCoefficient);
-	}
-	
-	@ZenMethod
-	public static void registerRTG(String rtgID, long power, double radiation) {
-		
-		Lazy<Block> rtg = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "rtg_" + rtgID, new BlockRTG(null) {
-			
-			@Override
-			public TileEntity createNewTileEntity(World world, int metadata) {
-				return new TileRTG(rtgID, power, radiation);
-			}
-		}));
-		
-		INFO_LIST.add(new RTGRegistrationInfo(rtg, rtgID, power, radiation));
-		CraftTweakerAPI.logInfo("Registered RTG with ID \"" + rtgID + "\", power " + power + " RF/t and radiation " + radiation + " Rad/t");
-	}
-	
-	@ZenMethod
-	public static void registerBattery(String batteryID, long capacity, int energyTier) {
-		
-		Lazy<Block> battery = new Lazy<>(() -> NCBlocks.withName(Global.MOD_ID, "battery_" + batteryID, new BlockBattery(null) {
-			
-			@Override
-			public TileEntity createNewTileEntity(World world, int metadata) {
-				return new TileBattery(batteryID, capacity, energyTier);
-			}
-		}));
-		
-		INFO_LIST.add(new BatteryRegistrationInfo(battery, batteryID, capacity, energyTier));
-		CraftTweakerAPI.logInfo("Registered battery with ID \"" + batteryID + "\", capacity " + capacity + " RF/t and energy tier " + energyTier);
 	}
 	
 	public static void registerProcessor(ProcessorContainerInfoBuilder<?, ?, ?, ?> builder, Function<String, TileEntity> tileFunction, Class<? extends JEIProcessorRecipeWrapper<?, ?, ?, ?>> jeiWrapperClassSuper) {
@@ -464,7 +464,7 @@ public class CTRegistration {
 	
 	public static class BlockRegistrationInfo extends RegistrationInfo {
 		
-		protected final Lazy<Block> block;
+		public final Lazy<Block> block;
 		
 		public BlockRegistrationInfo(Lazy<Block> block) {
 			this.block = block;
@@ -504,10 +504,62 @@ public class CTRegistration {
 		}
 	}
 	
+	public static class RTGRegistrationInfo extends TileBlockRegistrationInfo {
+		
+		public final String rtgID;
+		public final long power;
+		public final double radiation;
+		
+		RTGRegistrationInfo(Lazy<Block> block, String rtgID, long power, double radiation) {
+			super(block);
+			this.rtgID = rtgID;
+			this.power = power;
+			this.radiation = radiation;
+		}
+		
+		@Override
+		public void registerBlock() {
+			NCBlocks.registerBlock(block.get(), NCInfo.rtgInfo(power));
+		}
+		
+		@Override
+		public void init() {
+			super.init();
+			TileRTG.DYN_POWER_MAP.put(rtgID, power);
+			TileRTG.DYN_RADIATION_MAP.put(rtgID, radiation);
+		}
+	}
+	
+	public static class BatteryRegistrationInfo extends TileBlockRegistrationInfo {
+		
+		public final String batteryID;
+		public final long capacity;
+		public final int energyTier;
+		
+		BatteryRegistrationInfo(Lazy<Block> block, String batteryID, long capacity, int energyTier) {
+			super(block);
+			this.batteryID = batteryID;
+			this.capacity = capacity;
+			this.energyTier = energyTier;
+		}
+		
+		@Override
+		public void registerBlock() {
+			NCBlocks.registerBlock(block.get(), new ItemBlockBattery(block.get(), capacity, NCMath.toInt(capacity), energyTier, NCInfo.batteryInfo()));
+		}
+		
+		@Override
+		public void init() {
+			super.init();
+			TileBattery.DYN_CAPACITY_MAP.put(batteryID, capacity);
+			TileBattery.DYN_ENERGY_TIER_MAP.put(batteryID, energyTier);
+		}
+	}
+	
 	public static class FissionSinkRegistrationInfo extends TileBlockRegistrationInfo {
 		
-		protected final String sinkID, rule;
-		protected final int cooling;
+		public final String sinkID, rule;
+		public final int cooling;
 		
 		FissionSinkRegistrationInfo(Lazy<Block> block, String sinkID, int cooling, String rule) {
 			super(block);
@@ -532,8 +584,8 @@ public class CTRegistration {
 	
 	public static class FissionHeaterRegistrationInfo extends TileBlockRegistrationInfo {
 		
-		protected final String heaterID, fluidInput, fluidOutput, rule;
-		protected final int inputAmount, outputAmount, cooling;
+		public final String heaterID, fluidInput, fluidOutput, rule;
+		public final int inputAmount, outputAmount, cooling;
 		
 		FissionHeaterRegistrationInfo(Lazy<Block> block, String heaterID, String fluidInput, int inputAmount, String fluidOutput, int outputAmount, int cooling, String rule) {
 			super(block);
@@ -566,15 +618,18 @@ public class CTRegistration {
 	
 	public static class FissionHeaterPortRegistrationInfo extends TileBlockRegistrationInfo {
 		
+		public final String heaterID;
+		
 		FissionHeaterPortRegistrationInfo(Lazy<Block> block, String heaterID) {
 			super(block);
+			this.heaterID = heaterID;
 		}
 	}
 	
 	public static class FissionSourceRegistrationInfo extends TileBlockRegistrationInfo {
 		
-		protected final String sourceID;
-		protected final double efficiency;
+		public final String sourceID;
+		public final double efficiency;
 		
 		FissionSourceRegistrationInfo(Lazy<Block> block, String sourceID, double efficiency) {
 			super(block);
@@ -596,8 +651,8 @@ public class CTRegistration {
 	
 	public static class FissionShieldRegistrationInfo extends TileBlockRegistrationInfo {
 		
-		protected final String shieldID;
-		protected final double heatPerFlux, efficiency;
+		public final String shieldID;
+		public final double heatPerFlux, efficiency;
 		
 		FissionShieldRegistrationInfo(Lazy<Block> block, String shieldID, double heatPerFlux, double efficiency) {
 			super(block);
@@ -621,8 +676,8 @@ public class CTRegistration {
 	
 	public static class HeatExchangerTubeRegistrationInfo extends TileBlockRegistrationInfo {
 		
-		protected final String tubeID;
-		protected final double heatTransferCoefficient, heatRetentionMult;
+		public final String tubeID;
+		public final double heatTransferCoefficient, heatRetentionMult;
 		
 		HeatExchangerTubeRegistrationInfo(Lazy<Block> block, String tubeID, double heatTransferCoefficient, double heatRetentionMult) {
 			super(block);
@@ -646,8 +701,8 @@ public class CTRegistration {
 	
 	public static class TurbineCoilRegistrationInfo extends TileBlockRegistrationInfo {
 		
-		protected final String coilID, rule;
-		protected final double conductivity;
+		public final String coilID, rule;
+		public final double conductivity;
 		
 		TurbineCoilRegistrationInfo(Lazy<Block> block, String coilID, double conductivity, String rule) {
 			super(block);
@@ -672,7 +727,7 @@ public class CTRegistration {
 	
 	public static class TurbineBladeRegistrationInfo extends TileBlockRegistrationInfo {
 		
-		protected final IRotorBladeType bladeType;
+		public final IRotorBladeType bladeType;
 		
 		TurbineBladeRegistrationInfo(Lazy<Block> block, IRotorBladeType bladeType) {
 			super(block);
@@ -693,7 +748,7 @@ public class CTRegistration {
 	
 	public static class TurbineStatorRegistrationInfo extends TileBlockRegistrationInfo {
 		
-		protected final IRotorStatorType statorType;
+		public final IRotorStatorType statorType;
 		
 		TurbineStatorRegistrationInfo(Lazy<Block> block, IRotorStatorType statorType) {
 			super(block);
@@ -709,58 +764,6 @@ public class CTRegistration {
 		public void init() {
 			super.init();
 			TileTurbineRotorStator.DYN_STATOR_TYPE_MAP.put(statorType.getName(), statorType);
-		}
-	}
-	
-	public static class RTGRegistrationInfo extends TileBlockRegistrationInfo {
-		
-		protected final String rtgID;
-		protected final long power;
-		protected final double radiation;
-		
-		RTGRegistrationInfo(Lazy<Block> block, String rtgID, long power, double radiation) {
-			super(block);
-			this.rtgID = rtgID;
-			this.power = power;
-			this.radiation = radiation;
-		}
-		
-		@Override
-		public void registerBlock() {
-			NCBlocks.registerBlock(block.get(), NCInfo.rtgInfo(power));
-		}
-		
-		@Override
-		public void init() {
-			super.init();
-			TileRTG.DYN_POWER_MAP.put(rtgID, power);
-			TileRTG.DYN_RADIATION_MAP.put(rtgID, radiation);
-		}
-	}
-	
-	public static class BatteryRegistrationInfo extends TileBlockRegistrationInfo {
-		
-		protected final String batteryID;
-		protected final long capacity;
-		protected final int energyTier;
-		
-		BatteryRegistrationInfo(Lazy<Block> block, String batteryID, long capacity, int energyTier) {
-			super(block);
-			this.batteryID = batteryID;
-			this.capacity = capacity;
-			this.energyTier = energyTier;
-		}
-		
-		@Override
-		public void registerBlock() {
-			NCBlocks.registerBlock(block.get(), new ItemBlockBattery(block.get(), capacity, NCMath.toInt(capacity), energyTier, NCInfo.batteryInfo()));
-		}
-		
-		@Override
-		public void init() {
-			super.init();
-			TileBattery.DYN_CAPACITY_MAP.put(batteryID, capacity);
-			TileBattery.DYN_ENERGY_TIER_MAP.put(batteryID, energyTier);
 		}
 	}
 	
@@ -845,7 +848,7 @@ public class CTRegistration {
 		
 		protected final String name;
 		protected Item item = null;
-		protected CreativeTabs tab;
+		protected final CreativeTabs tab;
 		
 		public final List<String> types = new ArrayList<>();
 		public final List<String> models = new ArrayList<>();
@@ -877,7 +880,8 @@ public class CTRegistration {
 			
 			try {
 				FileUtils.writeStringToFile(new File("resources/nuclearcraft/blockstates/items/" + name + ".json"), builder.toString());
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				NCUtil.getLogger().catching(e);
 			}
 		}

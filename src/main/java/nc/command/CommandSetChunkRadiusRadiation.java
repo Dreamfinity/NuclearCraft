@@ -29,14 +29,16 @@ public class CommandSetChunkRadiusRadiation extends CommandBase {
 			double newRadiation;
 			try {
 				newRadiation = Double.parseDouble(args[0]);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				throw new WrongUsageException(getUsage(sender));
 			}
 			
 			int radius;
 			try {
 				radius = Integer.parseInt(args[1]);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e) {
 				throw new WrongUsageException(getUsage(sender));
 			}
 			

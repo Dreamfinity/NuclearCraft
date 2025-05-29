@@ -74,12 +74,14 @@ public class MultiblockHandler {
 		FissionReactor.PART_CLASSES.add(TileFissionMonitor.class);
 		FissionReactor.PART_CLASSES.add(TileFissionVent.class);
 		FissionReactor.PART_CLASSES.add(TileFissionIrradiatorPort.class);
+		FissionReactor.PART_CLASSES.add(TileFissionCoolerPort.class);
 		FissionReactor.PART_CLASSES.add(TileFissionCellPort.class);
 		FissionReactor.PART_CLASSES.add(TileFissionVesselPort.class);
 		FissionReactor.PART_CLASSES.add(TileFissionHeaterPort.class);
 		FissionReactor.PART_CLASSES.add(TileFissionSourceManager.class);
 		FissionReactor.PART_CLASSES.add(TileFissionShieldManager.class);
 		FissionReactor.PART_CLASSES.add(TileFissionIrradiator.class);
+		FissionReactor.PART_CLASSES.add(TileFissionCooler.class);
 		FissionReactor.PART_CLASSES.add(TileFissionSource.class);
 		FissionReactor.PART_CLASSES.add(TileFissionShield.class);
 		FissionReactor.PART_CLASSES.add(TileSolidFissionCell.class);

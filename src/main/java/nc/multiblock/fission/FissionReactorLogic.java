@@ -10,7 +10,7 @@ import nc.tile.fission.*;
 import nc.tile.fission.IFissionFuelComponent.ModeratorBlockInfo;
 import nc.tile.fission.TileFissionSource.PrimingTargetInfo;
 import nc.tile.fission.manager.*;
-import nc.tile.fission.port.TileFissionIrradiatorPort;
+import nc.tile.fission.port.*;
 import nc.tile.internal.energy.EnergyStorage;
 import nc.tile.internal.fluid.Tank;
 import nc.tile.internal.heat.HeatBuffer;
@@ -142,6 +142,7 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 		refreshManagers(TileFissionSourceManager.class);
 		refreshManagers(TileFissionShieldManager.class);
 		refreshFilteredPorts(TileFissionIrradiatorPort.class, TileFissionIrradiator.class);
+		refreshFilteredPorts(TileFissionCoolerPort.class, TileFissionCooler.class);
 	}
 	
 	public void refreshReactor() {

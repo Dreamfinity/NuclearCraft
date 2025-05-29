@@ -134,11 +134,13 @@ public class NCBlocks {
 	public static Block fission_power_port;
 	public static Block fission_vent;
 	public static Block fission_irradiator;
+	public static Block fission_cooler;
 	public static Block fission_source;
 	public static Block fission_shield;
 	public static Block fission_computer_port;
 	
 	public static Block fission_irradiator_port;
+	public static Block fission_cooler_port;
 	
 	public static Block fission_cell_port;
 	
@@ -366,12 +368,15 @@ public class NCBlocks {
 		fission_power_port = addWithName(Global.MOD_ID, "fission_power_port", new BlockFissionPowerPort());
 		fission_vent = addWithName(Global.MOD_ID, "fission_vent", new BlockFissionVent());
 		fission_irradiator = addWithName(Global.MOD_ID, "fission_irradiator", new BlockFissionIrradiator());
+		fission_cooler = addWithName(Global.MOD_ID, "fission_cooler", new BlockFissionCooler());
 		fission_source = addWithNameMeta(Global.MOD_ID, "fission_source", new BlockFissionMetaSource(), x -> new ItemBlockMeta<>(x, TextFormatting.LIGHT_PURPLE, NCInfo.neutronSourceFixedInfo(), TextFormatting.AQUA, NCInfo.neutronSourceInfo()), x -> "active=false,facing=south,type=" + x);
 		fission_shield = addWithNameMeta(Global.MOD_ID, "fission_shield", new BlockFissionMetaShield(), x -> new ItemBlockMeta<>(x, new TextFormatting[] {TextFormatting.YELLOW, TextFormatting.LIGHT_PURPLE}, NCInfo.neutronShieldFixedInfo(), TextFormatting.AQUA, NCInfo.neutronShieldInfo()), x -> "active=true,type=" + x);
 		
 		fission_computer_port = addWithName(Global.MOD_ID, "fission_computer_port", new BlockFissionComputerPort());
 		
 		fission_irradiator_port = addWithName(Global.MOD_ID, "fission_irradiator_port", new BlockFissionIrradiatorPort());
+		fission_cooler_port = addWithName(Global.MOD_ID, "fission_cooler_port", new BlockFissionCoolerPort());
+		
 		fission_cell_port = addWithName(Global.MOD_ID, "fission_cell_port", new BlockFissionCellPort());
 		
 		fission_vessel_port = addWithName(Global.MOD_ID, "fission_vessel_port", new BlockFissionVesselPort());

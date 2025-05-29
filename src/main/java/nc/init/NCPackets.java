@@ -64,6 +64,7 @@ public class NCPackets {
 		wrapper.registerMessage(FluidPortUpdatePacket.Handler.class, FluidPortUpdatePacket.class, nextID(), Side.CLIENT);
 		
 		wrapper.registerMessage(FissionIrradiatorUpdatePacket.Handler.class, FissionIrradiatorUpdatePacket.class, nextID(), Side.CLIENT);
+		wrapper.registerMessage(FissionCoolerUpdatePacket.Handler.class, FissionCoolerUpdatePacket.class, nextID(), Side.CLIENT);
 		wrapper.registerMessage(SolidFissionUpdatePacket.Handler.class, SolidFissionUpdatePacket.class, nextID(), Side.CLIENT);
 		wrapper.registerMessage(SolidFissionCellUpdatePacket.Handler.class, SolidFissionCellUpdatePacket.class, nextID(), Side.CLIENT);
 		wrapper.registerMessage(SaltFissionUpdatePacket.Handler.class, SaltFissionUpdatePacket.class, nextID(), Side.CLIENT);

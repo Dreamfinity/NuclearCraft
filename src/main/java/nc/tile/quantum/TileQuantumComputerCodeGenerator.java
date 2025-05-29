@@ -1,5 +1,6 @@
 package nc.tile.quantum;
 
+import nc.config.NCConfig;
 import nc.multiblock.quantum.QuantumComputer;
 import nc.util.Lang;
 import net.minecraft.block.state.IBlockState;
@@ -9,8 +10,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-
-import static nc.config.NCConfig.quantum_max_qubits_code;
 
 public abstract class TileQuantumComputerCodeGenerator extends TileQuantumComputerPart {
 	
@@ -66,7 +65,7 @@ public abstract class TileQuantumComputerCodeGenerator extends TileQuantumComput
 				if (qc.codeType >= 0) {
 					qc.printCode(player);
 				}
-				else if (qc.qubitCount() <= quantum_max_qubits_code) {
+				else if (qc.getQubitCount() <= NCConfig.quantum_max_qubits) {
 					qc.codeStart = codeType;
 					player.sendMessage(new TextComponentString(Lang.localize(getUnlocalizedCodeStartMessage())));
 				}

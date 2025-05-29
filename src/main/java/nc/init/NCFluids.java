@@ -162,6 +162,7 @@ public class NCFluids {
 		
 		addFluidPair(FluidType.COOLANT, "nak", 0xFFE5BC);
 		addFluidPair(FluidType.HOT_COOLANT, "nak_hot", 0xFFD5AC);
+		
 		addFluidPair(FluidType.LIQUID, "emergency_coolant", true, 0x6DD0E7, 2000, 250, 2000, 0);
 		addFluidPair(FluidType.LIQUID, "emergency_coolant_heated", true, 0xCDBEE7, 2000, 400, 1500, 7);
 		

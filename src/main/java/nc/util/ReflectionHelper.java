@@ -81,7 +81,8 @@ public class ReflectionHelper {
 			String fullName = clazz.getPackage().getName() + "." + cloneName;
 			cr.accept(new CloneClassVisitor(cw, fullName.replace('.', '/')), 0);
 			return defineClass(classLoader, fullName, cw);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			throw new UnsupportedOperationException();
 		}
 	}

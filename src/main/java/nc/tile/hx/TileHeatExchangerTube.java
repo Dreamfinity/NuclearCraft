@@ -160,7 +160,7 @@ public class TileHeatExchangerTube extends TileHeatExchangerPart implements IRay
 		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
 		float p = 2F * NCRenderHelper.PIXEL, q = 1F - p;
 		
-		switch (side) {
+		switch (player.isSneaking() ? side.getOpposite() : side) {
 			case DOWN -> NCRenderHelper.renderFrame(x + p, y, z + p, q - p, p, q - p, r, g, b, 1F);
 			case UP -> NCRenderHelper.renderFrame(x + p, y + q, z + p, q - p, p, q - p, r, g, b, 1F);
 			case NORTH -> NCRenderHelper.renderFrame(x + p, y + p, z, q - p, q - p, p, r, g, b, 1F);

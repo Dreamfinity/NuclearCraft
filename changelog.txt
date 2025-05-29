@@ -2,6 +2,8 @@ v2o.9.1
 
 * Fixed crash without CraftTweaker installed
 
++ Added Plannerator NCPF config JSON export [thanks to Thiz!]
+
 * Condenser now has its own recipes, including heat dissipation fluids
 * Fixed heat exchanger not allowing multiple disconnected shell flows
 * Fixed heat exchanger and condenser controller GUIs showing imprecise heat transfer and dissipation rates
@@ -17,6 +19,10 @@ v2o.9.1
 
 * Fixed fission reactor not updating correctly when resupplying ports with material
 + Added config to control rate of fission reactor heat dissipation
+
+* Significantly optimised implementation of quantum computers
+
++ Added initial S'tack language interpreter backend
 
 v2o.9.0
 
