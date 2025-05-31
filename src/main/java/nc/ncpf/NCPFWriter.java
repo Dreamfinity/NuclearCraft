@@ -459,8 +459,8 @@ public class NCPFWriter {
 				gson.toJson(ncpf, writer);
 			}
 		}
-		catch (Exception ex) {
-			NCUtil.getLogger().error("Unable to create nuclearcraft.ncpf.json file.", ex);
+		catch (Exception e) {
+			NCUtil.getLogger().error("Unable to create nuclearcraft.ncpf.json file!", e);
 		}
 	}
 	

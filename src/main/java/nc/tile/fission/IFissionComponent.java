@@ -45,16 +45,16 @@ public interface IFissionComponent extends IFissionPart {
 	/**
 	 * Unlike {@link IFissionComponent#isFunctional}, includes checking logic during clusterSearch if necessary!
 	 */
-	boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache);
+	boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate);
 	
-	boolean isFunctional();
+	boolean isFunctional(boolean simulate);
 	
 	void resetStats();
 	
 	boolean isClusterRoot();
 	
-	default void clusterSearch(Integer id, final Object2IntMap<IFissionComponent> clusterSearchCache, final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
-		if (!isValidHeatConductor(componentFailCache, assumedValidCache)) {
+	default void clusterSearch(Integer id, final Object2IntMap<IFissionComponent> clusterSearchCache, final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate) {
+		if (!isValidHeatConductor(componentFailCache, assumedValidCache, simulate)) {
 			return;
 		}
 		
@@ -97,7 +97,7 @@ public interface IFissionComponent extends IFissionPart {
 	
 	void onClusterMeltdown(Iterator<IFissionComponent> componentIterator);
 	
-	boolean isNullifyingSources(EnumFacing side);
+	boolean isNullifyingSources(EnumFacing side, boolean simulate);
 	
 	// Moderator Line
 	

@@ -2,11 +2,11 @@ package nc.tile.fission;
 
 public interface IFissionHeatingComponent extends IFissionComponent {
 	
-	long getRawHeating();
+	long getRawHeating(boolean simulate);
 	
-	long getRawHeatingIgnoreCoolingPenalty();
+	long getRawHeatingIgnoreCoolingPenalty(boolean simulate);
 	
-	double getEffectiveHeating();
+	double getEffectiveHeating(boolean simulate);
 	
-	double getEffectiveHeatingIgnoreCoolingPenalty();
+	double getEffectiveHeatingIgnoreCoolingPenalty(boolean simulate);
 }

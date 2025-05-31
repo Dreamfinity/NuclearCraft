@@ -203,7 +203,7 @@ public abstract class TurbinePlacement {
 		}
 		
 		@Override
-		public boolean satisfied(ITurbinePart part, EnumFacing dir) {
+		public boolean satisfied(ITurbinePart part, EnumFacing dir, boolean simulate) {
 			return isCasing(part.getMultiblock(), part.getTilePos().offset(dir));
 		}
 	}
@@ -223,7 +223,7 @@ public abstract class TurbinePlacement {
 		}
 		
 		@Override
-		public boolean satisfied(ITurbinePart part, EnumFacing dir) {
+		public boolean satisfied(ITurbinePart part, EnumFacing dir, boolean simulate) {
 			return isRotorBearing(part.getMultiblock(), part.getTilePos().offset(dir));
 		}
 	}
@@ -235,7 +235,7 @@ public abstract class TurbinePlacement {
 		}
 		
 		@Override
-		public boolean satisfied(ITurbinePart part, EnumFacing dir) {
+		public boolean satisfied(ITurbinePart part, EnumFacing dir, boolean simulate) {
 			return isCoilConnector(part.getMultiblock(), part.getTilePos().offset(dir));
 		}
 	}
@@ -258,7 +258,7 @@ public abstract class TurbinePlacement {
 		}
 		
 		@Override
-		public boolean satisfied(ITurbinePart part, EnumFacing dir) {
+		public boolean satisfied(ITurbinePart part, EnumFacing dir, boolean simulate) {
 			return isDynamoCoil(part.getMultiblock(), part.getTilePos().offset(dir), coilType);
 		}
 	}

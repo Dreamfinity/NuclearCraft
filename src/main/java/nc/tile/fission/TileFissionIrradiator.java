@@ -57,6 +57,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	
 	public double time, resetTime;
 	public boolean isProcessing, canProcessInputs, hasConsumed;
+	public boolean isRunningSimulated;
 	
 	protected RecipeInfo<BasicRecipe> recipeInfo = null;
 	
@@ -108,13 +109,13 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	}
 	
 	@Override
-	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
-		return isProcessing;
+	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate) {
+		return isRunning(simulate);
 	}
 	
 	@Override
-	public boolean isFunctional() {
-		return isProcessing;
+	public boolean isFunctional(boolean simulate) {
+		return isRunning(simulate);
 	}
 	
 	@Override
@@ -129,16 +130,23 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	}
 	
 	@Override
-	public void clusterSearch(Integer id, final Object2IntMap<IFissionComponent> clusterSearchCache, final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
+	public void clusterSearch(Integer id, final Object2IntMap<IFissionComponent> clusterSearchCache, final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate) {
 		refreshDirty();
-		refreshIsProcessing(false);
+		refreshIsProcessing(false, simulate);
 		
-		IFissionFluxSink.super.clusterSearch(id, clusterSearchCache, componentFailCache, assumedValidCache);
+		IFissionFluxSink.super.clusterSearch(id, clusterSearchCache, componentFailCache, assumedValidCache, simulate);
 	}
 	
 	@Override
-	public void refreshIsProcessing(boolean checkCluster) {
-		isProcessing = isProcessing(checkCluster);
+	public void refreshIsProcessing(boolean checkCluster, boolean simulate) {
+		if (simulate) {
+			isProcessing = false;
+			isRunningSimulated = isProcessing(checkCluster, simulate);
+		}
+		else {
+			isProcessing = isProcessing(checkCluster, simulate);
+			isRunningSimulated = false;
+		}
 		hasConsumed = hasConsumed();
 	}
 	
@@ -148,12 +156,12 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	}
 	
 	@Override
-	public boolean isAcceptingFlux(EnumFacing side) {
+	public boolean isAcceptingFlux(EnumFacing side, boolean simulate) {
 		return canProcessInputs;
 	}
 	
 	@Override
-	public boolean isNullifyingSources(EnumFacing side) {
+	public boolean isNullifyingSources(EnumFacing side, boolean simulate) {
 		return canProcessInputs;
 	}
 	
@@ -173,22 +181,22 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	}
 	
 	@Override
-	public long getRawHeating() {
+	public long getRawHeating(boolean simulate) {
 		return (long) Math.min(Long.MAX_VALUE, Math.floor(flux * baseProcessHeatPerFlux));
 	}
 	
 	@Override
-	public long getRawHeatingIgnoreCoolingPenalty() {
+	public long getRawHeatingIgnoreCoolingPenalty(boolean simulate) {
 		return 0L;
 	}
 	
 	@Override
-	public double getEffectiveHeating() {
+	public double getEffectiveHeating(boolean simulate) {
 		return flux * baseProcessHeatPerFlux * baseProcessEfficiency;
 	}
 	
 	@Override
-	public double getEffectiveHeatingIgnoreCoolingPenalty() {
+	public double getEffectiveHeatingIgnoreCoolingPenalty(boolean simulate) {
 		return 0D;
 	}
 	
@@ -230,15 +238,8 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	}
 	
 	@Override
-	public boolean onPortRefresh(boolean simulateMultiblockRefresh) {
-		if (simulateMultiblockRefresh) {
-			FissionReactor reactor = getMultiblock();
-			return reactor != null && reactor.isReactorOn && cluster == null && isProcessing(false);
-		}
-		else {
-			refreshAll();
-			return false;
-		}
+	public void onPortRefresh() {
+		refreshAll();
 	}
 	
 	// Ticking
@@ -256,7 +257,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	public void update() {
 		if (!world.isRemote) {
 			FissionReactor reactor = getMultiblock();
-			boolean shouldRefresh = reactor != null && reactor.isReactorOn && cluster == null && isProcessing(false);
+			boolean shouldRefresh = reactor != null && reactor.isReactorOn && cluster == null && isProcessing(false, false);
 			
 			if (onTick()) {
 				markDirty();
@@ -271,7 +272,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	@Override
 	public void refreshAll() {
 		refreshDirty();
-		refreshIsProcessing(true);
+		refreshIsProcessing(true, false);
 	}
 	
 	@Override
@@ -282,6 +283,10 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 		if (multiblock != null && !wasReady && readyToProcess(false)) {
 			multiblock.refreshFlag = true;
 		}
+	}
+	
+	public boolean isRunning(boolean simulate) {
+		return simulate ? isRunningSimulated : isProcessing;
 	}
 	
 	// IProcessor
@@ -308,7 +313,6 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public void setRecipeStats(@Nullable BasicRecipe recipe) {
-		// IProcessor.super.setRecipeStats(recipe);
 		baseProcessTime = recipe == null ? 1D : recipe.getIrradiatorFluxRequired();
 		baseProcessHeatPerFlux = recipe == null ? 0D : recipe.getIrradiatorHeatPerFlux();
 		baseProcessEfficiency = recipe == null ? 0D : recipe.getIrradiatorProcessEfficiency();
@@ -410,10 +414,10 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public boolean isProcessing() {
-		return isProcessing(true);
+		return !isSimulation() && isProcessing(true, false);
 	}
 	
-	public boolean isProcessing(boolean checkCluster) {
+	public boolean isProcessing(boolean checkCluster, boolean simulate) {
 		return readyToProcess(checkCluster) && flux > 0;
 	}
 	
@@ -651,6 +655,8 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 		
 		nbt.setLong("flux", flux);
 		nbt.setLong("clusterHeat", heat);
+		
+		nbt.setBoolean("isRunningSimulated", isRunningSimulated);
 		return nbt;
 	}
 	
@@ -671,6 +677,8 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 		
 		flux = nbt.getLong("flux");
 		heat = nbt.getLong("clusterHeat");
+		
+		isRunningSimulated = nbt.getBoolean("isRunningSimulated");
 	}
 	
 	@Override
@@ -725,7 +733,7 @@ public class TileFissionIrradiator extends TileFissionPart implements IBasicProc
 		List<ItemStack> stacks = getInventoryStacks();
 		entry.put("input", OCHelper.stackInfo(stacks.get(0)));
 		entry.put("output", OCHelper.stackInfo(stacks.get(1)));
-		entry.put("effective_heating", getEffectiveHeating());
+		entry.put("effective_heating", getEffectiveHeating(false));
 		entry.put("is_processing", getIsProcessing());
 		entry.put("current_time", getCurrentTime());
 		entry.put("base_process_time", getBaseProcessTime());

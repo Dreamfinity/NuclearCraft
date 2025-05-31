@@ -38,12 +38,12 @@ public class TileFissionConductor extends TileFissionPart implements IFissionCom
 	}
 	
 	@Override
-	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
+	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate) {
 		return true;
 	}
 	
 	@Override
-	public boolean isFunctional() {
+	public boolean isFunctional(boolean simulate) {
 		return false;
 	}
 	
@@ -71,7 +71,7 @@ public class TileFissionConductor extends TileFissionPart implements IFissionCom
 	}
 	
 	@Override
-	public boolean isNullifyingSources(EnumFacing side) {
+	public boolean isNullifyingSources(EnumFacing side, boolean simulate) {
 		return false;
 	}
 	

@@ -79,15 +79,15 @@ public class SolidFuelFissionLogic extends FissionReactorLogic {
 	}
 	
 	@Override
-	public void refreshAllFuelComponentModerators() {
+	public void refreshAllFuelComponentModerators(boolean simulate) {
 		for (TileSolidFissionCell cell : getParts(TileSolidFissionCell.class)) {
-			refreshFuelComponentModerators(cell, componentFailCache, assumedValidCache);
+			refreshFuelComponentModerators(cell, componentFailCache, assumedValidCache, simulate);
 		}
 	}
 	
 	@Override
-	public void refreshReactorStats() {
-		super.refreshReactorStats();
+	public void refreshReactorStats(boolean simulate) {
+		super.refreshReactorStats(simulate);
 		
 		for (FissionCluster cluster : multiblock.getClusterMap().values()) {
 			if (cluster.connectedToWall) {
@@ -114,27 +114,27 @@ public class SolidFuelFissionLogic extends FissionReactorLogic {
 	
 	@Override
 	public boolean onUpdateServer() {
-		heatBuffer.changeHeatStored(multiblock.rawHeating);
-		
-		if (heatBuffer.isFull() && fission_overheat) {
-			heatBuffer.setHeatStored(0L);
-			reservedEffectiveHeat = 0D;
-			casingMeltdown();
-			return true;
-		}
-		
-		for (FissionCluster cluster : getClusterMap().values()) {
-			cluster.heatBuffer.changeHeatStored(cluster.getNetHeating());
-			if (cluster.heatBuffer.isFull() && fission_overheat) {
-				cluster.heatBuffer.setHeatStored(0L);
-				clusterMeltdown(cluster);
+		if (!multiblock.isSimulation) {
+			heatBuffer.changeHeatStored(multiblock.rawHeating);
+			
+			if (heatBuffer.isFull() && fission_overheat) {
+				heatBuffer.setHeatStored(0L);
+				reservedEffectiveHeat = 0D;
+				casingMeltdown();
 				return true;
+			}
+			
+			for (FissionCluster cluster : getClusterMap().values()) {
+				cluster.heatBuffer.changeHeatStored(cluster.getNetHeating());
+				if (cluster.heatBuffer.isFull() && fission_overheat) {
+					cluster.heatBuffer.setHeatStored(0L);
+					clusterMeltdown(cluster);
+					return true;
+				}
 			}
 		}
 		
-		if (getEffectiveHeat() > 0D) {
-			updateFluidHeating();
-		}
+		updateFluidHeating();
 		
 		updateSounds();
 		
@@ -142,15 +142,23 @@ public class SolidFuelFissionLogic extends FissionReactorLogic {
 	}
 	
 	public void updateFluidHeating() {
-		if (multiblock.isReactorOn) {
+		if (multiblock.isReactorOn && getEffectiveHeat() > 0D) {
 			refreshRecipe();
 			if (canProcessInputs()) {
 				produceProducts();
 				return;
 			}
 		}
+		
 		heatingOutputRate = 0;
 		heatingRecipeRate = heatingOutputRateFP = 0D;
+		
+		if (multiblock.isSimulation) {
+			refreshRecipe();
+			if (heatingRecipeInfo != null) {
+				heatingOutputRateFP = effectiveHeating / heatingRecipeInfo.recipe.getFissionHeatingHeatPerInputMB();
+			}
+		}
 	}
 	
 	public void updateSounds() {
@@ -262,8 +270,8 @@ public class SolidFuelFissionLogic extends FissionReactorLogic {
 	// Component Logic
 	
 	@Override
-	public void distributeFluxFromFuelComponent(IFissionFuelComponent fuelComponent, final ObjectSet<IFissionFuelComponent> fluxSearchCache, final Long2ObjectMap<IFissionComponent> lineFailCache, final Long2ObjectMap<IFissionComponent> currentAssumedValidCache) {
-		fuelComponent.defaultDistributeFlux(fluxSearchCache, lineFailCache, assumedValidCache);
+	public void distributeFluxFromFuelComponent(IFissionFuelComponent fuelComponent, final ObjectSet<IFissionFuelComponent> fluxSearchCache, final Long2ObjectMap<IFissionComponent> lineFailCache, final Long2ObjectMap<IFissionComponent> currentAssumedValidCache, boolean simulate) {
+		fuelComponent.defaultDistributeFlux(fluxSearchCache, lineFailCache, assumedValidCache, simulate);
 	}
 	
 	@Override
@@ -272,13 +280,13 @@ public class SolidFuelFissionLogic extends FissionReactorLogic {
 	}
 	
 	@Override
-	public void refreshFuelComponentLocal(IFissionFuelComponent fuelComponent) {
-		fuelComponent.defaultRefreshLocal();
+	public void refreshFuelComponentLocal(IFissionFuelComponent fuelComponent, boolean simulate) {
+		fuelComponent.defaultRefreshLocal(simulate);
 	}
 	
 	@Override
-	public void refreshFuelComponentModerators(IFissionFuelComponent fuelComponent, final Long2ObjectMap<IFissionComponent> currentComponentFailCache, final Long2ObjectMap<IFissionComponent> currentAssumedValidCache) {
-		fuelComponent.defaultRefreshModerators(componentFailCache, assumedValidCache);
+	public void refreshFuelComponentModerators(IFissionFuelComponent fuelComponent, final Long2ObjectMap<IFissionComponent> currentComponentFailCache, final Long2ObjectMap<IFissionComponent> currentAssumedValidCache, boolean simulate) {
+		fuelComponent.defaultRefreshModerators(componentFailCache, assumedValidCache, simulate);
 	}
 	
 	@Override

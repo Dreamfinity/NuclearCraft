@@ -20,12 +20,12 @@ public abstract class BlockQuantumComputerGate<T extends Enum<T> & IStringSerial
 		super(enumm, property);
 	}
 	
-	public static class Single extends BlockQuantumComputerGate<QuantumGateEnums.SingleType> {
+	public static class Basic extends BlockQuantumComputerGate<QuantumGateEnums.BasicType> {
 		
-		public final static PropertyEnum<QuantumGateEnums.SingleType> TYPE = PropertyEnum.create("type", QuantumGateEnums.SingleType.class);
+		public final static PropertyEnum<QuantumGateEnums.BasicType> TYPE = PropertyEnum.create("type", QuantumGateEnums.BasicType.class);
 		
-		public Single() {
-			super(QuantumGateEnums.SingleType.class, TYPE);
+		public Basic() {
+			super(QuantumGateEnums.BasicType.class, TYPE);
 		}
 		
 		@Override
@@ -35,7 +35,7 @@ public abstract class BlockQuantumComputerGate<T extends Enum<T> & IStringSerial
 		
 		@Override
 		public TileEntity createNewTileEntity(World world, int meta) {
-			return QuantumGateEnums.SingleType.values()[meta].getTile();
+			return QuantumGateEnums.BasicType.values()[meta].getTile();
 		}
 	}
 	

@@ -30,9 +30,9 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 	
 	protected TileQuantumComputerController controller;
 	
-	protected QuantumState state;
+	public QuantumState state;
 	
-	public final Queue<QuantumGateWrapper> queue = new ConcurrentLinkedQueue<>();
+	public final Queue<QuantumOperationWrapper> queue = new ConcurrentLinkedQueue<>();
 	
 	public int codeStart = -1, codeType = -1;
 	protected StringBuilder codeBuilder;
@@ -176,7 +176,7 @@ public class QuantumComputer extends Multiblock<QuantumComputer, IQuantumCompute
 			codeBuilder = new StringBuilder();
 		}
 		
-		QuantumGateWrapper gate = queue.poll();
+		QuantumOperationWrapper gate = queue.poll();
 		if (gate != null) {
 			if (codeType >= 0) {
 				if (qubits <= NCConfig.quantum_max_qubits) {

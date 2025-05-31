@@ -131,20 +131,20 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 	}
 	
 	@Override
-	public void refreshAllFuelComponentModerators() {
+	public void refreshAllFuelComponentModerators(boolean simulate) {
 		for (TileSaltFissionVessel vessel : getParts(TileSaltFissionVessel.class)) {
-			refreshFuelComponentModerators(vessel, componentFailCache, assumedValidCache);
+			refreshFuelComponentModerators(vessel, componentFailCache, assumedValidCache, simulate);
 		}
 	}
 	
 	@Override
-	public void incrementClusterStatsFromComponents(FissionCluster cluster) {
+	public void incrementClusterStatsFromComponents(FissionCluster cluster, boolean simulate) {
 		for (SaltFissionVesselBunch bunch : vesselBunches) {
 			bunch.statsRetrieved = false;
 		}
 		
 		for (IFissionComponent component : cluster.getComponentMap().values()) {
-			if (component.isFunctional()) {
+			if (component.isFunctional(simulate)) {
 				++cluster.componentCount;
 				if (component instanceof IFissionHeatingComponent) {
 					if (component instanceof TileSaltFissionVessel) {
@@ -152,30 +152,30 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 						++cluster.fuelComponentCount;
 						if (bunch != null && !bunch.statsRetrieved) {
 							bunch.statsRetrieved = true;
-							cluster.rawHeating += bunch.getRawHeating();
-							cluster.rawHeatingIgnoreCoolingPenalty += bunch.getRawHeatingIgnoreCoolingPenalty();
-							cluster.effectiveHeating += bunch.getEffectiveHeating();
-							cluster.effectiveHeatingIgnoreCoolingPenalty += bunch.getEffectiveHeatingIgnoreCoolingPenalty();
-							cluster.totalHeatMult += bunch.getHeatMultiplier();
-							cluster.totalEfficiency += bunch.getEfficiency();
-							cluster.totalEfficiencyIgnoreCoolingPenalty += bunch.getEfficiencyIgnoreCoolingPenalty();
+							cluster.rawHeating += bunch.getRawHeating(simulate);
+							cluster.rawHeatingIgnoreCoolingPenalty += bunch.getRawHeatingIgnoreCoolingPenalty(simulate);
+							cluster.effectiveHeating += bunch.getEffectiveHeating(simulate);
+							cluster.effectiveHeatingIgnoreCoolingPenalty += bunch.getEffectiveHeatingIgnoreCoolingPenalty(simulate);
+							cluster.totalHeatMult += bunch.getHeatMultiplier(simulate);
+							cluster.totalEfficiency += bunch.getEfficiency(simulate);
+							cluster.totalEfficiencyIgnoreCoolingPenalty += bunch.getEfficiencyIgnoreCoolingPenalty(simulate);
 						}
 					}
 					else {
-						cluster.rawHeating += ((IFissionHeatingComponent) component).getRawHeating();
-						cluster.effectiveHeating += ((IFissionHeatingComponent) component).getEffectiveHeating();
+						cluster.rawHeating += ((IFissionHeatingComponent) component).getRawHeating(simulate);
+						cluster.effectiveHeating += ((IFissionHeatingComponent) component).getEffectiveHeating(simulate);
 					}
 				}
 				if (component instanceof IFissionCoolingComponent) {
-					cluster.cooling += ((IFissionCoolingComponent) component).getCooling();
+					cluster.cooling += ((IFissionCoolingComponent) component).getCooling(simulate);
 				}
 			}
 		}
 	}
 	
 	@Override
-	public void refreshReactorStats() {
-		super.refreshReactorStats();
+	public void refreshReactorStats(boolean simulate) {
+		super.refreshReactorStats(simulate);
 		
 		for (FissionCluster cluster : multiblock.getClusterMap().values()) {
 			multiblock.usefulPartCount += cluster.componentCount;
@@ -215,31 +215,31 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 	
 	@Override
 	public boolean onUpdateServer() {
-		if (heatBuffer.isFull() && fission_overheat) {
-			heatBuffer.setHeatStored(0L);
-			casingMeltdown();
-			return true;
-		}
-		
-		for (FissionCluster cluster : getClusterMap().values()) {
-			long netHeating = cluster.getNetHeating();
-			if (netHeating > 0 && cluster.connectedToWall) {
-				heatBuffer.changeHeatStored(netHeating);
-			}
-			else {
-				cluster.heatBuffer.changeHeatStored(netHeating);
-			}
-			
-			if (cluster.heatBuffer.isFull() && fission_overheat) {
-				cluster.heatBuffer.setHeatStored(0L);
-				clusterMeltdown(cluster);
+		if (!multiblock.isSimulation) {
+			if (heatBuffer.isFull() && fission_overheat) {
+				heatBuffer.setHeatStored(0L);
+				casingMeltdown();
 				return true;
 			}
+			
+			for (FissionCluster cluster : getClusterMap().values()) {
+				long netHeating = cluster.getNetHeating();
+				if (netHeating > 0 && cluster.connectedToWall) {
+					heatBuffer.changeHeatStored(netHeating);
+				}
+				else {
+					cluster.heatBuffer.changeHeatStored(netHeating);
+				}
+				
+				if (cluster.heatBuffer.isFull() && fission_overheat) {
+					cluster.heatBuffer.setHeatStored(0L);
+					clusterMeltdown(cluster);
+					return true;
+				}
+			}
 		}
 		
-		if (heatBuffer.getHeatStored() > 0L) {
-			updateEmergencyCooling();
-		}
+		updateEmergencyCooling();
 		
 		updateSounds();
 		
@@ -247,7 +247,7 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 	}
 	
 	public void updateEmergencyCooling() {
-		if (!multiblock.isReactorOn) {
+		if (!multiblock.isReactorOn && !heatBuffer.isEmpty()) {
 			refreshRecipe();
 			if (canProcessInputs()) {
 				produceProducts();
@@ -287,26 +287,29 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 			return false;
 		}
 		
-		return tanks.get(1).isEmpty() || tanks.get(1).getFluid().isFluidEqual(fluidProduct.getStack());
+		Tank outputTank = tanks.get(1);
+		return outputTank.isEmpty() || outputTank.getFluid().isFluidEqual(fluidProduct.getStack());
 	}
 	
 	public void produceProducts() {
-		BasicRecipe recipe = emergencyCoolingRecipeInfo.recipe;
-		int usedInput = NCMath.toInt(Math.min(tanks.get(0).getFluidAmount() / recipe.getEmergencyCoolingHeatPerInputMB(), Math.min(heatBuffer.getHeatStored(), (long) FissionReactor.BASE_TANK_CAPACITY * getPartCount(TileFissionVent.class))));
+		Tank inputTank = tanks.get(0), outputTank = tanks.get(1);
 		
-		tanks.get(0).changeFluidAmount(-usedInput);
-		if (tanks.get(0).getFluidAmount() <= 0) {
-			tanks.get(0).setFluidStored(null);
+		BasicRecipe recipe = emergencyCoolingRecipeInfo.recipe;
+		int usedInput = NCMath.toInt(Math.min(inputTank.getFluidAmount() / recipe.getEmergencyCoolingHeatPerInputMB(), Math.min(heatBuffer.getHeatStored(), (long) FissionReactor.BASE_TANK_CAPACITY * getPartCount(TileFissionVent.class))));
+		
+		inputTank.changeFluidAmount(-usedInput);
+		if (inputTank.getFluidAmount() <= 0) {
+			inputTank.setFluidStored(null);
 		}
 		
 		IFluidIngredient fluidProduct = recipe.getFluidProducts().get(0);
 		if (fluidProduct.getMaxStackSize(0) > 0) {
-			if (tanks.get(1).isEmpty()) {
-				tanks.get(1).setFluidStored(fluidProduct.getNextStack(0));
-				tanks.get(1).setFluidAmount(usedInput);
+			if (outputTank.isEmpty()) {
+				outputTank.setFluidStored(fluidProduct.getNextStack(0));
+				outputTank.setFluidAmount(usedInput);
 			}
-			else if (tanks.get(1).getFluid().isFluidEqual(fluidProduct.getStack())) {
-				tanks.get(1).changeFluidAmount(usedInput);
+			else if (outputTank.getFluid().isFluidEqual(fluidProduct.getStack())) {
+				outputTank.changeFluidAmount(usedInput);
 			}
 		}
 		
@@ -330,8 +333,8 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 	// Component Logic
 	
 	@Override
-	public void distributeFluxFromFuelComponent(IFissionFuelComponent fuelComponent, final ObjectSet<IFissionFuelComponent> fluxSearchCache, final Long2ObjectMap<IFissionComponent> lineFailCache, final Long2ObjectMap<IFissionComponent> currentAssumedValidCache) {
-		fuelComponent.defaultDistributeFlux(fluxSearchCache, lineFailCache, assumedValidCache);
+	public void distributeFluxFromFuelComponent(IFissionFuelComponent fuelComponent, final ObjectSet<IFissionFuelComponent> fluxSearchCache, final Long2ObjectMap<IFissionComponent> lineFailCache, final Long2ObjectMap<IFissionComponent> currentAssumedValidCache, boolean simulate) {
+		fuelComponent.defaultDistributeFlux(fluxSearchCache, lineFailCache, assumedValidCache, simulate);
 	}
 	
 	@Override
@@ -340,18 +343,17 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 	}
 	
 	@Override
-	public void refreshFuelComponentLocal(IFissionFuelComponent fuelComponent) {
-		fuelComponent.defaultRefreshLocal();
+	public void refreshFuelComponentLocal(IFissionFuelComponent fuelComponent, boolean simulate) {
+		fuelComponent.defaultRefreshLocal(simulate);
 	}
 	
 	@Override
-	public void refreshFuelComponentModerators(IFissionFuelComponent fuelComponent, final Long2ObjectMap<IFissionComponent> currentComponentFailCache, final Long2ObjectMap<IFissionComponent> currentAssumedValidCache) {
-		fuelComponent.defaultRefreshModerators(componentFailCache, assumedValidCache);
+	public void refreshFuelComponentModerators(IFissionFuelComponent fuelComponent, final Long2ObjectMap<IFissionComponent> currentComponentFailCache, final Long2ObjectMap<IFissionComponent> currentAssumedValidCache, boolean simulate) {
+		fuelComponent.defaultRefreshModerators(componentFailCache, assumedValidCache, simulate);
 	}
 	
 	@Override
 	public boolean isShieldActiveModerator(TileFissionShield shield, boolean activeModeratorPos) {
-		// return activeModeratorPos;
 		return super.isShieldActiveModerator(shield, activeModeratorPos);
 	}
 	

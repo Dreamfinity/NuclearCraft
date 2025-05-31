@@ -1,8 +1,6 @@
-Generate nuclearcraft.ncpf.json for registered multiblock component stats and rules
+Fix SFR steam production rate prediction
 
 Multiblock monitors: show cluster information, meltdown locations, side configurations, etc.
-
-Show potential (pre-primed) stats if reactor is idle
 
 Multiblock solars with CT support
 Multiblock collectors with CT support

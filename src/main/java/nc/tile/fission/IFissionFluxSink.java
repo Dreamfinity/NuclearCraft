@@ -7,9 +7,9 @@ public interface IFissionFluxSink extends IFissionComponent {
 	/**
 	 * True if neutron flux can be used by and should affect this part.
 	 */
-	boolean isAcceptingFlux(EnumFacing side);
+	boolean isAcceptingFlux(EnumFacing side, boolean simulate);
 	
-	default boolean canSupportActiveModerator(boolean activeModeratorPos) {
+	default boolean canSupportActiveModerator(boolean activeModeratorPos, boolean simulate) {
 		return false;
 	}
 	
@@ -22,5 +22,9 @@ public interface IFissionFluxSink extends IFissionComponent {
 	
 	void addFlux(long addedFlux);
 	
-	void refreshIsProcessing(boolean checkCluster);
+	void refreshIsProcessing(boolean checkCluster, boolean simulate);
+	
+	default void onEndModeratorLine(boolean simulate) {
+		refreshIsProcessing(false, simulate);
+	}
 }

@@ -8,11 +8,11 @@ import nc.util.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class QuantumGateWrapper {
+public abstract class QuantumOperationWrapper {
 	
 	protected final QuantumComputer qc;
 	
-	public QuantumGateWrapper(QuantumComputer qc) {
+	public QuantumOperationWrapper(QuantumComputer qc) {
 		this.qc = qc;
 	}
 	
@@ -25,7 +25,7 @@ public abstract class QuantumGateWrapper {
 	/**
 	 * Adds the decomposition of this gate to the list.
 	 */
-	public abstract void addDecomposition(List<QuantumGateWrapper> decomposition);
+	public abstract void addDecomposition(List<QuantumOperationWrapper> decomposition);
 	
 	public abstract List<String> getCode(int type);
 	
@@ -37,10 +37,10 @@ public abstract class QuantumGateWrapper {
 		
 		double[] getSingleMatrix();
 		
-		QuantumGateWrapper getWithoutControl();
+		QuantumOperationWrapper getWithoutControl();
 	}
 	
-	public static class Measurement extends QuantumGateWrapper {
+	public static class Measurement extends QuantumOperationWrapper {
 		
 		protected final int[] targets;
 		
@@ -60,7 +60,7 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public void addDecomposition(List<QuantumGateWrapper> decomposition) {
+		public void addDecomposition(List<QuantumOperationWrapper> decomposition) {
 			if (targets.length > 0) {
 				decomposition.add(this);
 			}
@@ -86,7 +86,7 @@ public abstract class QuantumGateWrapper {
 		}
 	}
 	
-	public static class Reset extends QuantumGateWrapper {
+	public static class Reset extends QuantumOperationWrapper {
 		
 		public Reset(QuantumComputer qc) {
 			super(qc);
@@ -103,7 +103,7 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public void addDecomposition(List<QuantumGateWrapper> decomposition) {
+		public void addDecomposition(List<QuantumOperationWrapper> decomposition) {
 			decomposition.add(this);
 		}
 		
@@ -127,7 +127,7 @@ public abstract class QuantumGateWrapper {
 		}
 	}
 	
-	public static abstract class Basic extends QuantumGateWrapper {
+	public static abstract class Basic extends QuantumOperationWrapper {
 		
 		protected final int[] targets;
 		
@@ -137,7 +137,7 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public void addDecomposition(List<QuantumGateWrapper> decomposition) {
+		public void addDecomposition(List<QuantumOperationWrapper> decomposition) {
 			if (targets.length > 0) {
 				decomposition.add(this);
 			}
@@ -342,7 +342,7 @@ public abstract class QuantumGateWrapper {
 		}
 	}
 	
-	public static abstract class BasicAngle extends QuantumGateWrapper {
+	public static abstract class BasicAngle extends QuantumOperationWrapper {
 		
 		protected final double angle;
 		protected final int[] targets;
@@ -372,7 +372,7 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public void addDecomposition(List<QuantumGateWrapper> decomposition) {
+		public void addDecomposition(List<QuantumOperationWrapper> decomposition) {
 			if (targets.length > 0) {
 				decomposition.add(this);
 			}
@@ -471,13 +471,14 @@ public abstract class QuantumGateWrapper {
 		}
 	}
 	
-	public static abstract class Control extends Basic implements IControl {
+	public static abstract class Control extends QuantumOperationWrapper implements IControl {
 		
-		protected final int[] controls;
+		protected final int[] controls, targets;
 		
 		public Control(QuantumComputer qc, int[] controls, int[] targets) {
-			super(qc, targets);
+			super(qc);
 			this.controls = controls;
+			this.targets = targets;
 		}
 		
 		@Override
@@ -496,7 +497,7 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public void addDecomposition(List<QuantumGateWrapper> decomposition) {
+		public void addDecomposition(List<QuantumOperationWrapper> decomposition) {
 			if (controls.length == 1) {
 				if (targets.length > 0) {
 					decomposition.add(this);
@@ -516,18 +517,16 @@ public abstract class QuantumGateWrapper {
 				return getSingleControlCode(type);
 			}
 			
-			List<QuantumGateWrapper> decomposition = new ArrayList<>();
+			List<QuantumOperationWrapper> decomposition = new ArrayList<>();
 			addDecomposition(decomposition);
 			
 			return StreamHelper.flatMap(decomposition, x -> x.getCode(type));
 		}
 		
-		@Override
 		public String getQasmLine(int i) {
 			return ";";
 		}
 		
-		@Override
 		public String getQiskitLine() {
 			return "";
 		}
@@ -562,17 +561,17 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new X(qc, targets);
-		}
-		
-		@Override
 		public double[] getSingleMatrix() {
 			return QuantumMatrix.X;
 		}
 		
 		@Override
-		public void addDecomposition(List<QuantumGateWrapper> decomposition) {
+		public QuantumOperationWrapper getWithoutControl() {
+			return new X(qc, targets);
+		}
+		
+		@Override
+		public void addDecomposition(List<QuantumOperationWrapper> decomposition) {
 			if (targets.length == 0) {
 				return;
 			}
@@ -662,10 +661,10 @@ public abstract class QuantumGateWrapper {
 			}
 			
 			List<String> lines = new ArrayList<>();
-			List<QuantumGateWrapper> decomposition = new ArrayList<>();
+			List<QuantumOperationWrapper> decomposition = new ArrayList<>();
 			
 			addDecomposition(decomposition);
-			for (QuantumGateWrapper gate : decomposition) {
+			for (QuantumOperationWrapper gate : decomposition) {
 				lines.addAll(gate.getCode(type));
 			}
 			return lines;
@@ -716,13 +715,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new Y(qc, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.Y;
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.Y;
+		public QuantumOperationWrapper getWithoutControl() {
+			return new Y(qc, targets);
 		}
 		
 		@Override
@@ -743,13 +742,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new Z(qc, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.Z;
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.Z;
+		public QuantumOperationWrapper getWithoutControl() {
+			return new Z(qc, targets);
 		}
 		
 		@Override
@@ -770,13 +769,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new H(qc, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.H;
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.H;
+		public QuantumOperationWrapper getWithoutControl() {
+			return new H(qc, targets);
 		}
 		
 		@Override
@@ -797,13 +796,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new S(qc, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.S;
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.S;
+		public QuantumOperationWrapper getWithoutControl() {
+			return new S(qc, targets);
 		}
 		
 		@Override
@@ -824,13 +823,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new Sdg(qc, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.Sdg;
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.Sdg;
+		public QuantumOperationWrapper getWithoutControl() {
+			return new Sdg(qc, targets);
 		}
 		
 		@Override
@@ -851,13 +850,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new T(qc, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.T;
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.T;
+		public QuantumOperationWrapper getWithoutControl() {
+			return new T(qc, targets);
 		}
 		
 		@Override
@@ -878,13 +877,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new Tdg(qc, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.Tdg;
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.Tdg;
+		public QuantumOperationWrapper getWithoutControl() {
+			return new Tdg(qc, targets);
 		}
 		
 		@Override
@@ -898,13 +897,16 @@ public abstract class QuantumGateWrapper {
 		}
 	}
 	
-	public static abstract class ControlAngle extends BasicAngle implements IControl {
+	public static abstract class ControlAngle extends QuantumOperationWrapper implements IControl {
 		
-		protected final int[] controls;
+		protected final double angle;
+		protected final int[] controls, targets;
 		
 		public ControlAngle(QuantumComputer qc, double angle, int[] controls, int[] targets) {
-			super(qc, angle, targets);
+			super(qc);
+			this.angle = angle;
 			this.controls = controls;
+			this.targets = targets;
 		}
 		
 		@Override
@@ -923,7 +925,7 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public void addDecomposition(List<QuantumGateWrapper> decomposition) {
+		public void addDecomposition(List<QuantumOperationWrapper> decomposition) {
 			if (controls.length == 1) {
 				if (targets.length > 0) {
 					decomposition.add(this);
@@ -943,23 +945,21 @@ public abstract class QuantumGateWrapper {
 				return singleControlCode(type);
 			}
 			
-			List<QuantumGateWrapper> decomposition = new ArrayList<>();
+			List<QuantumOperationWrapper> decomposition = new ArrayList<>();
 			addDecomposition(decomposition);
 			
 			List<String> lines = new ArrayList<>();
-			for (QuantumGateWrapper gate : decomposition) {
+			for (QuantumOperationWrapper gate : decomposition) {
 				lines.addAll(gate.getCode(type));
 			}
 			
 			return lines;
 		}
 		
-		@Override
 		public String getQasmLine(int i) {
 			return ";";
 		}
 		
-		@Override
 		public String getQiskitLine() {
 			return "";
 		}
@@ -995,13 +995,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new P(qc, angle, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.phase(Math.toRadians(angle));
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.phase(Math.toRadians(angle));
+		public QuantumOperationWrapper getWithoutControl() {
+			return new P(qc, angle, targets);
 		}
 		
 		@Override
@@ -1022,13 +1022,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new RX(qc, angle, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.rotateX(Math.toRadians(angle));
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.rotateX(Math.toRadians(angle));
+		public QuantumOperationWrapper getWithoutControl() {
+			return new RX(qc, angle, targets);
 		}
 		
 		@Override
@@ -1049,13 +1049,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new RY(qc, angle, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.rotateY(Math.toRadians(angle));
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.rotateY(Math.toRadians(angle));
+		public QuantumOperationWrapper getWithoutControl() {
+			return new RY(qc, angle, targets);
 		}
 		
 		@Override
@@ -1076,13 +1076,13 @@ public abstract class QuantumGateWrapper {
 		}
 		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
-			return new RZ(qc, angle, targets);
+		public double[] getSingleMatrix() {
+			return QuantumMatrix.rotateZ(Math.toRadians(angle));
 		}
 		
 		@Override
-		public double[] getSingleMatrix() {
-			return QuantumMatrix.rotateZ(Math.toRadians(angle));
+		public QuantumOperationWrapper getWithoutControl() {
+			return new RZ(qc, angle, targets);
 		}
 		
 		@Override
@@ -1096,7 +1096,7 @@ public abstract class QuantumGateWrapper {
 		}
 	}
 	
-	public static class Swap extends QuantumGateWrapper {
+	public static class Swap extends QuantumOperationWrapper {
 		
 		protected final int[] from, to;
 		
@@ -1116,12 +1116,8 @@ public abstract class QuantumGateWrapper {
 			}
 		}
 		
-		public double[] getSingleMatrix() {
-			return null;
-		}
-		
 		@Override
-		public void addDecomposition(List<QuantumGateWrapper> decomposition) {
+		public void addDecomposition(List<QuantumOperationWrapper> decomposition) {
 			if (from.length > 0 && from.length == to.length) {
 				decomposition.add(this);
 			}
@@ -1149,13 +1145,16 @@ public abstract class QuantumGateWrapper {
 		}
 	}
 	
-	public static class ControlSwap extends Swap implements IControl {
+	public static class ControlSwap extends QuantumOperationWrapper implements IControl {
 		
 		protected final int[] controls;
+		protected final int[] from, to;
 		
 		public ControlSwap(QuantumComputer qc, int[] controls, int[] from, int[] to) {
-			super(qc, from, to);
+			super(qc);
 			this.controls = controls;
+			this.from = from;
+			this.to = to;
 		}
 		
 		@Override
@@ -1178,13 +1177,17 @@ public abstract class QuantumGateWrapper {
 			}
 		}
 		
+		public double[] getSingleMatrix() {
+			return null;
+		}
+		
 		@Override
-		public QuantumGateWrapper getWithoutControl() {
+		public QuantumOperationWrapper getWithoutControl() {
 			return new Swap(qc, from, to);
 		}
 		
 		@Override
-		public void addDecomposition(List<QuantumGateWrapper> decomposition) {
+		public void addDecomposition(List<QuantumOperationWrapper> decomposition) {
 			int len = from.length;
 			if (len > 0 && len == to.length) {
 				if (controls.length == 0) {
@@ -1235,10 +1238,10 @@ public abstract class QuantumGateWrapper {
 					}
 				}
 				else {
-					List<QuantumGateWrapper> decomposition = new ArrayList<>();
+					List<QuantumOperationWrapper> decomposition = new ArrayList<>();
 					addDecomposition(decomposition);
 					
-					for (QuantumGateWrapper gate : decomposition) {
+					for (QuantumOperationWrapper gate : decomposition) {
 						lines.addAll(gate.getCode(type));
 					}
 				}
@@ -1320,7 +1323,7 @@ public abstract class QuantumGateWrapper {
 	/**
 	 * Adds the ZYZ decomposition of this gate to the list. Combines results from: <a href="https://arxiv.org/abs/quant-ph/9503016">...</a>, Nielsen, Michael A.; Chuang, Isaac L. Quantum Computation and Quantum Information
 	 */
-	public static <GATE extends QuantumGateWrapper & IControl> void addZYZDecomposition(GATE gate, List<QuantumGateWrapper> decomposition) {
+	public static <GATE extends QuantumOperationWrapper & IControl> void addZYZDecomposition(GATE gate, List<QuantumOperationWrapper> decomposition) {
 		int[] targets = gate.getTargets();
 		if (targets.length == 0) {
 			return;

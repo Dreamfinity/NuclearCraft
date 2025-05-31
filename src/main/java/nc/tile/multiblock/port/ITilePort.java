@@ -17,7 +17,7 @@ public interface ITilePort<MULTIBLOCK extends Multiblock<MULTIBLOCK, T> & ILogic
 	
 	void refreshMasterPort();
 	
-	void refreshTargets(boolean simulateMultiblockRefresh);
+	void refreshTargets();
 	
 	void setRefreshTargetsFlag(boolean refreshTargetsFlag);
 	

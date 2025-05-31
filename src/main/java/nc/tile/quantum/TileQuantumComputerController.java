@@ -40,7 +40,7 @@ public class TileQuantumComputerController extends TileQuantumComputerPart imple
 	
 	public final void queueReset() {
 		if (isMultiblockAssembled()) {
-			getMultiblock().queue.add(new QuantumGateWrapper.Reset(getMultiblock()));
+			getMultiblock().queue.add(new QuantumOperationWrapper.Reset(getMultiblock()));
 		}
 	}
 	

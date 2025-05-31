@@ -320,7 +320,7 @@ public abstract class TileMultiblockPart<MULTIBLOCK extends Multiblock<MULTIBLOC
 	}
 	
 	protected void nullControllerWarn() {
-		NCUtil.getLogger().warn(getBlock(pos).getLocalizedName() + " at (%d, %d, %d) is being assembled without being attached to a controller. It is recommended that the multiblock is completely disassambled and rebuilt if these errors continue!", pos.getX(), pos.getY(), pos.getZ());
+		NCUtil.getLogger().warn(getBlock(pos).getLocalizedName() + " at (%d, %d, %d) has a null controller. It is recommended that the multiblock is completely disassambled and rebuilt!", pos.getX(), pos.getY(), pos.getZ());
 	}
 	
 	// Private/Protected Logic Helpers

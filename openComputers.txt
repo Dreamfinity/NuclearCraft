@@ -11,10 +11,10 @@ double getCurrentTime()
 double getBaseProcessTime()
 double getBaseProcessPower()
 
-Table getItemInputs() -> {{stackSize, itemID}, ...}
-Table getFluidInputs() -> {{fluidAmount, fluidName}, ...}
-Table getItemOutputs() -> {{stackSize, itemID}, ...}
-Table getFluidOutputs() -> {{fluidAmount, fluidName}, ...}
+Table[] getItemInputs() -> {{stackSize, itemID}, ...}
+Table[] getFluidInputs() -> {{fluidAmount, fluidName}, ...}
+Table[] getItemOutputs() -> {{stackSize, itemID}, ...}
+Table[] getFluidOutputs() -> {{fluidAmount, fluidName}, ...}
 
 void setItemInputSorption(int side, int index, int sorption)
 void setFluidInputSorption(int side, int index, int sorption)
@@ -43,10 +43,10 @@ double getCurrentTime()
 double getBaseProcessTime()
 double getBaseProcessPower()
 
-Table getItemInputs() -> {{stackSize, itemID}, ...}
-Table getFluidInputs() -> {{fluidAmount, fluidName}, ...}
-Table getItemOutputs() -> {{stackSize, itemID}, ...}
-Table getFluidOutputs() -> {{fluidAmount, fluidName}, ...}
+Table[] getItemInputs() -> {{stackSize, itemID}, ...}
+Table[] getFluidInputs() -> {{fluidAmount, fluidName}, ...}
+Table[] getItemOutputs() -> {{stackSize, itemID}, ...}
+Table[] getFluidOutputs() -> {{fluidAmount, fluidName}, ...}
 
 void haltProcess()
 void resumeProcess()
@@ -82,16 +82,16 @@ int getNumberOfVessels()
 int getNumberOfHeaters()
 int getNumberOfShields()
 
-Table getIrradiatorStats()
-Table getCellStats()
-Table getSinkStats()
-Table getVesselStats()
-Table getHeaterStats()
-Table getShieldStats()
+Table[] getIrradiatorStats()
+Table[] getCellStats()
+Table[] getSinkStats()
+Table[] getVesselStats()
+Table[] getHeaterStats()
+Table[] getShieldStats()
 
 int getNumberOfClusters()
 
-Table getClusterInfo(int clusterID)
+Table[] getClusterInfo(int clusterID)
 
 void clearAllMaterial()
 
@@ -117,11 +117,11 @@ double getMeanTempDiff()
 
 int getNumberOfNetworks()
 
-Table getNetworkStats()
+Table[] getNetworkStats()
 
 int getNumberOfTubes()
 
-Table getTubeStats()
+Table[] getTubeStats()
 
 void activate()
 void deactivate()
@@ -162,12 +162,26 @@ int getInputRate()
 
 int getNumberOfDynamoParts()
 
-Table getDynamoPartStats()
+Table[] getDynamoPartStats()
 
 void activate()
 void deactivate()
 
 void clearAllMaterial()
+
+---------------------------------------------------------------------------------------------------------------------------
+
+ Quantum Computer - component.nc_quantum_computer:
+>-------------------------------------------------<
+
+boolean isComplete()
+
+int getNumberOfQubits()
+
+int getStateDim()
+
+Complex[] getStateVector()
+double[] getProbs()
 
 ---------------------------------------------------------------------------------------------------------------------------
 

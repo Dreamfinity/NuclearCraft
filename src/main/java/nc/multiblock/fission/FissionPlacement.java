@@ -280,8 +280,8 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isCasing(part.getMultiblock(), part.getTilePos().offset(dir));
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isCasing(part.getMultiblock(), part.getTilePos().offset(dir), simulate);
 		}
 	}
 	
@@ -292,8 +292,8 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isConductor(part.getMultiblock(), part.getTilePos().offset(dir));
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isConductor(part.getMultiblock(), part.getTilePos().offset(dir), simulate);
 		}
 	}
 	
@@ -304,8 +304,8 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isActiveModerator(part.getMultiblock(), part.getTilePos().offset(dir));
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isActiveModerator(part.getMultiblock(), part.getTilePos().offset(dir), simulate);
 		}
 	}
 	
@@ -316,8 +316,8 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isActiveReflector(part.getMultiblock(), part.getTilePos().offset(dir));
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isActiveReflector(part.getMultiblock(), part.getTilePos().offset(dir), simulate);
 		}
 	}
 	
@@ -328,8 +328,8 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isFunctionalIrradiator(part.getMultiblock(), part.getTilePos().offset(dir));
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isFunctionalIrradiator(part.getMultiblock(), part.getTilePos().offset(dir), simulate);
 		}
 	}
 	
@@ -340,8 +340,8 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isFunctionalShield(part.getMultiblock(), part.getTilePos().offset(dir));
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isFunctionalShield(part.getMultiblock(), part.getTilePos().offset(dir), simulate);
 		}
 	}
 	
@@ -352,8 +352,8 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isFunctionalCell(part.getMultiblock(), part.getTilePos().offset(dir));
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isFunctionalCell(part.getMultiblock(), part.getTilePos().offset(dir), simulate);
 		}
 	}
 	
@@ -375,8 +375,8 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isValidSink(part.getMultiblock(), part.getTilePos().offset(dir), sinkType);
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isValidSink(part.getMultiblock(), part.getTilePos().offset(dir), sinkType, simulate);
 		}
 	}
 	
@@ -387,8 +387,8 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isFunctionalVessel(part.getMultiblock(), part.getTilePos().offset(dir));
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isFunctionalVessel(part.getMultiblock(), part.getTilePos().offset(dir), simulate);
 		}
 	}
 	
@@ -410,59 +410,59 @@ public abstract class FissionPlacement {
 		}
 		
 		@Override
-		public boolean satisfied(IFissionPart part, EnumFacing dir) {
-			return isValidHeater(part.getMultiblock(), part.getTilePos().offset(dir), heaterType);
+		public boolean satisfied(IFissionPart part, EnumFacing dir, boolean simulate) {
+			return isValidHeater(part.getMultiblock(), part.getTilePos().offset(dir), heaterType, simulate);
 		}
 	}
 	
 	// Helper Methods
 	
-	public static boolean isCasing(FissionReactor reactor, BlockPos pos) {
+	public static boolean isCasing(FissionReactor reactor, BlockPos pos, boolean simulate) {
 		TileEntity tile = reactor.WORLD.getTileEntity(pos);
 		return tile instanceof TileFissionPart && ((TileFissionPart) tile).getPartPositionType().isGoodForWall();
 	}
 	
-	public static boolean isConductor(FissionReactor reactor, BlockPos pos) {
+	public static boolean isConductor(FissionReactor reactor, BlockPos pos, boolean simulate) {
 		return reactor.getPartMap(TileFissionConductor.class).get(pos.toLong()) != null;
 	}
 	
-	public static boolean isActiveModerator(FissionReactor reactor, BlockPos pos) {
+	public static boolean isActiveModerator(FissionReactor reactor, BlockPos pos, boolean simulate) {
 		IFissionComponent component = reactor.getPartMap(IFissionComponent.class).get(pos.toLong());
 		return (component != null && component.isActiveModerator()) || (reactor.activeModeratorCache.contains(pos.toLong()) && RecipeHelper.blockRecipe(NCRecipes.fission_moderator, reactor.WORLD, pos) != null);
 	}
 	
-	public static boolean isActiveReflector(FissionReactor reactor, BlockPos pos) {
+	public static boolean isActiveReflector(FissionReactor reactor, BlockPos pos, boolean simulate) {
 		return reactor.activeReflectorCache.contains(pos.toLong()) && RecipeHelper.blockRecipe(NCRecipes.fission_reflector, reactor.WORLD, pos) != null;
 	}
 	
-	public static boolean isFunctionalIrradiator(FissionReactor reactor, BlockPos pos) {
+	public static boolean isFunctionalIrradiator(FissionReactor reactor, BlockPos pos, boolean simulate) {
 		TileFissionIrradiator irradiator = reactor.getPartMap(TileFissionIrradiator.class).get(pos.toLong());
-		return irradiator != null && irradiator.isFunctional();
+		return irradiator != null && irradiator.isFunctional(simulate);
 	}
 	
-	public static boolean isFunctionalShield(FissionReactor reactor, BlockPos pos) {
+	public static boolean isFunctionalShield(FissionReactor reactor, BlockPos pos, boolean simulate) {
 		TileFissionShield shield = reactor.getPartMap(TileFissionShield.class).get(pos.toLong());
-		return shield != null && shield.isFunctional();
+		return shield != null && shield.isFunctional(simulate);
 	}
 	
-	public static boolean isFunctionalCell(FissionReactor reactor, BlockPos pos) {
+	public static boolean isFunctionalCell(FissionReactor reactor, BlockPos pos, boolean simulate) {
 		TileSolidFissionCell cell = reactor.getPartMap(TileSolidFissionCell.class).get(pos.toLong());
-		return cell != null && cell.isFunctional();
+		return cell != null && cell.isFunctional(simulate);
 	}
 	
-	public static boolean isValidSink(FissionReactor reactor, BlockPos pos, String sinkType) {
+	public static boolean isValidSink(FissionReactor reactor, BlockPos pos, String sinkType, boolean simulate) {
 		TileSolidFissionSink sink = reactor.getPartMap(TileSolidFissionSink.class).get(pos.toLong());
-		return sink != null && sink.isFunctional() && (sinkType.equals("any") || sink.sinkType.equals(sinkType));
+		return sink != null && sink.isFunctional(simulate) && (sinkType.equals("any") || sink.sinkType.equals(sinkType));
 	}
 	
-	public static boolean isFunctionalVessel(FissionReactor reactor, BlockPos pos) {
+	public static boolean isFunctionalVessel(FissionReactor reactor, BlockPos pos, boolean simulate) {
 		TileSaltFissionVessel vessel = reactor.getPartMap(TileSaltFissionVessel.class).get(pos.toLong());
-		return vessel != null && vessel.isFunctional();
+		return vessel != null && vessel.isFunctional(simulate);
 	}
 	
-	public static boolean isValidHeater(FissionReactor reactor, BlockPos pos, String heaterType) {
+	public static boolean isValidHeater(FissionReactor reactor, BlockPos pos, String heaterType, boolean simulate) {
 		TileSaltFissionHeater heater = reactor.getPartMap(TileSaltFissionHeater.class).get(pos.toLong());
-		return heater != null && heater.isFunctional() && (heaterType.equals("any") || heater.heaterType.equals(heaterType));
+		return heater != null && heater.isFunctional(simulate) && (heaterType.equals("any") || heater.heaterType.equals(heaterType));
 	}
 	
 	// Default Tooltip Builder

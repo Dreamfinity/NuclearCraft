@@ -52,7 +52,7 @@ public class GuiSolidFissionCell extends GuiProcessorImpl.GuiBasicFilteredProces
 	
 	public List<String> heatInfo() {
 		String heat = UnitHelper.prefix(tile.clusterHeatStored, tile.clusterHeatCapacity, 5, "H");
-		return Lists.newArrayList(TextFormatting.YELLOW + Lang.localize("gui.nc.container.solid_fission_tile.heat_stored") + TextFormatting.WHITE + " " + heat);
+		return Lists.newArrayList(TextFormatting.YELLOW + Lang.localize("gui.nc.container.fission_component.heat_stored") + TextFormatting.WHITE + " " + heat);
 	}
 	
 	@Override

@@ -39,21 +39,26 @@ public class FissionCluster {
 		return rawHeating - cooling;
 	}
 	
-	public void distributeHeatToComponents() {
-		if (componentMap.isEmpty()) {
+	public void distributeHeatToComponents(boolean simulate) {
+		if (simulate || componentMap.isEmpty()) {
 			return;
 		}
+		
 		long distributedHeat = (long) Math.ceil((double) heatBuffer.getHeatStored() / (double) componentMap.size());
 		for (IFissionComponent component : componentMap.values()) {
 			component.setHeatStored(heatBuffer.removeHeat(distributedHeat, false));
-			if (heatBuffer.getHeatStored() == 0L) {
+			if (heatBuffer.isEmpty()) {
 				return;
 			}
 		}
 		heatBuffer.setHeatStored(0L);
 	}
 	
-	public void recoverHeatFromComponents() {
+	public void recoverHeatFromComponents(boolean simulate) {
+		if (simulate) {
+			return;
+		}
+		
 		heatBuffer.setHeatStored(0L);
 		for (IFissionComponent component : componentMap.values()) {
 			heatBuffer.addHeat(component.getHeatStored(), false);

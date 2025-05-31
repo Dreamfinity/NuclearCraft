@@ -47,7 +47,7 @@ public class TileQuantumComputerQubit extends TileQuantumComputerPart implements
 	
 	public final void queueMeasurement() {
 		if (isMultiblockAssembled()) {
-			getMultiblock().queue.add(new QuantumGateWrapper.Measurement(getMultiblock(), new int[] {id}));
+			getMultiblock().queue.add(new QuantumOperationWrapper.Measurement(getMultiblock(), new int[] {id}));
 		}
 	}
 	

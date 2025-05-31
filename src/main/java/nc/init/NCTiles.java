@@ -207,7 +207,7 @@ public class NCTiles {
 		registerTile(Global.MOD_ID, "quantum_computer_controller", TileQuantumComputerController.class);
 		registerTile(Global.MOD_ID, "quantum_computer_qubit", TileQuantumComputerQubit.class);
 		
-		registerTileVariants(Global.MOD_ID, "quantum_computer_gate_single", QuantumGateEnums.SingleType.class);
+		registerTileVariants(Global.MOD_ID, "quantum_computer_gate_single", QuantumGateEnums.BasicType.class);
 		registerTileVariants(Global.MOD_ID, "quantum_computer_gate_control", QuantumGateEnums.ControlType.class);
 		registerTileVariants(Global.MOD_ID, "quantum_computer_gate_swap", QuantumGateEnums.SwapType.class);
 		

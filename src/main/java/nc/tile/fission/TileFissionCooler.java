@@ -57,6 +57,7 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 	
 	public double time, resetTime;
 	public boolean isProcessing, canProcessInputs;
+	public boolean isRunningSimulated;
 	
 	protected RecipeInfo<BasicRecipe> recipeInfo = null;
 	
@@ -105,13 +106,13 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 	}
 	
 	@Override
-	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
+	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate) {
 		return true;
 	}
 	
 	@Override
-	public boolean isFunctional() {
-		return isProcessing;
+	public boolean isFunctional(boolean simulate) {
+		return isRunning(simulate);
 	}
 	
 	@Override
@@ -125,16 +126,23 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 	}
 	
 	@Override
-	public void clusterSearch(Integer id, final Object2IntMap<IFissionComponent> clusterSearchCache, final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
+	public void clusterSearch(Integer id, final Object2IntMap<IFissionComponent> clusterSearchCache, final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate) {
 		refreshDirty();
 		
-		IFissionCoolingComponent.super.clusterSearch(id, clusterSearchCache, componentFailCache, assumedValidCache);
+		IFissionCoolingComponent.super.clusterSearch(id, clusterSearchCache, componentFailCache, assumedValidCache, simulate);
 		
-		refreshIsProcessing(true);
+		refreshIsProcessing(true, simulate);
 	}
 	
-	public void refreshIsProcessing(boolean checkCluster) {
-		isProcessing = isProcessing(checkCluster);
+	public void refreshIsProcessing(boolean checkCluster, boolean simulate) {
+		if (simulate) {
+			isProcessing = false;
+			isRunningSimulated = isProcessing(checkCluster, simulate);
+		}
+		else {
+			isProcessing = isProcessing(checkCluster, simulate);
+			isRunningSimulated = false;
+		}
 	}
 	
 	@Override
@@ -153,12 +161,12 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 	}
 	
 	@Override
-	public boolean isNullifyingSources(EnumFacing side) {
+	public boolean isNullifyingSources(EnumFacing side, boolean simulate) {
 		return false;
 	}
 	
 	@Override
-	public long getCooling() {
+	public long getCooling(boolean simulate) {
 		return baseProcessCooling;
 	}
 	
@@ -200,15 +208,8 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 	}
 	
 	@Override
-	public boolean onPortRefresh(boolean simulateMultiblockRefresh) {
-		if (simulateMultiblockRefresh) {
-			FissionReactor reactor = getMultiblock();
-			return reactor != null && reactor.isReactorOn && cluster == null && isProcessing(false);
-		}
-		else {
-			refreshAll();
-			return false;
-		}
+	public void onPortRefresh() {
+		refreshAll();
 	}
 	
 	// Ticking
@@ -226,7 +227,7 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 	public void update() {
 		if (!world.isRemote) {
 			FissionReactor reactor = getMultiblock();
-			boolean shouldRefresh = reactor != null && reactor.isReactorOn && cluster == null && isProcessing(false);
+			boolean shouldRefresh = reactor != null && reactor.isReactorOn && cluster == null && isProcessing(false, false);
 			
 			if (onTick()) {
 				markDirty();
@@ -241,12 +242,16 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 	@Override
 	public void refreshAll() {
 		refreshDirty();
-		refreshIsProcessing(true);
+		refreshIsProcessing(true, false);
 	}
 	
 	@Override
 	public void refreshActivity() {
 		canProcessInputs = canProcessInputs();
+	}
+	
+	public boolean isRunning(boolean simulate) {
+		return simulate ? isRunningSimulated : isProcessing;
 	}
 	
 	// IProcessor
@@ -363,10 +368,10 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 	
 	@Override
 	public boolean isProcessing() {
-		return isProcessing(true);
+		return !isSimulation() && isProcessing(true, false);
 	}
 	
-	public boolean isProcessing(boolean checkCluster) {
+	public boolean isProcessing(boolean checkCluster, boolean simulate) {
 		return readyToProcess(checkCluster);
 	}
 	
@@ -564,6 +569,8 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 		nbt.setInteger("baseProcessCooling", baseProcessCooling);
 		
 		nbt.setLong("clusterHeat", heat);
+		
+		nbt.setBoolean("isRunningSimulated", isRunningSimulated);
 		return nbt;
 	}
 	
@@ -576,6 +583,8 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 		baseProcessCooling = nbt.getInteger("baseProcessCooling");
 		
 		heat = nbt.getLong("clusterHeat");
+		
+		isRunningSimulated = nbt.getBoolean("isRunningSimulated");
 	}
 	
 	@Override
@@ -639,7 +648,7 @@ public class TileFissionCooler extends TileFissionPart implements IBasicProcesso
 		List<Tank> tanks = getTanks();
 		entry.put("coolant", OCHelper.tankInfo(tanks.get(0)));
 		entry.put("hot_coolant", OCHelper.tankInfo(tanks.get(1)));
-		entry.put("cooling", getCooling());
+		entry.put("cooling", getCooling(false));
 		entry.put("speed_multiplier", getSpeedMultiplier());
 		entry.put("is_processing", getIsProcessing());
 		entry.put("current_time", getCurrentTime());

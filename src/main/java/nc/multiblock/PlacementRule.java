@@ -47,7 +47,7 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 		return requiresRecheck;
 	}
 	
-	public abstract boolean satisfied(T tile);
+	public abstract boolean satisfied(T tile, boolean simulate);
 	
 	// Setup
 	
@@ -159,9 +159,9 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 		}
 		
 		@Override
-		public boolean satisfied(T tile) {
+		public boolean satisfied(T tile, boolean simulate) {
 			for (PlacementRule<MULTIBLOCK, T> rule : subRules) {
-				if (!rule.satisfied(tile)) {
+				if (!rule.satisfied(tile, simulate)) {
 					return false;
 				}
 			}
@@ -194,9 +194,9 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 		}
 		
 		@Override
-		public boolean satisfied(T tile) {
+		public boolean satisfied(T tile, boolean simulate) {
 			for (PlacementRule<MULTIBLOCK, T> rule : subRules) {
-				if (rule.satisfied(tile)) {
+				if (rule.satisfied(tile, simulate)) {
 					return true;
 				}
 			}
@@ -302,11 +302,11 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 		}
 		
 		@Override
-		public boolean satisfied(T tile) {
-			byte count = 0;
+		public boolean satisfied(T tile, boolean simulate) {
+			int count = 0;
 			if (adjType == AdjacencyType.STANDARD) {
 				for (EnumFacing dir : EnumFacing.VALUES) {
-					if (satisfied(tile, dir)) {
+					if (satisfied(tile, dir, simulate)) {
 						++count;
 					}
 					
@@ -325,7 +325,7 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 				if (countType == CountType.EXACTLY) {
 					boolean[] dirs = new boolean[] {false, false, false, false, false, false};
 					for (EnumFacing dir : EnumFacing.VALUES) {
-						if (satisfied(tile, dir)) {
+						if (satisfied(tile, dir, simulate)) {
 							++count;
 							if (count > amount) {
 								return false;
@@ -354,7 +354,7 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 					loop:
 					for (EnumFacing[] axialDirs : PosHelper.axialDirsList()) {
 						for (EnumFacing dir : axialDirs) {
-							if (!satisfied(tile, dir)) {
+							if (!satisfied(tile, dir, simulate)) {
 								continue loop;
 							}
 						}
@@ -375,7 +375,7 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 				if (countType == CountType.EXACTLY) {
 					boolean[] dirs = new boolean[] {false, false, false, false, false, false};
 					for (EnumFacing dir : EnumFacing.VALUES) {
-						if (satisfied(tile, dir)) {
+						if (satisfied(tile, dir, simulate)) {
 							++count;
 							if (count > amount) {
 								return false;
@@ -402,7 +402,7 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 					loop:
 					for (EnumFacing[] typeDirs : (adjType == AdjacencyType.VERTEX ? PosHelper.VERTEX_DIRS : PosHelper.EDGE_DIRS)) {
 						for (EnumFacing dir : typeDirs) {
-							if (!satisfied(tile, dir)) {
+							if (!satisfied(tile, dir, simulate)) {
 								continue loop;
 							}
 						}
@@ -413,7 +413,7 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 			}
 		}
 		
-		public abstract boolean satisfied(T tile, EnumFacing dir);
+		public abstract boolean satisfied(T tile, EnumFacing dir, boolean simulate);
 	}
 	
 	public enum AdjacencyType {

@@ -495,6 +495,7 @@ tile.nuclearcraft.quantum_computer_gate_swap.cswap.name=Quantum Computer Control
 tile.nuclearcraft.quantum_computer_gate_swap.cswap.desc=Performs a controlled swap on two lists of qubits.
 
 tile.nuclearcraft.quantum_computer_connector.name=Quantum Computer Connector
+tile.nuclearcraft.quantum_computer_port.name=Quantum Computer Port
 
 tile.nuclearcraft.quantum_computer_code_generator.qasm.name=Quantum Computer QASM Code Generator
 tile.nuclearcraft.quantum_computer_code_generator.qasm.desc=Used to generate QASM code for use with IBM Q.
@@ -3501,7 +3502,7 @@ gui.nc.container.infiltrator_controller.pressure_fluid_efficiency=Fluid Efficien
 gui.nc.container.no_cluster=No cluster!
 
 gui.nc.container.fission_controller.clusters=Number of Clusters:
-gui.nc.container.fission_controller.sparsity=Sparsity Efficiency Mult:
+gui.nc.container.fission_controller.sparsity=Sparsity Efficiency:
 gui.nc.container.fission_controller.useful_parts=Useful Components:
 gui.nc.container.fission_controller.temperature=Casing Temp:
 gui.nc.container.fission_controller.net_heating=Net Casing Heating:
@@ -3513,22 +3514,20 @@ gui.nc.container.fission_controller.efficiency=Mean Efficiency:
 gui.nc.container.fission_controller.heat_mult=Mean Heat Multiplier:
 gui.nc.container.fission_controller.heat_stored=Casing Heat Level:
 
+gui.nc.container.fission_component.heat_stored=Cluster Heat Level:
+
 gui.nc.container.fission_irradiator.irradiator=Fission Irradiator
-gui.nc.container.fission_irradiator.heat_stored=Cluster Heat Level:
 
 gui.nc.container.solid_fission_controller.reactor=Solid Fuel Reactor
 gui.nc.container.solid_fission_controller.output_rate=Production Rate:
 
 gui.nc.container.solid_fission_cell.cell=Fission Fuel Cell
-gui.nc.container.solid_fission_cell.heat_stored=Cluster Heat Level:
 
 gui.nc.container.salt_fission_controller.reactor=Molten Salt Reactor
 gui.nc.container.salt_fission_controller.heating_speed_multiplier=Mean Heating Speed:
 
 gui.nc.container.salt_fission_vessel.vessel=Fission Fuel Vessel
-gui.nc.container.salt_fission_vessel.heat_stored=Cluster Heat Level:
 gui.nc.container.salt_fission_heater.heater=Fission Coolant Heater
-gui.nc.container.salt_fission_heater.heat_stored=Cluster Heat Level:
 
 gui.nc.container.fission_heater_port.name=Fission Coolant Heater Port
 

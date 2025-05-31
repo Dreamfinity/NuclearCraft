@@ -302,12 +302,12 @@ public class TileSolidFissionSink extends TileFissionPart implements IFissionCoo
 	}
 	
 	@Override
-	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
+	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate) {
 		if (componentFailCache.containsKey(pos.toLong())) {
 			return isInValidPosition = false;
 		}
 		else if (placementRule.requiresRecheck()) {
-			isInValidPosition = placementRule.satisfied(this);
+			isInValidPosition = placementRule.satisfied(this, simulate);
 			if (isInValidPosition) {
 				assumedValidCache.put(pos.toLong(), this);
 			}
@@ -316,11 +316,11 @@ public class TileSolidFissionSink extends TileFissionPart implements IFissionCoo
 		else if (isInValidPosition) {
 			return true;
 		}
-		return isInValidPosition = placementRule.satisfied(this);
+		return isInValidPosition = placementRule.satisfied(this, simulate);
 	}
 	
 	@Override
-	public boolean isFunctional() {
+	public boolean isFunctional(boolean simulate) {
 		return isInValidPosition;
 	}
 	
@@ -350,12 +350,12 @@ public class TileSolidFissionSink extends TileFissionPart implements IFissionCoo
 	}
 	
 	@Override
-	public boolean isNullifyingSources(EnumFacing side) {
+	public boolean isNullifyingSources(EnumFacing side, boolean simulate) {
 		return false;
 	}
 	
 	@Override
-	public long getCooling() {
+	public long getCooling(boolean simulate) {
 		return coolingRate;
 	}
 	
@@ -396,7 +396,7 @@ public class TileSolidFissionSink extends TileFissionPart implements IFissionCoo
 	public Object getOCInfo() {
 		Object2ObjectMap<String, Object> entry = new Object2ObjectLinkedOpenHashMap<>();
 		entry.put("type", sinkType);
-		entry.put("cooling", getCooling());
+		entry.put("cooling", getCooling(false));
 		entry.put("is_valid", isInValidPosition);
 		return entry;
 	}

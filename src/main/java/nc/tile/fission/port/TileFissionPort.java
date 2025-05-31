@@ -82,21 +82,11 @@ public abstract class TileFissionPort<PORT extends TileFissionPort<PORT, TARGET>
 	}
 	
 	@Override
-	public void refreshTargets(boolean simulateMultiblockRefresh) {
+	public void refreshTargets() {
 		refreshTargetsFlag = false;
 		if (isMultiblockAssembled()) {
-			if (simulateMultiblockRefresh) {
-				for (TARGET part : getTargets()) {
-					if (part.onPortRefresh(true)) {
-						getMultiblock().refreshFlag = true;
-						break;
-					}
-				}
-			}
-			else {
-				for (TARGET part : getTargets()) {
-					part.onPortRefresh(false);
-				}
+			for (TARGET part : getTargets()) {
+				part.onPortRefresh();
 			}
 		}
 	}
@@ -112,7 +102,7 @@ public abstract class TileFissionPort<PORT extends TileFissionPort<PORT, TARGET>
 	public void update() {
 		if (!world.isRemote) {
 			if (refreshTargetsFlag) {
-				refreshTargets(false);
+				refreshTargets();
 			}
 		}
 	}

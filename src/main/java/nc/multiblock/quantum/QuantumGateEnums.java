@@ -7,7 +7,7 @@ import net.minecraft.util.IStringSerializable;
 
 public class QuantumGateEnums {
 	
-	public enum SingleType implements IStringSerializable, IBlockMetaEnum, ITileEnum<TileQuantumComputerGate> {
+	public enum BasicType implements IStringSerializable, IBlockMetaEnum, ITileEnum<TileQuantumComputerGate> {
 		
 		X("x", 0, TileQuantumComputerGate.X.class),
 		Y("y", 1, TileQuantumComputerGate.Y.class),
@@ -26,7 +26,7 @@ public class QuantumGateEnums {
 		private final int id;
 		private final Class<? extends TileQuantumComputerGate> tileClass;
 		
-		SingleType(String name, int id, Class<? extends TileQuantumComputerGate> tileClass) {
+		BasicType(String name, int id, Class<? extends TileQuantumComputerGate> tileClass) {
 			this.name = name;
 			this.id = id;
 			this.tileClass = tileClass;

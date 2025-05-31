@@ -489,7 +489,7 @@ public class CraftingRecipeHandler {
 			addShapelessOreRecipe(new ItemStack(NCBlocks.quantum_computer_gate_single, 1, 10), new ItemStack(NCBlocks.quantum_computer_gate_single, 1, 1), Blocks.REDSTONE_TORCH);
 			addShapelessOreRecipe(new ItemStack(NCBlocks.quantum_computer_gate_single, 1, 11), new ItemStack(NCBlocks.quantum_computer_gate_single, 1, 2), Blocks.REDSTONE_TORCH);
 			
-			for (int i = 0; i < QuantumGateEnums.SingleType.values().length; ++i) {
+			for (int i = 0; i < QuantumGateEnums.BasicType.values().length; ++i) {
 				addShapelessOreRecipe(new ItemStack(NCBlocks.quantum_computer_gate_control, 1, i), new ItemStack(NCBlocks.quantum_computer_gate_single, 1, i), "dustEnergetic");
 			}
 			
@@ -509,6 +509,9 @@ public class CraftingRecipeHandler {
 			addShapelessOreRecipe(new ItemStack(NCBlocks.quantum_computer_gate_swap, 1, 0), new ItemStack(NCBlocks.quantum_computer_gate_swap, 1, 1));
 			
 			addShapedOreRecipe(new ItemStack(NCBlocks.quantum_computer_connector, 8), "ESE", "S S", "ESE", 'E', "ingotExtreme", 'S', "ingotSteel");
+			if (ModCheck.openComputersLoaded()) {
+				addShapedOreRecipe(NCBlocks.quantum_computer_port, "EME", "CNC", "EPE", 'E', "ingotExtreme", 'M', RegistryHelper.itemStackFromRegistry("opencomputers:material:7"), 'C', RegistryHelper.blockStackFromRegistry("opencomputers:cable:0"), 'P', RegistryHelper.itemStackFromRegistry("opencomputers:material:4"), 'N', Items.ENDER_PEARL);
+			}
 			
 			addShapedOreRecipe(new ItemStack(NCBlocks.quantum_computer_code_generator, 1, 0), "ESE", "PBP", "ESE", 'E', "ingotExtreme", 'S', "ingotSteel", 'P', Items.ENDER_PEARL, 'B', Items.WRITABLE_BOOK);
 			addShapelessOreRecipe(new ItemStack(NCBlocks.quantum_computer_code_generator, 1, 0), new ItemStack(NCBlocks.quantum_computer_code_generator, 1, 1));

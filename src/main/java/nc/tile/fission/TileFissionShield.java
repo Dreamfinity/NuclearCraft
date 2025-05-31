@@ -98,12 +98,12 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	}
 	
 	@Override
-	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
+	public boolean isValidHeatConductor(final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate) {
 		return inCompleteModeratorLine;
 	}
 	
 	@Override
-	public boolean isFunctional() {
+	public boolean isFunctional(boolean simulate) {
 		return inCompleteModeratorLine;
 	}
 	
@@ -130,8 +130,8 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	}
 	
 	@Override
-	public void clusterSearch(Integer id, final Object2IntMap<IFissionComponent> clusterSearchCache, final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache) {
-		IFissionHeatingComponent.super.clusterSearch(id, clusterSearchCache, componentFailCache, assumedValidCache);
+	public void clusterSearch(Integer id, final Object2IntMap<IFissionComponent> clusterSearchCache, final Long2ObjectMap<IFissionComponent> componentFailCache, final Long2ObjectMap<IFissionComponent> assumedValidCache, boolean simulate) {
+		IFissionHeatingComponent.super.clusterSearch(id, clusterSearchCache, componentFailCache, assumedValidCache, simulate);
 	}
 	
 	@Override
@@ -140,7 +140,7 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	}
 	
 	@Override
-	public boolean isNullifyingSources(EnumFacing side) {
+	public boolean isNullifyingSources(EnumFacing side, boolean simulate) {
 		return isShielding;
 	}
 	
@@ -155,22 +155,22 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	}
 	
 	@Override
-	public long getRawHeating() {
-		return isFunctional() ? (long) Math.min(Long.MAX_VALUE, Math.floor(flux * heatPerFlux)) : 0L;
+	public long getRawHeating(boolean simulate) {
+		return isFunctional(simulate) ? (long) Math.min(Long.MAX_VALUE, Math.floor(flux * heatPerFlux)) : 0L;
 	}
 	
 	@Override
-	public long getRawHeatingIgnoreCoolingPenalty() {
+	public long getRawHeatingIgnoreCoolingPenalty(boolean simulate) {
 		return 0L;
 	}
 	
 	@Override
-	public double getEffectiveHeating() {
-		return isFunctional() ? flux * heatPerFlux * efficiency : 0D;
+	public double getEffectiveHeating(boolean simulate) {
+		return isFunctional(simulate) ? flux * heatPerFlux * efficiency : 0D;
 	}
 	
 	@Override
-	public double getEffectiveHeatingIgnoreCoolingPenalty() {
+	public double getEffectiveHeatingIgnoreCoolingPenalty(boolean simulate) {
 		return 0D;
 	}
 	
@@ -179,8 +179,9 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	@Override
 	public ModeratorBlockInfo getModeratorBlockInfo(EnumFacing dir, boolean validActiveModeratorPosIn) {
 		FissionReactorLogic logic = getLogic();
-		this.validActiveModeratorPos[dir.getIndex()] = logic != null && logic.isShieldActiveModerator(this, validActiveModeratorPosIn);
-		return logic != null ? logic.getShieldModeratorBlockInfo(this, this.validActiveModeratorPos[dir.getIndex()]) : null;
+		int index = dir.getIndex();
+		this.validActiveModeratorPos[index] = logic != null && logic.isShieldActiveModerator(this, validActiveModeratorPosIn);
+		return logic != null ? logic.getShieldModeratorBlockInfo(this, this.validActiveModeratorPos[index]) : null;
 	}
 	
 	@Override
@@ -348,7 +349,7 @@ public class TileFissionShield extends TileFissionPart implements IFissionHeatin
 	@Override
 	public Object getOCInfo() {
 		Object2ObjectMap<String, Object> entry = new Object2ObjectLinkedOpenHashMap<>();
-		entry.put("effective_heating", getEffectiveHeating());
+		entry.put("effective_heating", getEffectiveHeating(false));
 		entry.put("is_shielding", isShielding);
 		entry.put("flux", flux);
 		return entry;

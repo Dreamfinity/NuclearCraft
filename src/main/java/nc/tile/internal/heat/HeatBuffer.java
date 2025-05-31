@@ -59,7 +59,7 @@ public class HeatBuffer {
 	}
 	
 	public boolean isEmpty() {
-		return heatStored == 0;
+		return heatStored <= 0L;
 	}
 	
 	public void mergeHeatBuffers(HeatBuffer other) {

@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 
-import static nc.multiblock.quantum.QuantumGateWrapper.*;
+import static nc.multiblock.quantum.QuantumOperationWrapper.*;
 
 public abstract class TileQuantumComputerGate extends TileQuantumComputerPart implements ITickable {
 	
@@ -21,11 +21,11 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 	protected String toolMode = "";
 	public boolean pulsed = false;
 	
-	public static abstract class Single extends TileQuantumComputerGate {
+	public static abstract class Basic extends TileQuantumComputerGate {
 		
 		protected final IntSet targets;
 		
-		public Single(String gateID) {
+		public Basic(String gateID) {
 			super(gateID);
 			targets = new IntRBTreeSet();
 			toolMode = "getTarget";
@@ -80,109 +80,110 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 	}
 	
-	public static class X extends Single {
+	public static class X extends Basic {
 		
 		public X() {
 			super("x");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.X(qc, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.X(qc, targets.toIntArray());
 		}
 	}
 	
-	public static class Y extends Single {
+	public static class Y extends Basic {
 		
 		public Y() {
 			super("y");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.Y(qc, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.Y(qc, targets.toIntArray());
 		}
 	}
 	
-	public static class Z extends Single {
+	public static class Z extends Basic {
 		
 		public Z() {
 			super("z");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.Z(qc, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.Z(qc, targets.toIntArray());
 		}
 	}
 	
-	public static class H extends Single {
+	public static class H extends Basic {
 		
 		public H() {
 			super("h");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.H(qc, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.H(qc, targets.toIntArray());
 		}
 	}
 	
-	public static class S extends Single {
+	public static class S extends Basic {
 		
 		public S() {
 			super("s");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.S(qc, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.S(qc, targets.toIntArray());
 		}
 	}
 	
-	public static class Sdg extends Single {
+	public static class Sdg extends Basic {
 		
 		public Sdg() {
 			super("sdg");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.Sdg(qc, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.Sdg(qc, targets.toIntArray());
 		}
 	}
 	
-	public static class T extends Single {
+	public static class T extends Basic {
 		
 		public T() {
 			super("t");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.T(qc, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.T(qc, targets.toIntArray());
 		}
 	}
 	
-	public static class Tdg extends Single {
+	public static class Tdg extends Basic {
 		
 		public Tdg() {
 			super("tdg");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.Tdg(qc, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.Tdg(qc, targets.toIntArray());
 		}
 	}
 	
-	public static abstract class SingleAngle extends Single {
+	public static abstract class BasicAngle extends TileQuantumComputerGate {
 		
 		protected double angle = 0;
+		protected final IntSet targets;
 		
-		public SingleAngle(String gateID) {
+		public BasicAngle(String gateID) {
 			super(gateID);
-			toolMode = "getAngle";
+			targets = new IntRBTreeSet();
 		}
 		
 		@Override
@@ -244,6 +245,7 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		public NBTTagCompound writeAll(NBTTagCompound nbt) {
 			super.writeAll(nbt);
 			nbt.setDouble("qGateAngle", angle);
+			NBTHelper.writeIntCollection(nbt, targets, "nQubits");
 			return nbt;
 		}
 		
@@ -251,54 +253,55 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		public void readAll(NBTTagCompound nbt) {
 			super.readAll(nbt);
 			angle = nbt.getDouble("qGateAngle");
+			NBTHelper.readIntCollection(nbt, targets, "nQubits");
 		}
 	}
 	
-	public static class P extends SingleAngle {
+	public static class P extends BasicAngle {
 		
 		public P() {
 			super("p");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.P(qc, angle, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.P(qc, angle, targets.toIntArray());
 		}
 	}
 	
-	public static class RX extends SingleAngle {
+	public static class RX extends BasicAngle {
 		
 		public RX() {
 			super("rx");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.RX(qc, angle, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.RX(qc, angle, targets.toIntArray());
 		}
 	}
 	
-	public static class RY extends SingleAngle {
+	public static class RY extends BasicAngle {
 		
 		public RY() {
 			super("ry");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.RY(qc, angle, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.RY(qc, angle, targets.toIntArray());
 		}
 	}
 	
-	public static class RZ extends SingleAngle {
+	public static class RZ extends BasicAngle {
 		
 		public RZ() {
 			super("rz");
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.RZ(qc, angle, targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.RZ(qc, angle, targets.toIntArray());
 		}
 	}
 	
@@ -393,8 +396,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CX(qc, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CX(qc, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -405,8 +408,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CY(qc, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CY(qc, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -417,8 +420,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CZ(qc, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CZ(qc, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -429,8 +432,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CH(qc, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CH(qc, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -441,8 +444,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CS(qc, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CS(qc, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -453,8 +456,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CSdg(qc, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CSdg(qc, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -465,8 +468,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CT(qc, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CT(qc, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -477,17 +480,20 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CTdg(qc, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CTdg(qc, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
-	public static abstract class ControlAngle extends Control {
+	public static abstract class ControlAngle extends TileQuantumComputerGate {
 		
 		protected double angle = 0;
+		protected final IntSet controls, targets;
 		
 		public ControlAngle(String gateID) {
 			super(gateID);
+			controls = new IntRBTreeSet();
+			targets = new IntRBTreeSet();
 			toolMode = "getAngle";
 		}
 		
@@ -572,6 +578,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		public NBTTagCompound writeAll(NBTTagCompound nbt) {
 			super.writeAll(nbt);
 			nbt.setDouble("qGateAngle", angle);
+			NBTHelper.writeIntCollection(nbt, controls, "cQubits");
+			NBTHelper.writeIntCollection(nbt, targets, "tQubits");
 			return nbt;
 		}
 		
@@ -579,6 +587,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		public void readAll(NBTTagCompound nbt) {
 			super.readAll(nbt);
 			angle = nbt.getDouble("qGateAngle");
+			NBTHelper.readIntCollection(nbt, controls, "cQubits");
+			NBTHelper.readIntCollection(nbt, targets, "tQubits");
 		}
 	}
 	
@@ -589,8 +599,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CP(qc, angle, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CP(qc, angle, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -601,8 +611,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CRX(qc, angle, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CRX(qc, angle, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -613,8 +623,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CRY(qc, angle, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CRY(qc, angle, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -625,8 +635,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.CRZ(qc, angle, controls.toIntArray(), targets.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.CRZ(qc, angle, controls.toIntArray(), targets.toIntArray());
 		}
 	}
 	
@@ -642,8 +652,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.Swap(qc, from.toIntArray(), to.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.Swap(qc, from.toIntArray(), to.toIntArray());
 		}
 		
 		@Override
@@ -733,8 +743,8 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		}
 		
 		@Override
-		protected QuantumGateWrapper newGate(QuantumComputer qc) {
-			return new QuantumGateWrapper.ControlSwap(qc, controls.toIntArray(), from.toIntArray(), to.toIntArray());
+		protected QuantumOperationWrapper newGate(QuantumComputer qc) {
+			return new QuantumOperationWrapper.ControlSwap(qc, controls.toIntArray(), from.toIntArray(), to.toIntArray());
 		}
 		
 		@Override
@@ -870,7 +880,7 @@ public abstract class TileQuantumComputerGate extends TileQuantumComputerPart im
 		return oldState != newState;
 	}
 	
-	protected abstract QuantumGateWrapper newGate(QuantumComputer qc);
+	protected abstract QuantumOperationWrapper newGate(QuantumComputer qc);
 	
 	public abstract void sendGateInfo(EntityPlayerMP player);
 	

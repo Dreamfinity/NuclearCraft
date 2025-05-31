@@ -90,7 +90,7 @@ public abstract class TileTurbineDynamoPart extends TileTurbinePart implements I
 			return isInValidPosition = false;
 		}
 		else if (placementRule.requiresRecheck()) {
-			isInValidPosition = placementRule.satisfied(this);
+			isInValidPosition = placementRule.satisfied(this, false);
 			if (isInValidPosition) {
 				assumedValidCache.put(pos.toLong(), this);
 			}
@@ -99,7 +99,7 @@ public abstract class TileTurbineDynamoPart extends TileTurbinePart implements I
 		else if (isInValidPosition) {
 			return true;
 		}
-		return isInValidPosition = placementRule.satisfied(this);
+		return isInValidPosition = placementRule.satisfied(this, false);
 	}
 	
 	public boolean isSearchRoot() {

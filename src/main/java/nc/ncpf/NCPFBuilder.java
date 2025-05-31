@@ -676,21 +676,21 @@ public class NCPFBuilder {
 	private static <MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T extends ITileMultiblockPart<MULTIBLOCK, T>> NCPFPlacementRule translatePlacementRule(PlacementRule<MULTIBLOCK, T> rule) {
 		NCPFPlacementRule placementRule = new NCPFPlacementRule();
 		
-		if (rule instanceof PlacementRule.And<MULTIBLOCK, T> and) {
+		if (rule instanceof PlacementRule.And<?, ?> and) {
 			placementRule.type = NCPFPlacementRuleType.and;
-			for (PlacementRule<MULTIBLOCK, T> subRule : and.subRules) {
+			for (PlacementRule<?, ?> subRule : and.subRules) {
 				placementRule.rules.add(translatePlacementRule(subRule));
 			}
 		}
 		
-		if (rule instanceof PlacementRule.Or<MULTIBLOCK, T> or) {
+		if (rule instanceof PlacementRule.Or<?, ?> or) {
 			placementRule.type = NCPFPlacementRuleType.or;
-			for (PlacementRule<MULTIBLOCK, T> subRule : or.subRules) {
+			for (PlacementRule<?, ?> subRule : or.subRules) {
 				placementRule.rules.add(translatePlacementRule(subRule));
 			}
 		}
 		
-		if (rule instanceof PlacementRule.Adjacent<MULTIBLOCK, T> adjacent) {
+		if (rule instanceof PlacementRule.Adjacent<?, ?> adjacent) {
 			if (rule instanceof FissionPlacement.AdjacentCasing) {
 				placementRule.block = new NCPFModuleElement("nuclearcraft:" + configContext + ":casing");
 			}

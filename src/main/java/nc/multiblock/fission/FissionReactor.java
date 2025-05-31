@@ -37,11 +37,11 @@ public class FissionReactor extends CuboidalMultiblock<FissionReactor, IFissionP
 	public final LongSet activeModeratorCache = new LongOpenHashSet();
 	public final LongSet activeReflectorCache = new LongOpenHashSet();
 	
-	public static final long BASE_MAX_HEAT = 25000;
+	public static final long BASE_MAX_HEAT = 32000;
 	public static final int BASE_TANK_CAPACITY = 4000;
 	public static final double MAX_TEMP = 2400D;
 	
-	public boolean refreshFlag = true, isReactorOn = false;
+	public boolean refreshFlag = true, isSimulation = false, isReactorOn = false;
 	public double ambientTemp = 290D;
 	public int fuelComponentCount = 0;
 	public long cooling = 0L, rawHeating = 0L, totalHeatMult = 0L, usefulPartCount = 0L;
@@ -80,7 +80,6 @@ public class FissionReactor extends CuboidalMultiblock<FissionReactor, IFissionP
 	
 	public void resetStats() {
 		logic.onResetStats();
-		// isReactorOn = false;
 		fuelComponentCount = 0;
 		cooling = rawHeating = totalHeatMult = usefulPartCount = 0L;
 		meanHeatMult = totalEfficiency = meanEfficiency = sparsityEfficiencyMult = 0D;
@@ -184,13 +183,13 @@ public class FissionReactor extends CuboidalMultiblock<FissionReactor, IFissionP
 		}
 	}
 	
-	protected void refreshCluster(FissionCluster cluster) {
+	protected void refreshCluster(FissionCluster cluster, boolean simulate) {
 		if (cluster != null && clusterMap.containsKey(cluster.getId())) {
-			logic.refreshClusterStats(cluster);
+			logic.refreshClusterStats(cluster, simulate);
 		}
 	}
 	
-	protected void sortClusters() {
+	protected void sortClusters(boolean simulate) {
 		final ObjectSet<FissionCluster> uniqueClusterCache = new ObjectOpenHashSet<>();
 		uniqueClusterCache.addAll(clusterMap.values());
 		clusterMap.clear();
@@ -228,25 +227,12 @@ public class FissionReactor extends CuboidalMultiblock<FissionReactor, IFissionP
 	protected boolean updateServer() {
 		boolean flag = refreshFlag;
 		
-		if (refreshFlag) {
-			logic.refreshReactor();
-			clustersToRefresh.clear();
-		}
-		else if (!clustersToRefresh.isEmpty()) {
-			for (FissionCluster cluster : clustersToRefresh) {
-				refreshCluster(cluster);
-			}
-			logic.refreshReactorStats();
-			clustersToRefresh.clear();
-		}
-		
-		updateActivity();
+		checkRefresh();
 		
 		if (logic.onUpdateServer()) {
 			flag = true;
 		}
 		
-		logic.updateRedstone();
 		if (controller != null) {
 			sendMultiblockUpdatePacketToListeners();
 		}
@@ -254,9 +240,40 @@ public class FissionReactor extends CuboidalMultiblock<FissionReactor, IFissionP
 		return flag;
 	}
 	
+	public void checkRefresh() {
+		boolean refreshSimulation = false;
+		
+		if (refreshFlag) {
+			refreshSimulation = true;
+			logic.refreshReactor(false);
+			clustersToRefresh.clear();
+		}
+		else if (!clustersToRefresh.isEmpty()) {
+			refreshSimulation = true;
+			for (FissionCluster cluster : clustersToRefresh) {
+				refreshCluster(cluster, false);
+			}
+			logic.refreshReactorStats(false);
+			clustersToRefresh.clear();
+		}
+		
+		if (refreshSimulation) {
+			if (isAssembled() && !logic.isReactorActive(false)) {
+				logic.refreshReactor(true);
+				isSimulation = true;
+				clustersToRefresh.clear();
+			}
+			else {
+				isSimulation = false;
+			}
+		}
+		
+		updateActivity();
+	}
+	
 	public void updateActivity() {
 		boolean wasReactorOn = isReactorOn;
-		isReactorOn = isAssembled() && logic.isReactorOn();
+		isReactorOn = isAssembled() && logic.isReactorActive(true);
 		if (isReactorOn != wasReactorOn) {
 			if (controller != null) {
 				controller.setActivity(isReactorOn);
@@ -279,6 +296,7 @@ public class FissionReactor extends CuboidalMultiblock<FissionReactor, IFissionP
 	
 	@Override
 	public void syncDataTo(NBTTagCompound data, SyncReason syncReason) {
+		data.setBoolean("isSimulation", isSimulation);
 		data.setBoolean("isReactorOn", isReactorOn);
 		data.setInteger("clusterCount", clusterCount);
 		data.setLong("cooling", cooling);
@@ -296,6 +314,7 @@ public class FissionReactor extends CuboidalMultiblock<FissionReactor, IFissionP
 	
 	@Override
 	public void syncDataFrom(NBTTagCompound data, SyncReason syncReason) {
+		isSimulation = data.getBoolean("isSimulation");
 		isReactorOn = data.getBoolean("isReactorOn");
 		clusterCount = data.getInteger("clusterCount");
 		cooling = data.getLong("cooling");
@@ -355,8 +374,8 @@ public class FissionReactor extends CuboidalMultiblock<FissionReactor, IFissionP
 		super.clearAllMaterial();
 		
 		if (!WORLD.isRemote) {
-			logic.refreshReactor();
-			updateActivity();
+			refreshFlag = true;
+			checkRefresh();
 		}
 	}
 }

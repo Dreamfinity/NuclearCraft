@@ -125,7 +125,7 @@ public class TileFissionSource extends TileFissionPart implements IFissionManage
 		return (manager != null && manager.isManagerActive()) || getIsRedstonePowered();
 	}
 	
-	public PrimingTargetInfo getPrimingTarget(boolean simulate) {
+	public PrimingTargetInfo getPrimingTarget(boolean checkUpdate, boolean simulate) {
 		EnumFacing posFacing = getPartPosition().getFacing();
 		if (posFacing == null) {
 			posFacing = facing;
@@ -140,20 +140,24 @@ public class TileFissionSource extends TileFissionPart implements IFissionManage
 			if (blockRecipe != null && blockRecipe.getFissionReflectorReflectivity() >= 1D) {
 				return null;
 			}
+			
 			IFissionComponent component = getMultiblock().getPartMap(IFissionComponent.class).get(offPos.toLong());
 			// First check if source is blocked by a flux sink
-			if (component != null && component.isNullifyingSources(posFacing)) {
+			if (component != null && component.isNullifyingSources(posFacing, simulate)) {
 				return null;
 			}
-			if (component instanceof IFissionFuelComponent fuelComponent) {
-				if (simulate) {
-					return new PrimingTargetInfo(fuelComponent, false);
-				}
-				else if (fuelComponent.isAcceptingFlux(posFacing)) {
+			
+			if (component instanceof IFissionFuelComponent fuelComponent && fuelComponent.isAcceptingFlux(posFacing, simulate)) {
+				boolean newSourceEfficiency;
+				if (checkUpdate) {
 					double oldSourceEfficiency = fuelComponent.getSourceEfficiency();
 					fuelComponent.setSourceEfficiency(efficiency, true);
-					return new PrimingTargetInfo(fuelComponent, oldSourceEfficiency != fuelComponent.getSourceEfficiency());
+					newSourceEfficiency = oldSourceEfficiency != fuelComponent.getSourceEfficiency();
 				}
+				else {
+					newSourceEfficiency = false;
+				}
+				return new PrimingTargetInfo(fuelComponent, newSourceEfficiency);
 			}
 		}
 		return null;
@@ -228,7 +232,7 @@ public class TileFissionSource extends TileFissionPart implements IFissionManage
 			return true;
 		}
 		if (!player.isSneaking()) {
-			PrimingTargetInfo targetInfo = getPrimingTarget(true);
+			PrimingTargetInfo targetInfo = getPrimingTarget(false, true);
 			if (targetInfo == null) {
 				player.sendMessage(new TextComponentString(Lang.localize("nuclearcraft.multiblock.fission_reactor_source.no_target")));
 			}

@@ -225,6 +225,7 @@ public class NCBlocks {
 	public static Block quantum_computer_gate_swap;
 	
 	public static Block quantum_computer_connector;
+	public static Block quantum_computer_port;
 	
 	public static Block quantum_computer_code_generator;
 	
@@ -478,11 +479,12 @@ public class NCBlocks {
 			quantum_computer_controller = addWithName(Global.MOD_ID, "quantum_computer_controller", new BlockQuantumComputerController());
 			quantum_computer_qubit = addWithName(Global.MOD_ID, "quantum_computer_qubit", new BlockQuantumComputerQubit());
 			
-			quantum_computer_gate_single = addWithNameMeta(Global.MOD_ID, "quantum_computer_gate_single", new BlockQuantumComputerGate.Single());
+			quantum_computer_gate_single = addWithNameMeta(Global.MOD_ID, "quantum_computer_gate_single", new BlockQuantumComputerGate.Basic());
 			quantum_computer_gate_control = addWithNameMeta(Global.MOD_ID, "quantum_computer_gate_control", new BlockQuantumComputerGate.Control());
 			quantum_computer_gate_swap = addWithNameMeta(Global.MOD_ID, "quantum_computer_gate_swap", new BlockQuantumComputerGate.Swap());
 			
 			quantum_computer_connector = addWithName(Global.MOD_ID, "quantum_computer_connector", new BlockQuantumComputerConnector());
+			quantum_computer_port = addWithName(Global.MOD_ID, "quantum_computer_port", new BlockQuantumComputerPort());
 			
 			quantum_computer_code_generator = addWithNameMeta(Global.MOD_ID, "quantum_computer_code_generator", new BlockQuantumComputerCodeGenerator());
 		}
