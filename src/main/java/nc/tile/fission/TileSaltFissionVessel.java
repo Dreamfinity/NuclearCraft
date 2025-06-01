@@ -72,6 +72,8 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	
 	protected final Set<EntityPlayer> updatePacketListeners = new ObjectOpenHashSet<>();
 	
+	public long cachedFlux = 0L;
+	
 	protected FissionCluster cluster = null;
 	protected long heat = 0L;
 	
@@ -160,7 +162,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public void resetStats() {
-		vesselBunch.sources = vesselBunch.flux = 0L;
+		vesselBunch.sources = vesselBunch.flux = cachedFlux = 0L;
 		fluxSearched = false;
 		heatMult = 0;
 		undercoolingLifetimeFactor = 1D;
@@ -286,6 +288,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public void addFlux(long addedFlux) {
+		cachedFlux += addedFlux;
 		vesselBunch.flux += addedFlux;
 	}
 	
@@ -985,6 +988,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		nbt.setDouble("iodineFraction", iodineFraction);
 		nbt.setDouble("poisonFraction", poisonFraction);
 		
+		nbt.setLong("cachedFlux", cachedFlux);
 		nbt.setLong("clusterHeat", heat);
 		
 		nbt.setBoolean("isRunningSimulated", isRunningSimulated);
@@ -1010,6 +1014,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		iodineFraction = nbt.getDouble("iodineFraction");
 		poisonFraction = nbt.getDouble("poisonFraction");
 		
+		cachedFlux = nbt.getLong("cachedFlux");
 		heat = nbt.getLong("clusterHeat");
 		
 		isRunningSimulated = nbt.getBoolean("isRunningSimulated");

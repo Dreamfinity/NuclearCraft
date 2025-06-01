@@ -17,17 +17,17 @@ public class SaltFissionVesselBunch {
 	
 	public void init() {
 		if (!initialized) {
+			initialized = true;
+			
 			for (TileSaltFissionVessel vessel : vesselMap.values()) {
-				int i = 6;
+				flux += vessel.cachedFlux;
 				for (EnumFacing dir : EnumFacing.VALUES) {
-					if (vesselMap.containsKey(vessel.getPos().offset(dir).toLong())) {
-						--i;
+					if (!vesselMap.containsKey(vessel.getPos().offset(dir).toLong())) {
+						++openFaces;
 					}
 				}
-				openFaces += i;
 			}
 		}
-		initialized = true;
 	}
 	
 	protected long getSurfaceFactor() {

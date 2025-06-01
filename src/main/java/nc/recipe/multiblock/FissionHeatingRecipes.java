@@ -19,11 +19,11 @@ public class FissionHeatingRecipes extends BasicRecipeHandler {
 		addRecipe(fluidStack("preheated_water", 1), fluidStack("high_pressure_steam", 4), 32);
 		addRecipe(fluidStack("ic2coolant", 1), fluidStack("ic2hot_coolant", 1), 10 * rf_per_eu);
 		
-		// Hot NaK -> NaK
+		// NaK -> Hot NaK
 		
-		addRecipe(fluidStack("nak", 1), fluidStack("nak_hot", 1), fission_heater_cooling_rate[0]);
+		addRecipe(fluidStack("nak", 1), fluidStack("nak_hot", 1), (int) (fission_heater_cooling_rate[0] * fission_heating_coolant_heat_mult));
 		for (int i = 1; i < COOLANTS.size(); ++i) {
-			addRecipe(fluidStack(COOLANTS.get(i) + "_nak", 1), fluidStack(COOLANTS.get(i) + "_nak_hot", 1), fission_heater_cooling_rate[i]);
+			addRecipe(fluidStack(COOLANTS.get(i) + "_nak", 1), fluidStack(COOLANTS.get(i) + "_nak_hot", 1), (int) (fission_heater_cooling_rate[i] * fission_heating_coolant_heat_mult));
 		}
 	}
 	

@@ -1,5 +1,3 @@
-Fix SFR steam production rate prediction
-
 Multiblock monitors: show cluster information, meltdown locations, side configurations, etc.
 
 Multiblock solars with CT support

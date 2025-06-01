@@ -169,7 +169,8 @@ public class ElectrolyzerLogic extends MachineLogic {
 				push.accept(new Vec2i(i, j));
 				
 				ElectrolyzerRegion region = new ElectrolyzerRegion();
-				stackLoop: while (!vecs.isEmpty()) {
+				stackLoop:
+				while (!vecs.isEmpty()) {
 					Vec2i next = vecs.pop();
 					
 					for (Vec2i dir : Vec2i.DIRS_WITH_ZERO) {

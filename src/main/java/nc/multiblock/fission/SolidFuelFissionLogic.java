@@ -156,7 +156,8 @@ public class SolidFuelFissionLogic extends FissionReactorLogic {
 		if (multiblock.isSimulation) {
 			refreshRecipe();
 			if (heatingRecipeInfo != null) {
-				heatingOutputRateFP = effectiveHeating / heatingRecipeInfo.recipe.getFissionHeatingHeatPerInputMB();
+				BasicRecipe recipe = heatingRecipeInfo.recipe;
+				heatingOutputRateFP = recipe.getFluidProducts().get(0).getMaxStackSize(0) * effectiveHeating / recipe.getFissionHeatingHeatPerInputMB();
 			}
 		}
 	}

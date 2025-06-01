@@ -663,7 +663,8 @@ public class TokenExecutor extends TokenReader implements HierarchicalScope {
 			throw new IllegalArgumentException(String.format("Keyword \"loop\" requires %s element as argument!", BuiltIn.BLOCK));
 		}
 		
-		loop: while (true) {
+		loop:
+		while (true) {
 			TokenResult invokeResult = block.invoke(this);
 			switch (invokeResult) {
 				case CONTINUE:
@@ -694,7 +695,8 @@ public class TokenExecutor extends TokenReader implements HierarchicalScope {
 			throw new IllegalArgumentException(String.format("Keyword \"repeat\" requires %s element as second argument!", BuiltIn.BLOCK));
 		}
 		
-		loop: for (int i = 0; i < primitiveInt; ++i) {
+		loop:
+		for (int i = 0; i < primitiveInt; ++i) {
 			TokenResult invokeResult = block.invoke(this);
 			switch (invokeResult) {
 				case CONTINUE:
@@ -721,7 +723,8 @@ public class TokenExecutor extends TokenReader implements HierarchicalScope {
 			throw new IllegalArgumentException(String.format("Keyword \"foreach\" requires %s element as second argument!", BuiltIn.BLOCK));
 		}
 		
-		loop: for (@Nonnull Element e : iterable) {
+		loop:
+		for (@Nonnull Element e : iterable) {
 			push(e);
 			TokenResult invokeResult = block.invoke(this);
 			switch (invokeResult) {

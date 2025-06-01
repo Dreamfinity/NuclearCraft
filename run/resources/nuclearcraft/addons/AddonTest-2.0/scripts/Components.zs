@@ -14,8 +14,8 @@ mods.nuclearcraft.Registration.registerFissionSource("americium_beryllium", 0.97
 
 mods.nuclearcraft.Registration.registerFissionShield("cadmium", 10.0, 0.75);
 
-mods.nuclearcraft.Registration.registerHeatExchangerTube("silver", 16.0, 0.95);
-mods.nuclearcraft.Registration.registerHeatExchangerTube("boron_nitride", 32.0, 0.85);
+mods.nuclearcraft.Registration.registerHeatExchangerTube("silver", 16.0, 0.975);
+mods.nuclearcraft.Registration.registerHeatExchangerTube("boron_nitride", 32.0, 0.925);
 
 mods.nuclearcraft.Registration.registerTurbineCoil("extreme", 1.14, "four of any coil");
 mods.nuclearcraft.Registration.registerTurbineCoil("sic_sic_cmc", 1.16, "exactly two axial connectors");

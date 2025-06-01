@@ -115,40 +115,42 @@ public class NCPFWriter {
 				
 				// Ore Dictionary
 				for (List<NCPFElement> elements : lists) {
-					for (NCPFElement elem : elements) {
+					//noinspection ForLoopReplaceableByForEach
+					for (int i = 0; i < elements.size(); ++i) {
+						NCPFElement elem = elements.get(i);
 						if (elem instanceof NCPFOredict oredict) {
 							oreLoop:
 							for (ItemStack stack : OreDictionary.getOres(oredict.oredict, false)) {
-								NCPFElement element = NCPFBuilder.translate(stack);
+								NCPFElement stackElem = NCPFBuilder.translate(stack);
 								for (NCPFElement globalElem : globalElements) {
-									if (gson.toJson(element).equals(gson.toJson(globalElem))) {
+									if (gson.toJson(stackElem).equals(gson.toJson(globalElem))) {
 										elementsToHaveOredictTagsAdded.add(globalElem);
 										oredictTagsToAddToThoseAforementionedElements.add(oredict.oredict);
 										continue oreLoop;
 									}
 								}
 								
-								elementsToHaveOredictTagsAdded.add(element);
+								elementsToHaveOredictTagsAdded.add(stackElem);
 								oredictTagsToAddToThoseAforementionedElements.add(oredict.oredict);
-								globalElements.add(element);
+								globalElements.add(stackElem);
 							}
 						}
 					}
 				}
 				
 				for (int i = 0; i < elementsToHaveOredictTagsAdded.size(); ++i) {
-					NCPFElement element = elementsToHaveOredictTagsAdded.get(i);
-					if (element.modules == null) {
-						element.modules = new HashMap<>();
+					NCPFElement elem = elementsToHaveOredictTagsAdded.get(i);
+					if (elem.modules == null) {
+						elem.modules = new HashMap<>();
 					}
 					
-					if (!element.modules.containsKey("plannerator:tags")) {
+					if (!elem.modules.containsKey("plannerator:tags")) {
 						Map<String, Object> tags = new HashMap<>();
 						tags.put("tags", new ArrayList<String>());
-						element.modules.put("plannerator:tags", tags);
+						elem.modules.put("plannerator:tags", tags);
 					}
 					
-					NCPFHelper.<List<String>>get(NCPFHelper.get(element.modules, "plannerator:tags"), "tags").add(oredictTagsToAddToThoseAforementionedElements.get(i));
+					NCPFHelper.<List<String>>get(NCPFHelper.get(elem.modules, "plannerator:tags"), "tags").add(oredictTagsToAddToThoseAforementionedElements.get(i));
 				}
 				
 				globalElementsModule.put("elements", globalElements);
@@ -224,7 +226,6 @@ public class NCPFWriter {
 				globalLoop:
 				for (int i = 0; i < globalElements.size(); ++i) {
 					NCPFElement globalElem = globalElements.get(i);
-					
 					for (int j = 0; j < globalElements.size(); ++j) {
 						if (i == j) {
 							continue;
@@ -267,40 +268,42 @@ public class NCPFWriter {
 				
 				// Ore Dictionary
 				for (List<NCPFElement> elements : lists) {
-					for (NCPFElement elem : elements) {
+					//noinspection ForLoopReplaceableByForEach
+					for (int i = 0; i < elements.size(); ++i) {
+						NCPFElement elem = elements.get(i);
 						if (elem instanceof NCPFOredict oredict) {
 							oreLoop:
 							for (ItemStack stack : OreDictionary.getOres(oredict.oredict, false)) {
-								NCPFElement element = NCPFBuilder.translate(stack);
+								NCPFElement stackElem = NCPFBuilder.translate(stack);
 								for (NCPFElement globalElem : globalElements) {
-									if (gson.toJson(element).equals(gson.toJson(globalElem))) {
+									if (gson.toJson(stackElem).equals(gson.toJson(globalElem))) {
 										elementsToHaveOredictTagsAdded.add(globalElem);
 										oredictTagsToAddToThoseAforementionedElements.add(oredict.oredict);
 										continue oreLoop;
 									}
 								}
 								
-								elementsToHaveOredictTagsAdded.add(element);
+								elementsToHaveOredictTagsAdded.add(stackElem);
 								oredictTagsToAddToThoseAforementionedElements.add(oredict.oredict);
-								globalElements.add(element);
+								globalElements.add(stackElem);
 							}
 						}
 					}
 				}
 				
 				for (int i = 0; i < elementsToHaveOredictTagsAdded.size(); ++i) {
-					NCPFElement element = elementsToHaveOredictTagsAdded.get(i);
-					if (element.modules == null) {
-						element.modules = new HashMap<>();
+					NCPFElement elem = elementsToHaveOredictTagsAdded.get(i);
+					if (elem.modules == null) {
+						elem.modules = new HashMap<>();
 					}
 					
-					if (!element.modules.containsKey("plannerator:tags")) {
+					if (!elem.modules.containsKey("plannerator:tags")) {
 						Map<String, Object> tags = new HashMap<>();
 						tags.put("tags", new ArrayList<String>());
-						element.modules.put("plannerator:tags", tags);
+						elem.modules.put("plannerator:tags", tags);
 					}
 					
-					NCPFHelper.<List<String>>get(NCPFHelper.get(element.modules, "plannerator:tags"), "tags").add(oredictTagsToAddToThoseAforementionedElements.get(i));
+					NCPFHelper.<List<String>>get(NCPFHelper.get(elem.modules, "plannerator:tags"), "tags").add(oredictTagsToAddToThoseAforementionedElements.get(i));
 				}
 				
 				globalElementsModule.put("elements", globalElements);
@@ -413,40 +416,42 @@ public class NCPFWriter {
 				
 				// Ore Dictionary
 				for (List<NCPFElement> elements : lists) {
-					for (NCPFElement elem : elements) {
+					//noinspection ForLoopReplaceableByForEach
+					for (int i = 0; i < elements.size(); ++i) {
+						NCPFElement elem = elements.get(i);
 						if (elem instanceof NCPFOredict oredict) {
 							oreLoop:
 							for (ItemStack stack : OreDictionary.getOres(oredict.oredict, false)) {
-								NCPFElement element = NCPFBuilder.translate(stack);
+								NCPFElement stackElem = NCPFBuilder.translate(stack);
 								for (NCPFElement globalElem : globalElements) {
-									if (gson.toJson(element).equals(gson.toJson(globalElem))) {
+									if (gson.toJson(stackElem).equals(gson.toJson(globalElem))) {
 										elementsToHaveOredictTagsAdded.add(globalElem);
 										oredictTagsToAddToThoseAforementionedElements.add(oredict.oredict);
 										continue oreLoop;
 									}
 								}
 								
-								elementsToHaveOredictTagsAdded.add(element);
+								elementsToHaveOredictTagsAdded.add(stackElem);
 								oredictTagsToAddToThoseAforementionedElements.add(oredict.oredict);
-								globalElements.add(element);
+								globalElements.add(stackElem);
 							}
 						}
 					}
 				}
 				
 				for (int i = 0; i < elementsToHaveOredictTagsAdded.size(); ++i) {
-					NCPFElement element = elementsToHaveOredictTagsAdded.get(i);
-					if (element.modules == null) {
-						element.modules = new HashMap<>();
+					NCPFElement elem = elementsToHaveOredictTagsAdded.get(i);
+					if (elem.modules == null) {
+						elem.modules = new HashMap<>();
 					}
 					
-					if (!element.modules.containsKey("plannerator:tags")) {
+					if (!elem.modules.containsKey("plannerator:tags")) {
 						Map<String, Object> tags = new HashMap<>();
 						tags.put("tags", new ArrayList<String>());
-						element.modules.put("plannerator:tags", tags);
+						elem.modules.put("plannerator:tags", tags);
 					}
 					
-					NCPFHelper.<List<String>>get(NCPFHelper.get(element.modules, "plannerator:tags"), "tags").add(oredictTagsToAddToThoseAforementionedElements.get(i));
+					NCPFHelper.<List<String>>get(NCPFHelper.get(elem.modules, "plannerator:tags"), "tags").add(oredictTagsToAddToThoseAforementionedElements.get(i));
 				}
 				
 				globalElementsModule.put("elements", globalElements);

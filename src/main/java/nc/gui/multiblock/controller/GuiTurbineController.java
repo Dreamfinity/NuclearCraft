@@ -17,8 +17,6 @@ public class GuiTurbineController extends GuiMultiblockController<Turbine, ITurb
 	
 	protected final ResourceLocation gui_texture;
 	
-	int inputRateWidth = 0;
-	
 	public GuiTurbineController(Container inventory, EntityPlayer player, TileTurbineController controller, String textureLocation) {
 		super(inventory, player, controller, textureLocation);
 		gui_texture = new ResourceLocation(Global.MOD_ID + ":textures/gui/container/" + "turbine_controller" + ".png");
@@ -65,10 +63,9 @@ public class GuiTurbineController extends GuiMultiblockController<Turbine, ITurb
 			double maxRecipeRateMultiplierFP = multiblock.getLogic().getMaxRecipeRateMultiplier();
 			double rateRatio = (double) multiblock.recipeInputRate / maxRecipeRateMultiplierFP;
 			double rateRatioFP = multiblock.recipeInputRateFP / maxRecipeRateMultiplierFP;
-			inputRate = Lang.localize("gui.nc.container.turbine_controller.fluid_rate") + " " + UnitHelper.prefix(NCMath.roundTo(multiblock.recipeInputRateFP, 0.1D), 5, "B/t", -1) + " [" + NCMath.pcDecimalPlaces(rateRatioFP, 1) + (rateRatio > 1D ? "] [!]" : "]");
-			inputRateWidth = inputRateWidth - fontRenderer.getStringWidth(inputRate) > 1 ? fontRenderer.getStringWidth(inputRate) : Math.max(inputRateWidth, fontRenderer.getStringWidth(inputRate));
+			inputRate = Lang.localize("gui.nc.container.turbine_controller.fluid_rate") + " " + UnitHelper.prefix(Math.round(multiblock.recipeInputRateFP), 5, "B/t", -1) + " [" + NCMath.pcDecimalPlaces(rateRatioFP, 1) + (rateRatio > 1D ? "] [!]" : "]");
 		}
-		fontRenderer.drawString(inputRate, xSize / 2 - (NCUtil.isModifierKeyDown() ? fontRenderer.getStringWidth(inputRate) : inputRateWidth) / 2, 58, multiblock.bearingTension <= 0D ? fontColor : multiblock.isTurbineOn ? 0xFFFFFF - NCMath.toInt((255D * MathHelper.clamp(2D * multiblock.bearingTension, 0D, 1D))) - 256 * NCMath.toInt((255D * MathHelper.clamp(2D * multiblock.bearingTension - 1D, 0D, 1D))) : ColorHelper.blend(15641088, 0xFF0000, (float) multiblock.bearingTension));
+		fontRenderer.drawString(inputRate, xSize / 2 - fontRenderer.getStringWidth(inputRate) / 2, 58, multiblock.bearingTension <= 0D ? fontColor : multiblock.isTurbineOn ? 0xFFFFFF - NCMath.toInt((255D * MathHelper.clamp(2D * multiblock.bearingTension, 0D, 1D))) - 256 * NCMath.toInt((255D * MathHelper.clamp(2D * multiblock.bearingTension - 1D, 0D, 1D))) : ColorHelper.blend(15641088, 0xFF0000, (float) multiblock.bearingTension));
 	}
 	
 	@Override

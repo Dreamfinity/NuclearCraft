@@ -2776,6 +2776,9 @@ gui.nc.config.fission_cooling_efficiency_leniency=Cooling Leniency Factor
 gui.nc.config.fission_cooling_efficiency_leniency.comment=Determines the leniency for the difference between the actual and ideal cooling rate at which a cluster will begin to be given an overcooling efficiency penalty.
 gui.nc.config.fission_sparsity_penalty_params=Sparsity Efficiency Parameters
 gui.nc.config.fission_sparsity_penalty_params.comment=Parameters used for the sparsity efficiency factor. The first determines the minimum value of the multiplier, while the second determines the fraction of functional components at which there is no penalty.
+gui.nc.config.fission_heating_coolant_heat_mult=SFR NaK Heating Multiplier
+gui.nc.config.fission_heating_coolant_heat_mult.comment=Modifies the amount of heat absorbed per mB of NaK coolant when used to cool a solid fuel reactor.
+
 gui.nc.config.fission_decay_mechanics=Enable Decay Mechanics
 gui.nc.config.fission_decay_mechanics.comment=Enable fission reactor decay mechanics?
 gui.nc.config.fission_decay_build_up_times=Decay Build Time Params

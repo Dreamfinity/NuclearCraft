@@ -71,13 +71,14 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 	
 	protected final Set<EntityPlayer> updatePacketListeners = new ObjectOpenHashSet<>();
 	
+	protected long flux = 0;
+	
 	protected FissionCluster cluster = null;
 	protected long heat = 0L;
 	
 	public long clusterHeatStored, clusterHeatCapacity;
 	
 	protected boolean primed = false, fluxSearched = false;
-	protected long flux = 0;
 	
 	public int heatMult = 0;
 	protected double undercoolingLifetimeFactor = 1D;

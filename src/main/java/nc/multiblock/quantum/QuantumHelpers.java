@@ -21,7 +21,8 @@ public class QuantumHelpers {
 		int[] window = new int[span];
 		
 		boolean[] demux = QuantumHelpers.demux(targets, size);
-		outer: for (int i = 0, index = 0; index < span; ++i) {
+		outer:
+		for (int i = 0, index = 0; index < span; ++i) {
 			for (int j = 0; j < size; ++j) {
 				if (!demux[j] && ((i >> j) & 1) == 1) {
 					continue outer;

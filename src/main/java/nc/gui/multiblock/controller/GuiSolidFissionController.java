@@ -20,8 +20,6 @@ public class GuiSolidFissionController extends GuiLogicMultiblockController<Fiss
 	
 	protected final ResourceLocation gui_texture;
 	
-	int outputRateWidth = 0;
-	
 	public GuiSolidFissionController(Container inventory, EntityPlayer player, TileSolidFissionController controller, String textureLocation) {
 		super(inventory, player, controller, textureLocation);
 		gui_texture = new ResourceLocation(Global.MOD_ID + ":textures/gui/container/" + "solid_fission_controller" + ".png");
@@ -71,8 +69,7 @@ public class GuiSolidFissionController extends GuiLogicMultiblockController<Fiss
 		fontRenderer.drawString(efficiency, xSize / 2 - fontRenderer.getStringWidth(efficiency) / 2, 34, fontColor);
 		
 		String outputRate = Lang.localize("gui.nc.container.solid_fission_controller.output_rate") + " " + UnitHelper.prefix(getLogic().heatingOutputRateFP, 5, "B/t", -1);
-		outputRateWidth = outputRateWidth - fontRenderer.getStringWidth(outputRate) > 1 ? fontRenderer.getStringWidth(outputRate) : Math.max(outputRateWidth, fontRenderer.getStringWidth(outputRate));
-		fontRenderer.drawString(outputRate, xSize / 2 - outputRateWidth / 2, 46, fontColor);
+		fontRenderer.drawString(outputRate, xSize / 2 - fontRenderer.getStringWidth(outputRate) / 2, 46, fontColor);
 		
 		String usefulParts = NCUtil.isModifierKeyDown() ? Lang.localize("gui.nc.container.fission_controller.sparsity") + " " + NCMath.pcDecimalPlaces(multiblock.sparsityEfficiencyMult, 1) : Lang.localize("gui.nc.container.fission_controller.useful_parts") + " " + multiblock.usefulPartCount + "/" + multiblock.getInteriorVolume();
 		fontRenderer.drawString(usefulParts, xSize / 2 - fontRenderer.getStringWidth(usefulParts) / 2, 58, fontColor);

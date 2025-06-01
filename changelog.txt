@@ -1,8 +1,14 @@
 v2o.9.2
 
-+ Added idle reactor stat prediction to fission controller GUIs
++ Added idle reactor stat prediction to fission controller GUIs!
 
 * Fixed bug where molten salt vessel priming would fail incorrectly
+
+* Fixed bug where heat exchangers would process shell fluid too rapidly
+
++ Added config to control efficiency of SFR NaK coolant heating
+
++ Fixed Plannerator NCPF config JSON generation error
 
 v2o.9.1
 

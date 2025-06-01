@@ -144,6 +144,7 @@ public class NCConfig {
 	public static double[] fission_irradiator_efficiency;
 	public static int fission_cooling_efficiency_leniency;
 	public static double[] fission_sparsity_penalty_params; // Multiplier, threshold
+	public static double fission_heating_coolant_heat_mult;
 	
 	public static boolean fission_decay_mechanics;
 	public static double[] fission_decay_build_up_times; // Decay heat, iodine, poison
@@ -591,6 +592,8 @@ public class NCConfig {
 		fission_irradiator_efficiency = sync(CATEGORY_FISSION, "fission_irradiator_efficiency", new double[] {0D, 0D, 0.5D}, 0D, 32767D, ARRAY);
 		fission_cooling_efficiency_leniency = sync(CATEGORY_FISSION, "fission_cooling_efficiency_leniency", 10, 0, 32767);
 		fission_sparsity_penalty_params = sync(CATEGORY_FISSION, "fission_sparsity_penalty_params", new double[] {0.5D, 0.75D}, 0D, 1D, ARRAY);
+		fission_heating_coolant_heat_mult = sync(CATEGORY_FISSION, "fission_heating_coolant_heat_mult", 2D, 0.001D, Integer.MAX_VALUE);
+		
 		fission_decay_mechanics = sync(CATEGORY_FISSION, "fission_decay_mechanics", false);
 		fission_decay_build_up_times = sync(CATEGORY_FISSION, "fission_decay_build_up_times", new double[] {24000D, 24000D, 24000D}, 0D, Integer.MAX_VALUE, ARRAY);
 		fission_decay_lifetimes = sync(CATEGORY_FISSION, "fission_decay_lifetimes", new double[] {6000D, 8000D, 12000D}, 0D, Integer.MAX_VALUE, ARRAY);
@@ -700,8 +703,8 @@ public class NCConfig {
 		heat_exchanger_min_size = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_min_size", 1, 1, 255);
 		heat_exchanger_max_size = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_max_size", 24, 2, 255);
 		heat_exchanger_heat_transfer_coefficient = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_heat_transfer_coefficient", new double[] {16D, 24D, 32D}, 0.001D, Integer.MAX_VALUE, ARRAY);
-		heat_exchanger_heat_retention_mult = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_heat_retention_mult", new double[] {0.8D, 0.9D, 1D}, 0.01D, 1D, ARRAY);
-		heat_exchanger_coolant_heat_mult = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_coolant_heat_mult", 2D, 0.001D, Integer.MAX_VALUE);
+		heat_exchanger_heat_retention_mult = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_heat_retention_mult", new double[] {0.9D, 0.95D, 1D}, 0.01D, 1D, ARRAY);
+		heat_exchanger_coolant_heat_mult = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_coolant_heat_mult", 4D, 0.001D, Integer.MAX_VALUE);
 		heat_exchanger_lmtd = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_lmtd", false);
 		heat_exchanger_alternate_hps_recipe = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_alternate_hps_recipe", false);
 		heat_exchanger_alternate_exhaust_recipe = sync(CATEGORY_HEAT_EXCHANGER, "heat_exchanger_alternate_exhaust_recipe", false);
