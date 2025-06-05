@@ -52,21 +52,21 @@ public class RecipeHelper {
 		if (object == null) {
 			return null;
 		}
-		else if (object instanceof ItemStack) {
-			ItemStack stack = ((ItemStack) object).copy();
-			if (stack.getCount() <= 0) {
-				stack.setCount(1);
+		else if (object instanceof ItemStack stack) {
+			ItemStack copy = stack.copy();
+			if (copy.getCount() <= 0) {
+				copy.setCount(1);
 			}
-			return stack;
+			return copy;
 		}
-		else if (object instanceof Item) {
-			return new ItemStack((Item) object, 1);
+		else if (object instanceof Item item) {
+			return new ItemStack(item, 1);
+		}
+		else if (object instanceof Block block) {
+			return new ItemStack(block, 1);
 		}
 		else {
-			if (!(object instanceof Block)) {
-				throw new RuntimeException(String.format("Invalid ItemStack: %s", object));
-			}
-			return new ItemStack((Block) object, 1);
+			throw new RuntimeException(String.format("Invalid ItemStack: %s", object));
 		}
 	}
 	
@@ -74,18 +74,18 @@ public class RecipeHelper {
 		if (object == null) {
 			return null;
 		}
-		else if (object instanceof FluidStack) {
-			FluidStack fluidstack = ((FluidStack) object).copy();
-			if (fluidstack.amount <= 0) {
-				fluidstack.amount = 1000;
+		else if (object instanceof FluidStack stack) {
+			FluidStack copy = stack.copy();
+			if (copy.amount <= 0) {
+				copy.amount = 1000;
 			}
-			return fluidstack;
+			return copy;
+		}
+		else if (object instanceof Fluid fluid) {
+			return new FluidStack(fluid, 1000);
 		}
 		else {
-			if (!(object instanceof Fluid)) {
-				throw new RuntimeException(String.format("Invalid FluidStack: %s", object));
-			}
-			return new FluidStack((Fluid) object, 1000);
+			throw new RuntimeException(String.format("Invalid FluidStack: %s", object));
 		}
 	}
 	
@@ -172,18 +172,18 @@ public class RecipeHelper {
 		if (AbstractRecipeHandler.requiresItemFixing(object)) {
 			object = RecipeHelper.fixItemStack(object);
 		}
-		if (object instanceof IItemIngredient) {
-			return checkedItemIngredient((IItemIngredient) object);
+		if (object instanceof IItemIngredient ingredient) {
+			return checkedItemIngredient(ingredient);
 		}
 		else if (object instanceof List<?> list) {
 			List<IItemIngredient> buildList = new ArrayList<>();
 			if (!list.isEmpty()) {
-				for (Object listObject : list) {
-					if (listObject instanceof IItemIngredient) {
-						buildList.add((IItemIngredient) listObject);
+				for (Object e : list) {
+					if (e instanceof IItemIngredient ingredient) {
+						buildList.add(ingredient);
 					}
-					else if (listObject != null) {
-						IItemIngredient recipeObject = checkedItemIngredient(buildItemIngredient(listObject));
+					else if (e != null) {
+						IItemIngredient recipeObject = checkedItemIngredient(buildItemIngredient(e));
 						if (recipeObject != null) {
 							buildList.add(recipeObject);
 						}
@@ -198,11 +198,11 @@ public class RecipeHelper {
 				return null;
 			}
 		}
-		else if (object instanceof String) {
-			return checkedItemIngredient(RecipeHelper.oreStackFromString((String) object));
+		else if (object instanceof String string) {
+			return checkedItemIngredient(RecipeHelper.oreStackFromString(string));
 		}
-		if (object instanceof ItemStack) {
-			return checkedItemIngredient(new ItemIngredient((ItemStack) object));
+		if (object instanceof ItemStack stack) {
+			return checkedItemIngredient(new ItemIngredient(stack));
 		}
 		return null;
 	}
@@ -219,22 +219,22 @@ public class RecipeHelper {
 		}
 		
 		boolean mekanismExpansion = fluidNeedsMekanismExpansion(), techRebornExpansion = fluidNeedsTechRebornExpansion();
-		if ((mekanismExpansion || techRebornExpansion) && object instanceof FluidIngredient) {
-			return checkedFluidIngredient(buildFluidIngredient(expandedFluidStackList((FluidIngredient) object, mekanismExpansion, techRebornExpansion)));
+		if ((mekanismExpansion || techRebornExpansion) && object instanceof FluidIngredient ingredient) {
+			return checkedFluidIngredient(buildFluidIngredient(expandedFluidStackList(ingredient, mekanismExpansion, techRebornExpansion)));
 		}
 		
-		if (object instanceof IFluidIngredient) {
-			return checkedFluidIngredient((IFluidIngredient) object);
+		if (object instanceof IFluidIngredient ingredient) {
+			return checkedFluidIngredient(ingredient);
 		}
 		else if (object instanceof List<?> list) {
 			List<IFluidIngredient> buildList = new ArrayList<>();
 			if (!list.isEmpty()) {
-				for (Object listObject : list) {
-					if (listObject instanceof IFluidIngredient) {
-						buildList.add((IFluidIngredient) listObject);
+				for (Object e : list) {
+					if (e instanceof IFluidIngredient ingredient) {
+						buildList.add(ingredient);
 					}
-					else if (listObject != null) {
-						IFluidIngredient recipeObject = checkedFluidIngredient(buildFluidIngredient(listObject));
+					else if (e != null) {
+						IFluidIngredient recipeObject = checkedFluidIngredient(buildFluidIngredient(e));
 						if (recipeObject != null) {
 							buildList.add(recipeObject);
 						}
@@ -249,11 +249,11 @@ public class RecipeHelper {
 				return null;
 			}
 		}
-		else if (object instanceof String) {
-			return checkedFluidIngredient(RecipeHelper.fluidStackFromString((String) object));
+		else if (object instanceof String string) {
+			return checkedFluidIngredient(RecipeHelper.fluidStackFromString(string));
 		}
-		if (object instanceof FluidStack) {
-			return checkedFluidIngredient(new FluidIngredient((FluidStack) object));
+		if (object instanceof FluidStack stack) {
+			return checkedFluidIngredient(new FluidIngredient(stack));
 		}
 		return null;
 	}
@@ -378,8 +378,8 @@ public class RecipeHelper {
 			if (ingredient == null || ingredient instanceof EmptyItemIngredient) {
 				ingredientNames.add("null");
 			}
-			else if (ingredient instanceof ItemArrayIngredient) {
-				ingredientNames.add(((ItemArrayIngredient) ingredient).getIngredientRecipeString());
+			else if (ingredient instanceof ItemArrayIngredient arrayIngredient) {
+				ingredientNames.add(arrayIngredient.getIngredientRecipeString());
 			}
 			else {
 				ingredientNames.add(ingredient.getMaxStackSize(0) + " x " + ingredient.getIngredientName());
@@ -394,8 +394,8 @@ public class RecipeHelper {
 			if (ingredient == null || ingredient instanceof EmptyFluidIngredient) {
 				ingredientNames.add("null");
 			}
-			else if (ingredient instanceof FluidArrayIngredient) {
-				ingredientNames.add(((FluidArrayIngredient) ingredient).getIngredientRecipeString());
+			else if (ingredient instanceof FluidArrayIngredient arrayIngredient) {
+				ingredientNames.add(arrayIngredient.getIngredientRecipeString());
 			}
 			else {
 				ingredientNames.add(ingredient.getMaxStackSize(0) + " x " + ingredient.getIngredientName());
@@ -430,8 +430,8 @@ public class RecipeHelper {
 					obj = buildItemIngredient(obj);
 				}
 				IItemIngredient ingredient = (IItemIngredient) obj;
-				if (ingredient instanceof ItemArrayIngredient) {
-					ingredientNames.add(((ItemArrayIngredient) ingredient).getIngredientRecipeString());
+				if (ingredient instanceof ItemArrayIngredient arrayIngredient) {
+					ingredientNames.add(arrayIngredient.getIngredientRecipeString());
 				}
 				else {
 					ingredientNames.add(ingredient.getMaxStackSize(0) + " x " + ingredient.getIngredientName());
@@ -452,8 +452,8 @@ public class RecipeHelper {
 					obj = buildFluidIngredient(obj);
 				}
 				IFluidIngredient ingredient = (IFluidIngredient) obj;
-				if (ingredient instanceof FluidArrayIngredient) {
-					ingredientNames.add(((FluidArrayIngredient) ingredient).getIngredientRecipeString());
+				if (ingredient instanceof FluidArrayIngredient arrayIngredient) {
+					ingredientNames.add(arrayIngredient.getIngredientRecipeString());
 				}
 				else {
 					ingredientNames.add(ingredient.getMaxStackSize(0) + " x " + ingredient.getIngredientName());

@@ -37,7 +37,7 @@ import static nc.config.NCConfig.*;
 import static nc.util.FluidStackHelper.INGOT_BLOCK_VOLUME;
 import static nc.util.PosHelper.DEFAULT_NON;
 
-public class TileSaltFissionVessel extends TileFissionPart implements IBasicProcessor<TileSaltFissionVessel, SaltFissionVesselUpdatePacket>, ITileFilteredFluid, IFissionFuelComponent, IFissionPortTarget<TileFissionVesselPort, TileSaltFissionVessel> {
+public class TileSaltFissionVessel extends TileFissionPart implements IBasicProcessor<TileSaltFissionVessel, SaltFissionVesselUpdatePacket>, ITileFilteredFluid, IFissionFuelBunchComponent, IFissionPortTarget<TileFissionVesselPort, TileSaltFissionVessel> {
 	
 	protected final ProcessorContainerInfoImpl.BasicProcessorContainerInfo<TileSaltFissionVessel, SaltFissionVesselUpdatePacket> info;
 	
@@ -81,7 +81,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	
 	protected boolean fluxSearched = false;
 	
-	public int heatMult = 0;
+	public long heatMult = 0L;
 	protected double undercoolingLifetimeFactor = 1D;
 	protected Double sourceEfficiency = null;
 	protected long[] moderatorLineFluxes = new long[] {0L, 0L, 0L, 0L, 0L, 0L};
@@ -97,7 +97,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	protected BlockPos masterPortPos = DEFAULT_NON;
 	protected TileFissionVesselPort masterPort = null;
 	
-	protected SaltFissionVesselBunch vesselBunch = null;
+	protected FissionFuelBunch fuelBunch = null;
 	
 	public TileSaltFissionVessel() {
 		super(CuboidalPartPositionType.INTERIOR);
@@ -125,19 +125,17 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	
 	// IFissionFuelComponent
 	
-	public @Nullable SaltFissionVesselBunch getVesselBunch() {
-		return vesselBunch;
+	@Override
+	public @Nullable FissionFuelBunch getFuelBunch() {
+		return fuelBunch;
 	}
 	
-	public void setVesselBunch(@Nullable SaltFissionVesselBunch vesselBunch) {
-		this.vesselBunch = vesselBunch;
-		if (vesselBunch != null) {
-			vesselBunch.vesselMap.put(pos.toLong(), this);
+	@Override
+	public void setFuelBunch(@Nullable FissionFuelBunch fuelBunch) {
+		this.fuelBunch = fuelBunch;
+		if (fuelBunch != null) {
+			fuelBunch.fuelComponentMap.put(pos.toLong(), this);
 		}
-	}
-	
-	public int getVesselBunchSize() {
-		return vesselBunch.vesselMap.size();
 	}
 	
 	@Override
@@ -162,9 +160,9 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public void resetStats() {
-		vesselBunch.sources = vesselBunch.flux = cachedFlux = 0L;
+		fuelBunch.sources = fuelBunch.flux = cachedFlux = 0L;
 		fluxSearched = false;
-		heatMult = 0;
+		heatMult = 0L;
 		undercoolingLifetimeFactor = 1D;
 		// sourceEfficiency = null;
 		for (int i = 0; i < 6; ++i) {
@@ -192,7 +190,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		refreshDirty();
 		refreshIsProcessing(false, simulate);
 		
-		IFissionFuelComponent.super.clusterSearch(id, clusterSearchCache, componentFailCache, assumedValidCache, simulate);
+		IFissionFuelBunchComponent.super.clusterSearch(id, clusterSearchCache, componentFailCache, assumedValidCache, simulate);
 	}
 	
 	@Override
@@ -207,23 +205,23 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		}
 		
 		if (canProcessInputs) {
-			vesselBunch.tryPriming(fromSource, simulate);
+			fuelBunch.tryPriming(fromSource, simulate);
 		}
 	}
 	
 	@Override
 	public boolean isPrimed(boolean simulate) {
-		return vesselBunch.primed;
+		return fuelBunch.primed;
 	}
 	
 	@Override
 	public void addToPrimedCache(final ObjectSet<IFissionFuelComponent> primedCache) {
-		primedCache.addAll(vesselBunch.vesselMap.values());
+		primedCache.addAll(fuelBunch.fuelComponentMap.values());
 	}
 	
 	@Override
 	public void unprime(boolean simulate) {
-		vesselBunch.primed = false;
+		fuelBunch.primed = false;
 	}
 	
 	@Override
@@ -256,13 +254,13 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public void addToFluxSearchCache(final ObjectSet<IFissionFuelComponent> fluxSearchCache) {
-		fluxSearchCache.addAll(vesselBunch.vesselMap.values());
+		fluxSearchCache.addAll(fuelBunch.fuelComponentMap.values());
 	}
 	
 	@Override
 	public void onEndModeratorLine(boolean simulate) {
-		for (TileSaltFissionVessel vessel : vesselBunch.vesselMap.values()) {
-			vessel.refreshIsProcessing(false, simulate);
+		for (IFissionFuelBunchComponent fuelComponent : fuelBunch.fuelComponentMap.values()) {
+			fuelComponent.refreshIsProcessing(false, simulate);
 		}
 	}
 	
@@ -283,13 +281,18 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	
 	@Override
 	public long getFlux() {
-		return vesselBunch.flux;
+		return fuelBunch.flux;
 	}
 	
 	@Override
 	public void addFlux(long addedFlux) {
 		cachedFlux += addedFlux;
-		vesselBunch.flux += addedFlux;
+		fuelBunch.flux += addedFlux;
+	}
+	
+	@Override
+	public long getIndividualFlux() {
+		return cachedFlux;
 	}
 	
 	@Override
@@ -337,12 +340,22 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		return activeReflectorCache;
 	}
 	
+	@Override
+	public long getBaseProcessHeat() {
+		return baseProcessHeat;
+	}
+	
+	@Override
+	public double getBaseProcessEfficiency() {
+		return baseProcessEfficiency;
+	}
+	
 	/**
 	 * DON'T USE IN REACTOR LOGIC!
 	 */
 	@Override
 	public long getRawHeating(boolean simulate) {
-		return isRunning(simulate) ? baseProcessHeat * vesselBunch.getHeatMultiplier(simulate) / getVesselBunchSize() : 0L;
+		return isRunning(simulate) ? baseProcessHeat * fuelBunch.getHeatMultiplier(simulate) / getFuelBunchSize() : 0L;
 	}
 	
 	/**
@@ -368,17 +381,22 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	 */
 	@Override
 	public long getHeatMultiplier(boolean simulate) {
-		return vesselBunch.getHeatMultiplier(simulate) / getVesselBunchSize();
+		return fuelBunch.getHeatMultiplier(simulate) / getFuelBunchSize();
+	}
+	
+	@Override
+	public long getIndividualHeatMultiplier(boolean simulate) {
+		return heatMult;
 	}
 	
 	@Override
 	public double getFluxEfficiencyFactor() {
-		return vesselBunch.getFluxEfficiencyFactor(getFloatingPointCriticality());
+		return fuelBunch.getFluxEfficiencyFactor(getFloatingPointCriticality());
 	}
 	
 	@Override
 	public double getEfficiency(boolean simulate) {
-		return isRunning(simulate) ? vesselBunch.getHeatMultiplier(simulate) * baseProcessEfficiency * getSourceEfficiency() * getModeratorEfficiencyFactor() * getFluxEfficiencyFactor() / getVesselBunchSize() : 0D;
+		return isRunning(simulate) ? fuelBunch.getHeatMultiplier(simulate) * baseProcessEfficiency * getSourceEfficiency() * getModeratorEfficiencyFactor() * getFluxEfficiencyFactor() / getFuelBunchSize() : 0D;
 	}
 	
 	@Override
@@ -601,10 +619,12 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 		}
 	}
 	
+	@Override
 	public int getDecayHeating() {
 		return fission_decay_mechanics ? NCMath.toInt(getFloatingPointDecayHeating()) : 0;
 	}
 	
+	@Override
 	public double getFloatingPointDecayHeating() {
 		return fission_decay_mechanics ? decayProcessHeat * decayHeatFraction : 0D;
 	}
@@ -773,7 +793,7 @@ public class TileSaltFissionVessel extends TileFissionPart implements IBasicProc
 	}
 	
 	public boolean hasEnoughFlux() {
-		return vesselBunch != null && vesselBunch.flux >= vesselBunch.getCriticalityFactor(getCriticality());
+		return fuelBunch != null && fuelBunch.flux >= fuelBunch.getCriticalityFactor(getCriticality());
 	}
 	
 	@Override

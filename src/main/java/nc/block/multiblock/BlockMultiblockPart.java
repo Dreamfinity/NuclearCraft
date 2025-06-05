@@ -54,10 +54,10 @@ public abstract class BlockMultiblockPart extends NCBlock implements ITileEntity
 			}
 		}
 		if (!world.isRemote && player.getHeldItem(hand).isEmpty()) {
-			if (tile instanceof ITileMultiblockPart) {
-				Multiblock<?, ?> controller = ((ITileMultiblockPart<?, ?>) tile).getMultiblock();
-				if (controller != null) {
-					MultiblockValidationError e = controller.getLastError();
+			if (tile instanceof ITileMultiblockPart<?, ?> part) {
+				Multiblock<?, ?> multiblock = part.getMultiblock();
+				if (multiblock != null) {
+					MultiblockValidationError e = multiblock.getLastError();
 					if (e != null) {
 						e = e.updatedError(world);
 						player.sendMessage(e.getChatMessage());

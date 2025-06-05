@@ -109,16 +109,16 @@ public interface ITileEnergy extends ITile, IBigPower {
 	
 	@Optional.Method(modid = "ic2")
 	default void addTileToENet() {
-		if (!getTileWorld().isRemote && enable_ic2_eu && !getIC2Reg() && this instanceof IEnergyTile) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) this));
+		if (!getTileWorld().isRemote && enable_ic2_eu && !getIC2Reg() && this instanceof IEnergyTile energyTile) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(energyTile));
 			setIC2Reg(true);
 		}
 	}
 	
 	@Optional.Method(modid = "ic2")
 	default void removeTileFromENet() {
-		if (!getTileWorld().isRemote && getIC2Reg() && this instanceof IEnergyTile) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) this));
+		if (!getTileWorld().isRemote && getIC2Reg() && this instanceof IEnergyTile energyTile) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(energyTile));
 			setIC2Reg(false);
 		}
 	}
@@ -204,8 +204,8 @@ public interface ITileEnergy extends ITile, IBigPower {
 			return;
 		}
 		
-		if (tile instanceof ITileEnergy) {
-			if (!((ITileEnergy) tile).getEnergyConnection(side.getOpposite()).canReceive()) {
+		if (tile instanceof ITileEnergy tileEnergy) {
+			if (!tileEnergy.getEnergyConnection(side.getOpposite()).canReceive()) {
 				return;
 			}
 		}
@@ -227,8 +227,8 @@ public interface ITileEnergy extends ITile, IBigPower {
 		}
 		
 		if (ModCheck.ic2Loaded() && enable_ic2_eu) {
-			if (tile instanceof IEnergySink) {
-				getEnergyStorage().extractEnergy(NCMath.toInt(Math.round(((IEnergySink) tile).injectEnergy(side.getOpposite(), (double) getEnergyStorage().extractEnergy(getMaxEnergyStored(), true) / rf_per_eu, getSourceTier()) * rf_per_eu)), false);
+			if (tile instanceof IEnergySink energySink) {
+				getEnergyStorage().extractEnergy(NCMath.toInt(Math.round(energySink.injectEnergy(side.getOpposite(), (double) getEnergyStorage().extractEnergy(getMaxEnergyStored(), true) / rf_per_eu, getSourceTier()) * rf_per_eu)), false);
 				return;
 			}
 		}

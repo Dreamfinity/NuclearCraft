@@ -54,8 +54,8 @@ public abstract class BlockFissionPart extends BlockMultiblockPart {
 				FissionReactor reactor = part.getMultiblock();
 				if (reactor != null) {
 					float damage;
-					if (part instanceof IFissionComponent && ((IFissionComponent) part).getCluster() != null) {
-						damage = ((IFissionComponent) part).getCluster().getBurnDamage();
+					if (part instanceof IFissionComponent component && component.getCluster() != null) {
+						damage = component.getCluster().getBurnDamage();
 					}
 					else {
 						damage = reactor.getLogic().getBurnDamage();

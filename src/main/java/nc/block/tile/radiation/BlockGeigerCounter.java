@@ -47,8 +47,8 @@ public class BlockGeigerCounter extends BlockSimpleTile<TileGeigerCounter> {
 	@Override
 	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileGeigerCounter) {
-			return ((TileGeigerCounter) tile).comparatorStrength;
+		if (tile instanceof TileGeigerCounter geigerCounter) {
+			return geigerCounter.comparatorStrength;
 		}
 		return 0;
 	}

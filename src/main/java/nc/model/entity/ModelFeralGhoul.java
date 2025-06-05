@@ -55,7 +55,7 @@ public class ModelFeralGhoul extends ModelBiped {
 	
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-		boolean flag = entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).getTicksElytraFlying() > 4;
+		boolean flag = entityIn instanceof EntityLivingBase entityLivingBase && entityLivingBase.getTicksElytraFlying() > 4;
 		
 		bipedHead.setRotationPoint(0F, 3.5F, -2.2F);
 		

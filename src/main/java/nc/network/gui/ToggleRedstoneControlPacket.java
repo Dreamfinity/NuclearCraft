@@ -34,8 +34,8 @@ public class ToggleRedstoneControlPacket extends TileGuiPacket {
 		
 		@Override
 		protected void onPacket(ToggleRedstoneControlPacket message, EntityPlayerMP player, TileEntity tile) {
-			if (tile instanceof ITile machine) {
-				machine.setRedstoneControl(message.redstoneControl);
+			if (tile instanceof ITile t) {
+				t.setRedstoneControl(message.redstoneControl);
 				tile.markDirty();
 			}
 		}

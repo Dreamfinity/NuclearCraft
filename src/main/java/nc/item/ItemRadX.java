@@ -36,8 +36,8 @@ public class ItemRadX extends NCItem {
 				world.playSound(null, player.posX, player.posY, player.posZ, NCSounds.rad_x, SoundCategory.PLAYERS, (float) (0.5D * radiation_sound_volumes[2]), 1F);
 				onRadXConsumed(stack, world, player);
 				player.addStat(StatList.getObjectUseStats(this));
-				if (player instanceof EntityPlayerMP) {
-					CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP) player, stack);
+				if (player instanceof EntityPlayerMP playerMP) {
+					CriteriaTriggers.CONSUME_ITEM.trigger(playerMP, stack);
 				}
 				if (!player.isCreative()) {
 					stack.shrink(1);

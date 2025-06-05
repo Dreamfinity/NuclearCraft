@@ -25,8 +25,8 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-		if (tile instanceof ITileGui) {
-			return ((ITileGui) tile).getContainerInfo().getNewContainer(id, player, tile);
+		if (tile instanceof ITileGui tileGui) {
+			return tileGui.getContainerInfo().getNewContainer(id, player, tile);
 		}
 		return null;
 	}
@@ -35,8 +35,8 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-		if (tile instanceof ITileGui) {
-			return ((ITileGui) tile).getContainerInfo().getNewGui(id, player, tile);
+		if (tile instanceof ITileGui tileGui) {
+			return tileGui.getContainerInfo().getNewGui(id, player, tile);
 		}
 		return null;
 	}

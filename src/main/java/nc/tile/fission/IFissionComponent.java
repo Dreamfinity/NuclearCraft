@@ -78,8 +78,8 @@ public interface IFissionComponent extends IFissionPart {
 		for (EnumFacing dir : EnumFacing.VALUES) {
 			BlockPos offPos = getTilePos().offset(dir);
 			if (!getCluster().connectedToWall) {
-				TileEntity part = getTileWorld().getTileEntity(offPos);
-				if (part instanceof TileFissionPart && ((TileFissionPart) part).getPartPositionType().isGoodForWall()) {
+				TileEntity tile = getTileWorld().getTileEntity(offPos);
+				if (tile instanceof TileFissionPart part && part.getPartPositionType().isGoodForWall()) {
 					getCluster().connectedToWall = true;
 					continue;
 				}

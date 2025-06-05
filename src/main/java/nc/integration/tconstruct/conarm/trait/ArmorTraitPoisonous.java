@@ -18,8 +18,8 @@ public class ArmorTraitPoisonous extends AbstractArmorTrait implements IArmorTra
 	@Override
 	public float onHurt(ItemStack armor, EntityPlayer player, DamageSource source, float damage, float newDamage, LivingHurtEvent evt) {
 		Entity damager = source.getImmediateSource();
-		if (damager instanceof EntityLivingBase) {
-			((EntityLivingBase) damager).addPotionEffect(new PotionEffect(MobEffects.POISON, 81));
+		if (damager instanceof EntityLivingBase entityLivingBase) {
+			entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.POISON, 81));
 		}
 		return super.onHurt(armor, player, source, damage, newDamage, evt);
 	}

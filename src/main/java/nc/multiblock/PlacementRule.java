@@ -615,13 +615,13 @@ public abstract class PlacementRule<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>
 		
 		@Override
 		public String buildTooltip(PlacementRule<MULTIBLOCK, T> rule) {
-			if (rule instanceof Adjacent) {
-				return Lang.localize("nc.sf.placement_rule.and_or.adjacent4", Lang.localize("nc.sf.placement_rule.and_or.adjacent0", Lang.localize("nc.sf.placement_rule.adjacent.must_be_adjacent_to"), ((Adjacent<MULTIBLOCK, T>) rule).buildSubTooltip()));
+			if (rule instanceof Adjacent<?, ?> adjacent) {
+				return Lang.localize("nc.sf.placement_rule.and_or.adjacent4", Lang.localize("nc.sf.placement_rule.and_or.adjacent0", Lang.localize("nc.sf.placement_rule.adjacent.must_be_adjacent_to"), adjacent.buildSubTooltip()));
 			}
 			else if (rule instanceof And || rule instanceof Or) {
 				LinkedList<String> subTooltips = new LinkedList<>();
 				for (PlacementRule<MULTIBLOCK, T> r : rule.getSubRules()) {
-					subTooltips.add(r instanceof Adjacent ? ((Adjacent<MULTIBLOCK, T>) r).buildSubTooltip() : "?");
+					subTooltips.add(r instanceof Adjacent<?, ?> adjacent ? adjacent.buildSubTooltip() : "?");
 				}
 				return Lang.localize("nc.sf.placement_rule.and_or.adjacent4", Lang.localize("nc.sf.placement_rule.and_or.adjacent0", Lang.localize("nc.sf.placement_rule.adjacent.must_be_adjacent_to"), joinSubTooltips(subTooltips, Lang.localize("nc.sf." + (rule instanceof And ? "and" : "or")))));
 			}

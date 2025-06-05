@@ -1,7 +1,6 @@
-Multiblock monitors: show cluster information, meltdown locations, side configurations, etc.
+Add infinite and NaN special cases to sigFigs (zero speed multiplier -> infinite process time fp)
 
-Multiblock solars with CT support
-Multiblock collectors with CT support
+Fission monitors: cluster information, S'tack, etc.
 
 Finish fission meltdown mechanics
 Add melting logic to non-fuel components
@@ -17,6 +16,8 @@ Reduce default neutron poison lifetime
 Keep clusters running even when multiblock is invalidated
 
 Patchouli documentation
+
+Script addon Java mod template
 ___________________________________________________________________________________________________________________________
 
 Gas-cooled Pebble-Bed Reactor that produces energy directly
@@ -34,27 +35,22 @@ Superconducting e-magnets can be used instead for an efficiency bonus?
 ___________________________________________________________________________________________________________________________
 ---------------------------------------------------------------------------------------------------------------------------
 
-1.21+: Potential block state getter optimisation - https://github.com/RogueLogix/BiggerSeries/blob/master/Phosphophyllite/src/main/java/net/roguelogix/phosphophyllite/util/Util.java#L51-L83 (chunkCachedBlockStateIteration)
-1.21+: Potential TE getter optimisation - https://github.com/mekanism/Mekanism/blob/1.16.x/src/main/java/mekanism/common/util/MekanismUtils.java#L929-L948 (getChunkForTile)
-
-1.21+: Remove fission clusters
-1.21+: Make moderators reflectors form clusters and conduct heat
-
-1.21+: Give dynamo depth for 3D coil puzzle?
+1.21+: Potential block state getter optimisation - https://github.com/BiggerSeries/Phosphophyllite/blob/master/src/main/java/net/roguelogix/phosphophyllite/util/Util.java#L110 (chunkCachedBlockStateIteration)
 ___________________________________________________________________________________________________________________________
 
 1.21+: Uranium/Thorium ore processing - ore -> 2x crushed ore -> hexa/tetrafluoride -> 4x dust
-1.21+: Multiblock variants of basic machines?
+1.21+: Multiblocks instead of single-block machines?
+___________________________________________________________________________________________________________________________
 
-1.21+: Specialised fuel-making machine
+1.21+: Remove fission clusters?
+1.21+: Make moderators reflectors form clusters and conduct heat
 
 1.21+: MSR split: NaK coolant for thermal, eutectic Pb-Bi alloy coolant for fast?
 1.21+: Negative temperature coefficient for MSR anf PBR
 ___________________________________________________________________________________________________________________________
 
-1.21+: Inertial Confinement Fusion - synchrotron radiation as laser -> heat molten salt coolant
-
+1.21+: Inertial Confinement Fusion - synchrotron radiation as laser -> heat molten salt coolant?
 1.21+: Focus Fusion -> direct energy production?
 ___________________________________________________________________________________________________________________________
 
-1.21+: Hawking Generator - form black hole and power with matter -> Hawking radiation produced for energy
+1.21+: Hawking Generator - form black hole and power with matter -> Hawking radiation produced for energy?

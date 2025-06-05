@@ -23,6 +23,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.BiPredicate;
 
 import static nc.config.NCConfig.*;
 
@@ -31,6 +32,8 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 	public final HeatBuffer heatBuffer = new HeatBuffer(FissionReactor.BASE_MAX_HEAT);
 	
 	public final Long2ObjectMap<IFissionComponent> componentFailCache = new Long2ObjectOpenHashMap<>(), assumedValidCache = new Long2ObjectOpenHashMap<>();
+	
+	public final ObjectSet<FissionFuelBunch> fuelBunches = new ObjectOpenHashSet<>();
 	
 	public FissionReactorLogic(FissionReactor reactor) {
 		super(reactor);
@@ -143,6 +146,58 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 		refreshManagers(TileFissionShieldManager.class);
 		refreshFilteredPorts(TileFissionIrradiatorPort.class, TileFissionIrradiator.class);
 		refreshFilteredPorts(TileFissionCoolerPort.class, TileFissionCooler.class);
+	}
+	
+	public <T extends IFissionFuelBunchComponent> void formFuelBunches(Class<T> fuelBunchComponentClass, BiPredicate<T, T> bunchingPredicate) {
+		fuelBunches.clear();
+		
+		Long2ObjectMap<T> fuelBunchComponentMap = getPartMap(fuelBunchComponentClass);
+		
+		for (T fuelBunchComponent : fuelBunchComponentMap.values()) {
+			fuelBunchComponent.setFuelBunch(null);
+		}
+		
+		for (T fuelBunchComponent : fuelBunchComponentMap.values()) {
+			boolean setBunch = false;
+			FissionFuelBunch fuelBunch = null;
+			BlockPos pos = fuelBunchComponent.getTilePos();
+			for (EnumFacing dir : EnumFacing.VALUES) {
+				T otherBunchComponent = fuelBunchComponentMap.get(pos.offset(dir).toLong());
+				if (otherBunchComponent != null && bunchingPredicate.test(fuelBunchComponent, otherBunchComponent)) {
+					FissionFuelBunch otherFuelBunch = otherBunchComponent.getFuelBunch();
+					if (fuelBunch == null) {
+						fuelBunch = otherFuelBunch;
+					}
+					else if (fuelBunch != otherFuelBunch) {
+						if (otherFuelBunch != null) {
+							fuelBunches.remove(otherFuelBunch);
+							for (IFissionFuelBunchComponent otherFuelBunchComponent : otherFuelBunch.fuelComponentMap.values()) {
+								otherFuelBunchComponent.setFuelBunch(fuelBunch);
+							}
+							otherFuelBunch.fuelComponentMap.clear();
+						}
+						else {
+							otherBunchComponent.setFuelBunch(fuelBunch);
+						}
+					}
+					
+					if (!setBunch && fuelBunch != null) {
+						fuelBunchComponent.setFuelBunch(fuelBunch);
+						setBunch = true;
+					}
+				}
+			}
+			
+			if (fuelBunch == null) {
+				fuelBunch = new FissionFuelBunch();
+				fuelBunchComponent.setFuelBunch(fuelBunch);
+				fuelBunches.add(fuelBunch);
+			}
+		}
+		
+		for (FissionFuelBunch bunch : fuelBunches) {
+			bunch.init();
+		}
 	}
 	
 	public void refreshReactor(boolean simulate) {
@@ -340,20 +395,20 @@ public class FissionReactorLogic extends MultiblockLogic<FissionReactor, Fission
 		for (IFissionComponent component : cluster.getComponentMap().values()) {
 			if (component.isFunctional(simulate)) {
 				++cluster.componentCount;
-				if (component instanceof IFissionHeatingComponent) {
-					cluster.rawHeating += ((IFissionHeatingComponent) component).getRawHeating(simulate);
-					cluster.rawHeatingIgnoreCoolingPenalty += ((IFissionHeatingComponent) component).getRawHeatingIgnoreCoolingPenalty(simulate);
-					cluster.effectiveHeating += ((IFissionHeatingComponent) component).getEffectiveHeating(simulate);
-					cluster.effectiveHeatingIgnoreCoolingPenalty += ((IFissionHeatingComponent) component).getEffectiveHeatingIgnoreCoolingPenalty(simulate);
-					if (component instanceof IFissionFuelComponent) {
+				if (component instanceof IFissionHeatingComponent heatingComponent) {
+					cluster.rawHeating += heatingComponent.getRawHeating(simulate);
+					cluster.rawHeatingIgnoreCoolingPenalty += heatingComponent.getRawHeatingIgnoreCoolingPenalty(simulate);
+					cluster.effectiveHeating += heatingComponent.getEffectiveHeating(simulate);
+					cluster.effectiveHeatingIgnoreCoolingPenalty += heatingComponent.getEffectiveHeatingIgnoreCoolingPenalty(simulate);
+					if (component instanceof IFissionFuelComponent fuelComponent) {
 						++cluster.fuelComponentCount;
-						cluster.totalHeatMult += ((IFissionFuelComponent) component).getHeatMultiplier(simulate);
-						cluster.totalEfficiency += ((IFissionFuelComponent) component).getEfficiency(simulate);
-						cluster.totalEfficiencyIgnoreCoolingPenalty += ((IFissionFuelComponent) component).getEfficiencyIgnoreCoolingPenalty(simulate);
+						cluster.totalHeatMult += fuelComponent.getHeatMultiplier(simulate);
+						cluster.totalEfficiency += fuelComponent.getEfficiency(simulate);
+						cluster.totalEfficiencyIgnoreCoolingPenalty += fuelComponent.getEfficiencyIgnoreCoolingPenalty(simulate);
 					}
 				}
-				if (component instanceof IFissionCoolingComponent) {
-					cluster.cooling += ((IFissionCoolingComponent) component).getCooling(simulate);
+				if (component instanceof IFissionCoolingComponent coolingComponent) {
+					cluster.cooling += coolingComponent.getCooling(simulate);
 				}
 			}
 		}

@@ -153,8 +153,8 @@ public class RadiationHelper {
 		
 		double rawRadiation = 0D;
 		if (ModCheck.ic2Loaded()) {
-			if (provider instanceof IReactor) {
-				rawRadiation += ((IReactor) provider).getReactorEUEnergyOutput() * radiation_ic2_reactor_mult;
+			if (provider instanceof IReactor reactor) {
+				rawRadiation += reactor.getReactorEUEnergyOutput() * radiation_ic2_reactor_mult;
 			}
 		}
 		
@@ -311,8 +311,8 @@ public class RadiationHelper {
 	
 	public static double getEntityArmorRadResistance(EntityLivingBase entity) {
 		double resistance = getArmorInventoryRadResistance(entity);
-		if (radiation_horse_armor_public && entity instanceof EntityHorse) {
-			resistance += getHorseArmorRadResistance((EntityHorse) entity);
+		if (radiation_horse_armor_public && entity instanceof EntityHorse horse) {
+			resistance += getHorseArmorRadResistance(horse);
 		}
 		return resistance;
 	}

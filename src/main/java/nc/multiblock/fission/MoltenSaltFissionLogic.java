@@ -13,7 +13,6 @@ import nc.tile.internal.fluid.Tank;
 import nc.tile.multiblock.TilePartAbstract.SyncReason;
 import nc.util.NCMath;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -23,8 +22,6 @@ import java.util.*;
 import static nc.config.NCConfig.*;
 
 public class MoltenSaltFissionLogic extends FissionReactorLogic {
-	
-	public final ObjectSet<SaltFissionVesselBunch> vesselBunches = new ObjectOpenHashSet<>();
 	
 	public final List<Tank> tanks = Lists.newArrayList(new Tank(FissionReactor.BASE_TANK_CAPACITY, NCRecipes.fission_emergency_cooling.validFluids.get(0)), new Tank(FissionReactor.BASE_TANK_CAPACITY, null));
 	
@@ -78,56 +75,7 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 		super.refreshConnections();
 		refreshFilteredPorts(TileFissionVesselPort.class, TileSaltFissionVessel.class);
 		refreshFilteredPorts(TileFissionHeaterPort.class, TileSaltFissionHeater.class);
-		formVesselBunches();
-	}
-	
-	public void formVesselBunches() {
-		vesselBunches.clear();
-		
-		for (TileSaltFissionVessel vessel : getParts(TileSaltFissionVessel.class)) {
-			vessel.setVesselBunch(null);
-		}
-		
-		for (TileSaltFissionVessel vessel : getParts(TileSaltFissionVessel.class)) {
-			boolean setBunch = false;
-			SaltFissionVesselBunch bunch = null;
-			for (EnumFacing dir : EnumFacing.VALUES) {
-				TileSaltFissionVessel other = getPartMap(TileSaltFissionVessel.class).get(vessel.getPos().offset(dir).toLong());
-				if (other != null && vessel.getFilterKey().equals(other.getFilterKey())) {
-					SaltFissionVesselBunch otherBunch = other.getVesselBunch();
-					if (bunch == null) {
-						bunch = otherBunch;
-					}
-					else if (bunch != otherBunch) {
-						if (otherBunch != null) {
-							vesselBunches.remove(otherBunch);
-							for (TileSaltFissionVessel otherBunchVessel : otherBunch.vesselMap.values()) {
-								otherBunchVessel.setVesselBunch(bunch);
-							}
-							otherBunch.vesselMap.clear();
-						}
-						else {
-							other.setVesselBunch(bunch);
-						}
-					}
-					
-					if (!setBunch && bunch != null) {
-						vessel.setVesselBunch(bunch);
-						setBunch = true;
-					}
-				}
-			}
-			
-			if (bunch == null) {
-				bunch = new SaltFissionVesselBunch();
-				vessel.setVesselBunch(bunch);
-				vesselBunches.add(bunch);
-			}
-		}
-		
-		for (SaltFissionVesselBunch bunch : vesselBunches) {
-			bunch.init();
-		}
+		formFuelBunches(TileSaltFissionVessel.class, (x, y) -> x.getFilterKey().equals(y.getFilterKey()));
 	}
 	
 	@Override
@@ -139,35 +87,37 @@ public class MoltenSaltFissionLogic extends FissionReactorLogic {
 	
 	@Override
 	public void incrementClusterStatsFromComponents(FissionCluster cluster, boolean simulate) {
-		for (SaltFissionVesselBunch bunch : vesselBunches) {
+		for (FissionFuelBunch bunch : fuelBunches) {
 			bunch.statsRetrieved = false;
 		}
 		
 		for (IFissionComponent component : cluster.getComponentMap().values()) {
 			if (component.isFunctional(simulate)) {
 				++cluster.componentCount;
-				if (component instanceof IFissionHeatingComponent) {
-					if (component instanceof TileSaltFissionVessel) {
-						SaltFissionVesselBunch bunch = ((TileSaltFissionVessel) component).getVesselBunch();
+				if (component instanceof IFissionHeatingComponent heatingComponent) {
+					if (component instanceof TileSaltFissionVessel vessel) {
+						FissionFuelBunch fuelBunch = vessel.getFuelBunch();
 						++cluster.fuelComponentCount;
-						if (bunch != null && !bunch.statsRetrieved) {
-							bunch.statsRetrieved = true;
-							cluster.rawHeating += bunch.getRawHeating(simulate);
-							cluster.rawHeatingIgnoreCoolingPenalty += bunch.getRawHeatingIgnoreCoolingPenalty(simulate);
-							cluster.effectiveHeating += bunch.getEffectiveHeating(simulate);
-							cluster.effectiveHeatingIgnoreCoolingPenalty += bunch.getEffectiveHeatingIgnoreCoolingPenalty(simulate);
-							cluster.totalHeatMult += bunch.getHeatMultiplier(simulate);
-							cluster.totalEfficiency += bunch.getEfficiency(simulate);
-							cluster.totalEfficiencyIgnoreCoolingPenalty += bunch.getEfficiencyIgnoreCoolingPenalty(simulate);
+						if (fuelBunch != null && !fuelBunch.statsRetrieved) {
+							fuelBunch.statsRetrieved = true;
+							cluster.rawHeating += fuelBunch.getRawHeating(simulate);
+							cluster.rawHeatingIgnoreCoolingPenalty += fuelBunch.getRawHeatingIgnoreCoolingPenalty(simulate);
+							cluster.effectiveHeating += fuelBunch.getEffectiveHeating(simulate);
+							cluster.effectiveHeatingIgnoreCoolingPenalty += fuelBunch.getEffectiveHeatingIgnoreCoolingPenalty(simulate);
+							cluster.totalHeatMult += fuelBunch.getHeatMultiplier(simulate);
+							cluster.totalEfficiency += fuelBunch.getEfficiency(simulate);
+							cluster.totalEfficiencyIgnoreCoolingPenalty += fuelBunch.getEfficiencyIgnoreCoolingPenalty(simulate);
 						}
 					}
 					else {
-						cluster.rawHeating += ((IFissionHeatingComponent) component).getRawHeating(simulate);
-						cluster.effectiveHeating += ((IFissionHeatingComponent) component).getEffectiveHeating(simulate);
+						cluster.rawHeating += heatingComponent.getRawHeating(simulate);
+						cluster.rawHeatingIgnoreCoolingPenalty += heatingComponent.getRawHeatingIgnoreCoolingPenalty(simulate);
+						cluster.effectiveHeating += heatingComponent.getEffectiveHeating(simulate);
+						cluster.effectiveHeatingIgnoreCoolingPenalty += heatingComponent.getEffectiveHeatingIgnoreCoolingPenalty(simulate);
 					}
 				}
-				if (component instanceof IFissionCoolingComponent) {
-					cluster.cooling += ((IFissionCoolingComponent) component).getCooling(simulate);
+				if (component instanceof IFissionCoolingComponent coolingComponent) {
+					cluster.cooling += coolingComponent.getCooling(simulate);
 				}
 			}
 		}

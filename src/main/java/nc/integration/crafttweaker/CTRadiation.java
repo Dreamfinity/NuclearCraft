@@ -28,8 +28,8 @@ public class CTRadiation {
 			if (ingredient == null) {
 				return 0D;
 			}
-			else if (ingredient instanceof IItemStack) {
-				ItemStack stack = CTHelper.getItemStack((IItemStack) ingredient);
+			else if (ingredient instanceof IItemStack iItem) {
+				ItemStack stack = CTHelper.getItemStack(iItem);
 				return stack.isEmpty() ? 0D : RadSources.STACK_MAP.get(RecipeItemHelper.pack(stack)) * stack.getCount();
 			}
 			else if (ingredient instanceof IOreDictEntry ore) {
@@ -45,8 +45,8 @@ public class CTRadiation {
 					return stack == null || stack.isEmpty() ? 0D : RadSources.STACK_MAP.get(RecipeItemHelper.pack(stack)) * stack.getCount();
 				}
 			}
-			else if (ingredient instanceof ILiquidStack) {
-				FluidStack stack = CTHelper.getFluidStack((ILiquidStack) ingredient);
+			else if (ingredient instanceof ILiquidStack iLiquid) {
+				FluidStack stack = CTHelper.getFluidStack(iLiquid);
 				return stack == null ? 0D : RadiationHelper.getRadiationFromFluid(stack, 1D);
 			}
 			else {
@@ -57,27 +57,27 @@ public class CTRadiation {
 		@ZenMethod
 		public static void addToRadiationBlacklist(IIngredient ingredient) {
 			boolean success = false;
-			if (ingredient instanceof IItemStack) {
-				RadSources.RUNNABLES.add(() -> RadSources.addToStackBlacklist(CTHelper.getItemStack((IItemStack) ingredient)));
+			if (ingredient instanceof IItemStack iItem) {
+				RadSources.RUNNABLES.add(() -> RadSources.addToStackBlacklist(CTHelper.getItemStack(iItem)));
 				success = true;
 			}
-			else if (ingredient instanceof IOreDictEntry) {
-				RadSources.RUNNABLES.add(() -> RadSources.addToOreBlacklist(((IOreDictEntry) ingredient).getName()));
+			else if (ingredient instanceof IOreDictEntry ore) {
+				RadSources.RUNNABLES.add(() -> RadSources.addToOreBlacklist(ore.getName()));
 				success = true;
 			}
 			else if (ingredient instanceof IngredientStack) {
-				IItemIngredient i = CTHelper.buildOreIngredientArray(ingredient, true);
-				if (i instanceof OreIngredient) {
-					RadSources.RUNNABLES.add(() -> RadSources.addToOreBlacklist(((OreIngredient) i).oreName));
+				IItemIngredient iItem = CTHelper.buildOreIngredientArray(ingredient, true);
+				if (iItem instanceof OreIngredient ore) {
+					RadSources.RUNNABLES.add(() -> RadSources.addToOreBlacklist(ore.oreName));
 					success = true;
 				}
-				else if (i.getStack() != null) {
-					RadSources.RUNNABLES.add(() -> RadSources.addToStackBlacklist(i.getStack()));
+				else if (iItem.getStack() != null) {
+					RadSources.RUNNABLES.add(() -> RadSources.addToStackBlacklist(iItem.getStack()));
 					success = true;
 				}
 			}
-			else if (ingredient instanceof ILiquidStack) {
-				FluidStack stack = CTHelper.getFluidStack((ILiquidStack) ingredient);
+			else if (ingredient instanceof ILiquidStack iLiquid) {
+				FluidStack stack = CTHelper.getFluidStack(iLiquid);
 				if (stack != null && stack.getFluid() != null) {
 					RadSources.RUNNABLES.add(() -> RadSources.addToFluidBlacklist(stack.getFluid().getName()));
 					success = true;
@@ -100,27 +100,27 @@ public class CTRadiation {
 		@ZenMethod
 		public static void setRadiationLevel(IIngredient ingredient, double radiation) {
 			boolean success = false;
-			if (ingredient instanceof IItemStack) {
-				RadSources.RUNNABLES.add(() -> RadSources.addToStackMap(CTHelper.getItemStack((IItemStack) ingredient), radiation));
+			if (ingredient instanceof IItemStack iItem) {
+				RadSources.RUNNABLES.add(() -> RadSources.addToStackMap(CTHelper.getItemStack(iItem), radiation));
 				success = true;
 			}
-			else if (ingredient instanceof IOreDictEntry) {
-				RadSources.RUNNABLES.add(() -> RadSources.addToOreMap(((IOreDictEntry) ingredient).getName(), radiation));
+			else if (ingredient instanceof IOreDictEntry ore) {
+				RadSources.RUNNABLES.add(() -> RadSources.addToOreMap(ore.getName(), radiation));
 				success = true;
 			}
 			else if (ingredient instanceof IngredientStack) {
-				IItemIngredient i = CTHelper.buildOreIngredientArray(ingredient, true);
-				if (i instanceof OreIngredient) {
-					RadSources.RUNNABLES.add(() -> RadSources.addToOreMap(((OreIngredient) i).oreName, radiation));
+				IItemIngredient iItem = CTHelper.buildOreIngredientArray(ingredient, true);
+				if (iItem instanceof OreIngredient ore) {
+					RadSources.RUNNABLES.add(() -> RadSources.addToOreMap(ore.oreName, radiation));
 					success = true;
 				}
-				else if (i.getStack() != null) {
-					RadSources.RUNNABLES.add(() -> RadSources.addToStackMap(i.getStack(), radiation));
+				else if (iItem.getStack() != null) {
+					RadSources.RUNNABLES.add(() -> RadSources.addToStackMap(iItem.getStack(), radiation));
 					success = true;
 				}
 			}
-			else if (ingredient instanceof ILiquidStack) {
-				FluidStack stack = CTHelper.getFluidStack((ILiquidStack) ingredient);
+			else if (ingredient instanceof ILiquidStack iLiquid) {
+				FluidStack stack = CTHelper.getFluidStack(iLiquid);
 				if (stack != null && stack.getFluid() != null) {
 					RadSources.RUNNABLES.add(() -> RadSources.addToFluidMap(stack.getFluid().getName(), radiation));
 					success = true;

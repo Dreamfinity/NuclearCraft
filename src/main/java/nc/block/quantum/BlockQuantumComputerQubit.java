@@ -72,8 +72,8 @@ public class BlockQuantumComputerQubit extends BlockQuantumComputerPart {
 	@Override
 	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileQuantumComputerQubit) {
-			return ((TileQuantumComputerQubit) tile).redstone ? 15 : 0;
+		if (tile instanceof TileQuantumComputerQubit qubit) {
+			return qubit.redstone ? 15 : 0;
 		}
 		return 0;
 	}

@@ -26,9 +26,9 @@ public class BlockFluidFission extends BlockFluidMolten {
 	@Override
 	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		entityIn.setFire(10);
-		if (entityIn instanceof EntityLivingBase) {
-			((EntityLivingBase) entityIn).addPotionEffect(PotionHelper.newEffect(18, 1, 100));
-			((EntityLivingBase) entityIn).addPotionEffect(PotionHelper.newEffect(19, 1, 100));
+		if (entityIn instanceof EntityLivingBase entityLivingBase) {
+			entityLivingBase.addPotionEffect(PotionHelper.newEffect(18, 1, 100));
+			entityLivingBase.addPotionEffect(PotionHelper.newEffect(19, 1, 100));
 		}
 	}
 	

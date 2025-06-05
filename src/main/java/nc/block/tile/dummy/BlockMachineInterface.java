@@ -47,8 +47,8 @@ public class BlockMachineInterface extends BlockSimpleDummy<TileMachineInterface
 					return true;
 				}
 			}
-			if (master instanceof ITileGui) {
-				((ITileGui<?, ?, ?>) master).openGui(world, masterPos, player);
+			if (master instanceof ITileGui<?, ?, ?> tileGui) {
+				tileGui.openGui(world, masterPos, player);
 			}
 		}
 		return true;

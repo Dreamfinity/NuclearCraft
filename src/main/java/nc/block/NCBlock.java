@@ -54,8 +54,8 @@ public class NCBlock extends Block {
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (this instanceof ITileEntityProvider) {
 			TileEntity tile = world.getTileEntity(pos);
-			if (tile instanceof ITile) {
-				((ITile) tile).onBlockNeighborChanged(state, world, pos, fromPos);
+			if (tile instanceof ITile t) {
+				t.onBlockNeighborChanged(state, world, pos, fromPos);
 			}
 		}
 	}
@@ -83,8 +83,8 @@ public class NCBlock extends Block {
 	
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		if (this instanceof INBTDrop) {
-			return Lists.newArrayList(((INBTDrop) this).getNBTDrop(world, pos, state));
+		if (this instanceof INBTDrop drop) {
+			return Lists.newArrayList(drop.getNBTDrop(world, pos, state));
 		}
 		return super.getDrops(world, pos, state, fortune);
 	}
@@ -92,8 +92,8 @@ public class NCBlock extends Block {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(world, pos, state, placer, stack);
-		if (this instanceof INBTDrop && stack.hasTagCompound()) {
-			((INBTDrop) this).readStackData(world, pos, placer, stack);
+		if (this instanceof INBTDrop drop && stack.hasTagCompound()) {
+			drop.readStackData(world, pos, placer, stack);
 			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}

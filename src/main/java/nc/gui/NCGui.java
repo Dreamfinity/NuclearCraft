@@ -42,8 +42,8 @@ public abstract class NCGui extends GuiContainer {
 	protected void renderHoveredToolTip(int x, int y) {
 		Slot slot = getSlotUnderMouse();
 		if (slot != null && mc.player.inventory.getItemStack().isEmpty()) {
-			if (slot instanceof SlotFiltered && ((SlotFiltered) slot).hasStackForRender()) {
-				renderToolTip(((SlotFiltered) slot).getStackForRender(), x, y);
+			if (slot instanceof SlotFiltered slotFiltered && slotFiltered.hasStackForRender()) {
+				renderToolTip(slotFiltered.getStackForRender(), x, y);
 			}
 			else if (slot.getHasStack()) {
 				renderToolTip(slot.getStack(), x, y);
@@ -57,22 +57,22 @@ public abstract class NCGui extends GuiContainer {
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		if (mouseButton == 1 || mouseButton == 2) {
 			for (int i = 0; i < buttonList.size(); ++i) {
-				GuiButton guibutton = buttonList.get(i);
-				boolean mousePressed = guibutton instanceof NCButton && ((NCButton) guibutton).mousePressed(mc, mouseX, mouseY, mouseButton);
+				GuiButton button = buttonList.get(i);
+				boolean mousePressed = button instanceof NCButton ncButton && ncButton.mousePressed(mc, mouseX, mouseY, mouseButton);
 				if (mousePressed) {
-					GuiScreenEvent.ActionPerformedEvent.Pre event = new GuiScreenEvent.ActionPerformedEvent.Pre(this, guibutton, buttonList);
+					GuiScreenEvent.ActionPerformedEvent.Pre event = new GuiScreenEvent.ActionPerformedEvent.Pre(this, button, buttonList);
 					if (MinecraftForge.EVENT_BUS.post(event)) {
 						break;
 					}
-					guibutton = event.getButton();
-					selectedButton = guibutton;
+					button = event.getButton();
+					selectedButton = button;
 					float soundPitch = 1F;
 					if (mouseButton == 1) {
-						actionPerformedRight(guibutton);
+						actionPerformedRight(button);
 						soundPitch = SoundHelper.getPitch(1D);
 					}
 					else if (mouseButton == 2) {
-						actionPerformedMiddle(guibutton);
+						actionPerformedMiddle(button);
 					}
 					mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, soundPitch));
 					if (equals(mc.currentScreen)) {

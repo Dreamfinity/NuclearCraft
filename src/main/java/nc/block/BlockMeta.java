@@ -312,8 +312,8 @@ public abstract class BlockMeta<T extends Enum<T> & IStringSerializable & IBlock
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (this instanceof ITileEntityProvider) {
 			TileEntity tile = world.getTileEntity(pos);
-			if (tile instanceof ITile) {
-				((ITile) tile).onBlockNeighborChanged(state, world, pos, fromPos);
+			if (tile instanceof ITile t) {
+				t.onBlockNeighborChanged(state, world, pos, fromPos);
 			}
 		}
 	}

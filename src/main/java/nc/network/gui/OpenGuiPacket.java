@@ -38,8 +38,8 @@ public class OpenGuiPacket extends TileGuiPacket {
 		@Override
 		protected void onPacket(OpenGuiPacket message, EntityPlayerMP player, TileEntity tile) {
 			FMLNetworkHandler.openGui(player, NuclearCraft.instance, message.guiId, player.getServerWorld(), message.pos.getX(), message.pos.getY(), message.pos.getZ());
-			if (tile instanceof ITileGui) {
-				((ITileGui<?, ?, ?>) tile).addTileUpdatePacketListener(player);
+			if (tile instanceof ITileGui<?, ?, ?> tileGui) {
+				tileGui.addTileUpdatePacketListener(player);
 			}
 		}
 	}

@@ -267,7 +267,7 @@ public abstract class TurbinePlacement {
 	
 	public static boolean isCasing(Turbine turbine, BlockPos pos) {
 		TileEntity tile = turbine.WORLD.getTileEntity(pos);
-		return tile instanceof TileTurbinePart && ((TileTurbinePart) tile).getPartPositionType().isGoodForWall();
+		return tile instanceof TileTurbinePart part && part.getPartPositionType().isGoodForWall();
 	}
 	
 	public static boolean isRotorBearing(Turbine turbine, BlockPos pos) {

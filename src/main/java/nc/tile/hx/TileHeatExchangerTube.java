@@ -44,7 +44,7 @@ public class TileHeatExchangerTube extends TileHeatExchangerPart implements IRay
 	public static abstract class Variant extends TileHeatExchangerTube {
 		
 		protected Variant(HeatExchangerTubeType type) {
-			super(type.getName(), type.getHeatTransferCoefficient(), type.getHeatRetentionMult());
+			super(type.getName(), type.getHeatTransferCoefficient(), type.getHeatRetentionMultiplier());
 		}
 	}
 	

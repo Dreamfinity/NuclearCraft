@@ -30,7 +30,7 @@ public interface ISidedEnergy {
 	
 	default EnergyConnection getEnergyConnection(IBlockAccess world, BlockPos pos, @Nonnull EnumFacing facing) {
 		TileEntity tile = world.getTileEntity(pos);
-		return tile instanceof ITileEnergy ? ((ITileEnergy) tile).getEnergyConnection(facing) : EnergyConnection.NON;
+		return tile instanceof ITileEnergy tileEnergy ? tileEnergy.getEnergyConnection(facing) : EnergyConnection.NON;
 	}
 	
 	default BlockStateContainer createEnergyBlockState(Block block) {

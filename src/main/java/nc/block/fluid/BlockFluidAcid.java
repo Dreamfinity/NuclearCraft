@@ -20,9 +20,9 @@ public class BlockFluidAcid extends NCBlockFluid {
 	@Override
 	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		entityIn.attackEntityFrom(DamageSources.ACID_BURN, 3F);
-		if (entityIn instanceof EntityLivingBase) {
-			((EntityLivingBase) entityIn).addPotionEffect(PotionHelper.newEffect(18, 2, 100));
-			((EntityLivingBase) entityIn).addPotionEffect(PotionHelper.newEffect(19, 2, 100));
+		if (entityIn instanceof EntityLivingBase entityLivingBase) {
+			entityLivingBase.addPotionEffect(PotionHelper.newEffect(18, 2, 100));
+			entityLivingBase.addPotionEffect(PotionHelper.newEffect(19, 2, 100));
 		}
 	}
 	

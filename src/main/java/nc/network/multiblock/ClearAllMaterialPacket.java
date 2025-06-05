@@ -49,8 +49,8 @@ public class ClearAllMaterialPacket extends NCPacket {
 						return;
 					}
 					TileEntity tile = world.getTileEntity(message.pos);
-					if (tile instanceof ITileMultiblockPart) {
-						Multiblock<?, ?> multiblock = ((ITileMultiblockPart<?, ?>) tile).getMultiblock();
+					if (tile instanceof ITileMultiblockPart<?, ?> part) {
+						Multiblock<?, ?> multiblock = part.getMultiblock();
 						multiblock.clearAllMaterial();
 					}
 				});

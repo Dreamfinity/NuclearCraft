@@ -1151,11 +1151,11 @@ public abstract class Multiblock<MULTIBLOCK extends Multiblock<MULTIBLOCK, T>, T
 	public void clearAllMaterial() {
 		for (Entry<Class<? extends T>, Long2ObjectMap<? extends T>> superMapEntryRaw : getPartSuperMap().entrySet()) {
 			for (T tile : superMapEntryRaw.getValue().values()) {
-				if (tile instanceof ITileInventory) {
-					((ITileInventory) tile).clearAllSlots();
+				if (tile instanceof ITileInventory tileInventory) {
+					tileInventory.clearAllSlots();
 				}
-				if (tile instanceof ITileFluid) {
-					((ITileFluid) tile).clearAllTanks();
+				if (tile instanceof ITileFluid tileFluid) {
+					tileFluid.clearAllTanks();
 				}
 			}
 		}

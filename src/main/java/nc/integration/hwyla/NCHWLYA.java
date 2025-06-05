@@ -23,8 +23,8 @@ public class NCHWLYA {
 		public @Nonnull List<String> getWailaBody(ItemStack stack, List<String> tooltip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
 			if (hwyla_enabled) {
 				TileEntity tile = accessor.getTileEntity();
-				if (tile instanceof ITile) {
-					((ITile) tile).addToHWYLATooltip(tooltip);
+				if (tile instanceof ITile t) {
+					t.addToHWYLATooltip(tooltip);
 				}
 			}
 			return tooltip;

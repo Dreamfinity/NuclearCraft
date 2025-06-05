@@ -32,8 +32,8 @@ public class GuiFilteredProcessor<TILE extends TileEntity & IProcessor<TILE, PAC
 	}
 	
 	protected void drawFilters() {
-		if (tile instanceof ITileFilteredInventory) {
-			NonNullList<ItemStack> filterStacks = ((ITileFilteredInventory) tile).getFilterStacks();
+		if (tile instanceof ITileFilteredInventory tileFilteredInventory) {
+			NonNullList<ItemStack> filterStacks = tileFilteredInventory.getFilterStacks();
 			for (int i = 0; i < info.itemInputSize; ++i) {
 				int[] stackXY = info.itemInputStackXY.get(i);
 				new GuiItemRenderer(filterStacks.get(i), guiLeft + stackXY[0], guiTop + stackXY[1], 0.5F).draw();
@@ -45,8 +45,8 @@ public class GuiFilteredProcessor<TILE extends TileEntity & IProcessor<TILE, PAC
 			}
 		}
 		
-		if (tile instanceof ITileFilteredFluid) {
-			List<Tank> filterTanks = ((ITileFilteredFluid) tile).getFilterTanks();
+		if (tile instanceof ITileFilteredFluid tileFilteredFluid) {
+			List<Tank> filterTanks = tileFilteredFluid.getFilterTanks();
 			for (int i = 0; i < info.fluidInputSize; ++i) {
 				Tank filterTank = filterTanks.get(i);
 				if (!filterTank.isEmpty()) {
@@ -67,8 +67,8 @@ public class GuiFilteredProcessor<TILE extends TileEntity & IProcessor<TILE, PAC
 	
 	@Override
 	protected void clearTankAction(int tankNumber) {
-		if (tile instanceof ITileFilteredFluid && tile.getTanks().get(tankNumber).isEmpty()) {
-			new ClearFilterTankPacket((ITileFilteredFluid) tile, tankNumber).sendToServer();
+		if (tile instanceof ITileFilteredFluid tileFilteredFluid && tile.getTanks().get(tankNumber).isEmpty()) {
+			new ClearFilterTankPacket(tileFilteredFluid, tankNumber).sendToServer();
 		}
 		else {
 			super.clearTankAction(tankNumber);
@@ -77,8 +77,8 @@ public class GuiFilteredProcessor<TILE extends TileEntity & IProcessor<TILE, PAC
 	
 	@Override
 	protected void renderTankTooltips(int mouseX, int mouseY) {
-		if (tile instanceof ITileFilteredFluid) {
-			List<Tank> tanks = tile.getTanks(), filterTanks = ((ITileFilteredFluid) tile).getFilterTanks();
+		if (tile instanceof ITileFilteredFluid tileFilteredFluid) {
+			List<Tank> tanks = tile.getTanks(), filterTanks = tileFilteredFluid.getFilterTanks();
 			for (int i = 0; i < info.fluidInputSize; ++i) {
 				int[] tankXYWH = info.fluidInputGuiXYWH.get(i);
 				drawFilteredFluidTooltip(tanks.get(i), filterTanks.get(i), mouseX, mouseY, tankXYWH[0], tankXYWH[1], tankXYWH[2], tankXYWH[3]);

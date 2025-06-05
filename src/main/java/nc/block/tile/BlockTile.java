@@ -40,7 +40,7 @@ public abstract class BlockTile extends NCBlock implements ITileEntityProvider {
 		}
 		
 		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof ITileInstallable && ((ITileInstallable) tile).tryInstall(player, hand, facing)) {
+		if (tile instanceof ITileInstallable installable && installable.tryInstall(player, hand, facing)) {
 			return true;
 		}
 		

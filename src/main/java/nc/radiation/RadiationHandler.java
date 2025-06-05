@@ -268,11 +268,11 @@ public class RadiationHandler {
 			for (ClassInheritanceMultiMap<Entity> entities : entityListArray) {
 				Entity[] entityArray = entities.toArray(new Entity[0]);
 				for (Entity entity : entityArray) {
-					if (entity instanceof EntityPlayer) {
-						RadiationHelper.transferRadsFromInventoryToChunkBuffer(((EntityPlayer) entity).inventory, chunkSource);
+					if (entity instanceof EntityPlayer player) {
+						RadiationHelper.transferRadsFromInventoryToChunkBuffer(player.inventory, chunkSource);
 					}
-					else if (radiation_dropped_items && entity instanceof EntityItem) {
-						RadiationHelper.transferRadiationFromStackToChunkBuffer(((EntityItem) entity).getItem(), chunkSource, 1D);
+					else if (radiation_dropped_items && entity instanceof EntityItem entityItem) {
+						RadiationHelper.transferRadiationFromStackToChunkBuffer(entityItem.getItem(), chunkSource, 1D);
 					}
 					else if (entity instanceof EntityLiving entityLiving) {
 						IEntityRads entityRads = RadiationHelper.getEntityRadiation(entityLiving);

@@ -34,8 +34,8 @@ public class ToggleAlternateComparatorPacket extends TileGuiPacket {
 		
 		@Override
 		protected void onPacket(ToggleAlternateComparatorPacket message, EntityPlayerMP player, TileEntity tile) {
-			if (tile instanceof ITile machine) {
-				machine.setAlternateComparator(message.alternateComparator);
+			if (tile instanceof ITile t) {
+				t.setAlternateComparator(message.alternateComparator);
 				tile.markDirty();
 			}
 		}

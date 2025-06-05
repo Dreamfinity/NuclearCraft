@@ -60,6 +60,10 @@ public interface IFissionFuelComponent extends IFissionFluxSink, IFissionHeating
 	
 	LongSet getActiveReflectorCache();
 	
+	long getBaseProcessHeat();
+	
+	double getBaseProcessEfficiency();
+	
 	long getHeatMultiplier(boolean simulate);
 	
 	default double getModeratorEfficiencyFactor() {
@@ -97,6 +101,12 @@ public interface IFissionFuelComponent extends IFissionFluxSink, IFissionHeating
 	long getCriticality();
 	
 	double getFloatingPointCriticality();
+	
+	boolean isRunning(boolean simulate);
+	
+	int getDecayHeating();
+	
+	double getFloatingPointDecayHeating();
 	
 	boolean isInitiallyPrimed(boolean simulate);
 	

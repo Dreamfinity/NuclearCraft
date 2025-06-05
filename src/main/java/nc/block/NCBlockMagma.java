@@ -33,7 +33,7 @@ public class NCBlockMagma extends BlockMagma {
 	
 	@Override
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
-		if (!entityIn.isImmuneToFire() && entityIn instanceof EntityLivingBase && !EnchantmentHelper.hasFrostWalkerEnchantment((EntityLivingBase) entityIn)) {
+		if (!entityIn.isImmuneToFire() && entityIn instanceof EntityLivingBase entityLivingBase && !EnchantmentHelper.hasFrostWalkerEnchantment(entityLivingBase)) {
 			entityIn.attackEntityFrom(damageSource, damageAmount);
 		}
 		super.onEntityWalk(worldIn, pos, entityIn);

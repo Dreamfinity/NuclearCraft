@@ -20,8 +20,8 @@ public class BlockFluidSugar extends NCBlockFluid {
 	
 	@Override
 	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		if (entityIn instanceof EntityLivingBase) {
-			((EntityLivingBase) entityIn).addPotionEffect(PotionHelper.newEffect(2, 3, 100));
+		if (entityIn instanceof EntityLivingBase entityLivingBase) {
+			entityLivingBase.addPotionEffect(PotionHelper.newEffect(2, 3, 100));
 		}
 	}
 	

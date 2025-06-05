@@ -78,8 +78,8 @@ public class BlockBattery extends BlockMultiblockPart implements IDynamicState, 
 	@Override
 	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileBattery) {
-			BatteryMultiblock multiblock = ((TileBattery) tile).getMultiblock();
+		if (tile instanceof TileBattery battery) {
+			BatteryMultiblock multiblock = battery.getMultiblock();
 			if (multiblock != null) {
 				return multiblock.getComparatorStrength();
 			}

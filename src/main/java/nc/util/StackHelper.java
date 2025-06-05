@@ -15,21 +15,21 @@ import java.util.List;
 public class StackHelper {
 	
 	public static ItemStack fixItemStack(Object object) {
-		if (object instanceof ItemStack) {
-			ItemStack stack = ((ItemStack) object).copy();
-			if (stack.getCount() == 0) {
-				stack.setCount(1);
+		if (object instanceof ItemStack stack) {
+			ItemStack copy = stack.copy();
+			if (copy.getCount() == 0) {
+				copy.setCount(1);
 			}
-			return stack;
+			return copy;
 		}
-		else if (object instanceof Item) {
-			return new ItemStack((Item) object, 1);
+		else if (object instanceof Item item) {
+			return new ItemStack(item, 1);
+		}
+		else if (object instanceof Block block) {
+			return new ItemStack(block, 1);
 		}
 		else {
-			if (!(object instanceof Block)) {
-				throw new RuntimeException(String.format("Invalid ItemStack: %s", object));
-			}
-			return new ItemStack((Block) object, 1);
+			throw new RuntimeException(String.format("Invalid ItemStack: %s", object));
 		}
 	}
 	

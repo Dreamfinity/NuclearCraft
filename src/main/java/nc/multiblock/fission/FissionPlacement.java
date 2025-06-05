@@ -419,7 +419,7 @@ public abstract class FissionPlacement {
 	
 	public static boolean isCasing(FissionReactor reactor, BlockPos pos, boolean simulate) {
 		TileEntity tile = reactor.WORLD.getTileEntity(pos);
-		return tile instanceof TileFissionPart && ((TileFissionPart) tile).getPartPositionType().isGoodForWall();
+		return tile instanceof TileFissionPart part && part.getPartPositionType().isGoodForWall();
 	}
 	
 	public static boolean isConductor(FissionReactor reactor, BlockPos pos, boolean simulate) {

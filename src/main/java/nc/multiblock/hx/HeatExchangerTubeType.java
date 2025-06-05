@@ -38,7 +38,7 @@ public enum HeatExchangerTubeType implements IStringSerializable, ITileEnum<Tile
 		return heatTransferCoefficient;
 	}
 	
-	public double getHeatRetentionMult() {
+	public double getHeatRetentionMultiplier() {
 		return heatRetentionMult;
 	}
 	

@@ -80,7 +80,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 	
 	protected boolean primed = false, fluxSearched = false;
 	
-	public int heatMult = 0;
+	public long heatMult = 0L;
 	protected double undercoolingLifetimeFactor = 1D;
 	protected Double sourceEfficiency = null;
 	protected long[] moderatorLineFluxes = new long[] {0L, 0L, 0L, 0L, 0L, 0L};
@@ -145,7 +145,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 	public void resetStats() {
 		// primed = false;
 		fluxSearched = false;
-		flux = heatMult = 0;
+		flux = heatMult = 0L;
 		undercoolingLifetimeFactor = 1D;
 		// sourceEfficiency = null;
 		for (int i = 0; i < 6; ++i) {
@@ -308,6 +308,16 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 	@Override
 	public LongSet getActiveReflectorCache() {
 		return activeReflectorCache;
+	}
+	
+	@Override
+	public long getBaseProcessHeat() {
+		return baseProcessHeat;
+	}
+	
+	@Override
+	public double getBaseProcessEfficiency() {
+		return baseProcessEfficiency;
 	}
 	
 	@Override
@@ -565,10 +575,12 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 		}
 	}
 	
+	@Override
 	public int getDecayHeating() {
 		return fission_decay_mechanics ? NCMath.toInt(getFloatingPointDecayHeating()) : 0;
 	}
 	
+	@Override
 	public double getFloatingPointDecayHeating() {
 		return fission_decay_mechanics ? decayProcessHeat * decayHeatFraction : 0D;
 	}
@@ -589,6 +601,7 @@ public class TileSolidFissionCell extends TileFissionPart implements IBasicProce
 		}
 	}
 	
+	@Override
 	public boolean isRunning(boolean simulate) {
 		return simulate ? isRunningSimulated : isProcessing;
 	}
