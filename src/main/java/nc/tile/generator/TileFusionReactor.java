@@ -354,7 +354,7 @@ public class TileFusionReactor extends TileGeneratorInventory implements IEnergy
 	}
 	
 	public boolean completeString() {
-    	if (completeStringPre(getWorldObj(), this.xCoord, this.yCoord, this.zCoord)) {
+    	if (completeStringPre(getWorld(), this.xCoord, this.yCoord, this.zCoord)) {
     		return true;
     	} return false;
 	}
@@ -1424,7 +1424,7 @@ public class TileFusionReactor extends TileGeneratorInventory implements IEnergy
 	 * Returns an array containing the indices of the slots that can be accessed by automation on the given side of this
 	 * block.
 	 */
-	public int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(int side) {
 	    return input;
 	}
 

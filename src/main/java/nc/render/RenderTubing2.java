@@ -23,7 +23,7 @@ public class RenderTubing2 extends TileEntitySpecialRenderer {
 		
 		int i;
 
-		if (tileentity.getWorldObj() == null)
+		if (tileentity.getWorld() == null)
 		{
 			i = 0;
 		} else {

@@ -90,7 +90,7 @@ public class MetalFurnaceRecipeHandler extends TemplateRecipeHandler
 
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals("metalsmelting") && getClass() == MetalFurnaceRecipeHandler.class) {//don't want subclasses getting a hold of this
-            @SuppressWarnings("unchecked") Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.smelting().getSmeltingList();
+            @SuppressWarnings("unchecked") Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.instance().getSmeltingList();
             for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet())
                 arecipes.add(new MetalSmeltingPair(recipe.getKey(), recipe.getValue()));
         } else
@@ -98,7 +98,7 @@ public class MetalFurnaceRecipeHandler extends TemplateRecipeHandler
     }
 
    public void loadCraftingRecipes(ItemStack result) {
-        @SuppressWarnings("unchecked") Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.smelting().getSmeltingList();
+        @SuppressWarnings("unchecked") Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.instance().getSmeltingList();
         for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet())
             if (NEIServerUtils.areStacksSameType(recipe.getValue(), result))
                 arecipes.add(new MetalSmeltingPair(recipe.getKey(), recipe.getValue()));
@@ -113,7 +113,7 @@ public class MetalFurnaceRecipeHandler extends TemplateRecipeHandler
 
     public void loadUsageRecipes(ItemStack ingredient) {
         @SuppressWarnings("unchecked")
-        Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.smelting().getSmeltingList();
+        Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.instance().getSmeltingList();
         for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet())
             if (NEIServerUtils.areStacksSameTypeCrafting(recipe.getKey(), ingredient)) {
                 MetalSmeltingPair arecipe = new MetalSmeltingPair(recipe.getKey(), recipe.getValue());
@@ -174,7 +174,7 @@ public class MetalFurnaceRecipeHandler extends TemplateRecipeHandler
             	return 16000/NuclearCraft.metalFurnaceCookEfficiency;
             if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD"))
             	return 16000/NuclearCraft.metalFurnaceCookEfficiency;
-            if (item instanceof ItemHoe && ((ItemHoe)item).getToolMaterialName().equals("WOOD"))
+            if (item instanceof ItemHoe && ((ItemHoe)item).getMaterialName().equals("WOOD"))
             	return 16000/NuclearCraft.metalFurnaceCookEfficiency;
             if (item == Items.stick) return 4000/NuclearCraft.metalFurnaceCookEfficiency;
             if (item == Items.coal) return 96000/NuclearCraft.metalFurnaceCookEfficiency;

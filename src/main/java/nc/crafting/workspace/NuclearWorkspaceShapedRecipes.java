@@ -96,7 +96,7 @@ public class NuclearWorkspaceShapedRecipes implements IRecipe
                         return false;
                     }
 
-                    if (itemstack.getItemDamage() != 32767 && itemstack.getItemDamage() != itemstack1.getItemDamage())
+                    if (itemstack.getMetadata() != 32767 && itemstack.getMetadata() != itemstack1.getMetadata())
                     {
                         return false;
                     }

@@ -111,14 +111,14 @@ public class TileSupercooler extends TileInventory implements IFluidHandler, ISi
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		this.readFromNBT(packet.func_148857_g());
+		this.readFromNBT(packet.getNbtCompound());
 	}
 	
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 		return false;
 	}
 
-	public int[] getAccessibleSlotsFromSide(int slot) {
+	public int[] getSlotsForFace(int slot) {
 		return null;
 	}
 

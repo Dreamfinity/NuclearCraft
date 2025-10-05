@@ -49,7 +49,7 @@ public class NuclearFurnaceFuelRecipeHandler extends NuclearFurnaceRecipeHandler
 
     private void loadAllSmelting() {
         @SuppressWarnings("unchecked")
-		Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.smelting().getSmeltingList();
+		Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.instance().getSmeltingList();
 
         for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet())
             mnuclearfurnace.add(new NuclearSmeltingPair(recipe.getKey(), recipe.getValue()));

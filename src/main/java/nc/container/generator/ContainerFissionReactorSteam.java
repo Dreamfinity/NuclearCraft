@@ -52,8 +52,8 @@ public class ContainerFissionReactorSteam extends Container {
         }
     }
 
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
     }
 
     /**

@@ -65,7 +65,7 @@ public class TileElectricFurnace extends TileInventory implements IEnergyHandler
 	}
 	
 	public ItemStack getOutput(ItemStack stack) {
-		   return FurnaceRecipes.smelting().getSmeltingResult(stack);
+		   return FurnaceRecipes.instance().getSmeltingResult(stack);
 	}
 	
 	public int getInputSize(ItemStack stack, int slot) {
@@ -260,8 +260,8 @@ public class TileElectricFurnace extends TileInventory implements IEnergyHandler
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
 	{
 		   super.onDataPacket(net, packet);
-	  readSides(packet.func_148857_g());
-	  readEnergy(packet.func_148857_g());
+	  readSides(packet.getNbtCompound());
+	  readEnergy(packet.getNbtCompound());
 	}
 	
 	public boolean canConnectEnergy(ForgeDirection from) {
@@ -320,7 +320,7 @@ public class TileElectricFurnace extends TileInventory implements IEnergyHandler
 		return getBlockMetadata();
 	}
 
-	public int[] getAccessibleSlotsFromSide(int var1) {
+	public int[] getSlotsForFace(int var1) {
 		return automation;
 	}
 }

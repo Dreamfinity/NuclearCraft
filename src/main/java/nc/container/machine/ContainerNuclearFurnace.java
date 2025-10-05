@@ -45,9 +45,9 @@ public class ContainerNuclearFurnace extends Container {
 		
 	}
 	
-	public void addCraftingToCrafters(ICrafting icrafting)
+	public void onCraftGuiOpened(ICrafting icrafting)
 	{
-		super.addCraftingToCrafters(icrafting);
+		super.onCraftGuiOpened(icrafting);
 		icrafting.sendProgressBarUpdate(this, 0, this.entity.cookTime);
 		icrafting.sendProgressBarUpdate(this, 1, this.entity.burnTime);
 		icrafting.sendProgressBarUpdate(this, 2, this.entity.currentItemBurnTime);
@@ -112,7 +112,7 @@ public class ContainerNuclearFurnace extends Container {
 			}
 			else if(clickedSlotNumber != 1 && clickedSlotNumber != 0)
 			{
-				if(FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null)
+				if(FurnaceRecipes.instance().getSmeltingResult(itemstack1) != null)
 				{
 					if(!this.mergeItemStack(itemstack1, 0, 1, false))
 					{

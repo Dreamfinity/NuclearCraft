@@ -34,7 +34,7 @@ public class BlockSolarPanel extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister)
+	public void registerIcons(IIconRegister iconRegister)
 	{
 		this.blockIcon = iconRegister.registerIcon("nc:generator/solar/" + "top");
 		this.iconSide = iconRegister.registerIcon("nc:generator/solar/" + "side");

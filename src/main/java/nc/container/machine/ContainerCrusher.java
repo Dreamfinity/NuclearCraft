@@ -45,9 +45,9 @@ public class ContainerCrusher extends Container {
 		
 	}
 	
-	public void addCraftingToCrafters(ICrafting icrafting)
+	public void onCraftGuiOpened(ICrafting icrafting)
 	{
-		super.addCraftingToCrafters(icrafting);
+		super.onCraftGuiOpened(icrafting);
 		icrafting.sendProgressBarUpdate(this, 0, this.entity.cookTime);
 		icrafting.sendProgressBarUpdate(this, 1, this.entity.burnTime);
 		icrafting.sendProgressBarUpdate(this, 2, this.entity.currentItemBurnTime);

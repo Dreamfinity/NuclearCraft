@@ -11,7 +11,7 @@ public class ItemBlockBlock extends ItemBlockMeta {
 	}
 
 	public String getUnlocalizedName(ItemStack stack) {
-		switch (stack.getItemDamage()) {
+		switch (stack.getMetadata()) {
 			case 0: return "copperBlock";
 			case 1: return "tinBlock";
 			case 2: return "leadBlock";

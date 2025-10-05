@@ -48,7 +48,7 @@ public class BlockNuclearWorkspace extends BlockContainer {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		this.blockIcon = iconRegister.registerIcon("nc:machine/workspace/" + "dummy");
 	}
 	
@@ -63,7 +63,7 @@ public class BlockNuclearWorkspace extends BlockContainer {
 	
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLivingBase, ItemStack itemstack) {
 		 IChatComponent localIChatComponent;
-		 localIChatComponent = IChatComponent.Serializer.func_150699_a("[{text:\"Use NuclearCraft's NEI info system or click here for help with the mod!\",color:white,italic:false,clickEvent:{action:open_url,value:\"http://minecraft.curseforge.com/projects/nuclearcraft-mod\"}}]");
+		 localIChatComponent = IChatComponent.Serializer.jsonToComponent("[{text:\"Use NuclearCraft's NEI info system or click here for help with the mod!\",color:white,italic:false,clickEvent:{action:open_url,value:\"http://minecraft.curseforge.com/projects/nuclearcraft-mod\"}}]");
 
 		 if (world.isRemote) {((ICommandSender) entityLivingBase).addChatMessage(localIChatComponent);}
 	}
@@ -90,7 +90,7 @@ public class BlockNuclearWorkspace extends BlockContainer {
                             j1 = itemstack.stackSize;
                         }
                         itemstack.stackSize -= j1;
-                        EntityItem entityitem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
+                        EntityItem entityitem = new EntityItem(world, (double) ((float) x + f), (double) ((float) y + f1), (double) ((float) z + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getMetadata()));
                         if (itemstack.hasTagCompound()) {
                             entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
                         }
@@ -101,7 +101,7 @@ public class BlockNuclearWorkspace extends BlockContainer {
                         world.spawnEntityInWorld(entityitem);
                     }
                 }
-                world.func_147453_f(x, y, z, block);
+                world.updateNeighborsAboutBlockChange(x, y, z, block);
             }
         }
         super.breakBlock(world, x, y, z, block, integer);

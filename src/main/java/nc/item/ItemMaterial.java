@@ -18,7 +18,7 @@ public class ItemMaterial extends ItemMeta {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean whatIsThis) {
         super.addInformation(itemStack, player, list, whatIsThis);
-        if (info(itemStack.getItemDamage()) == InfoNC.nul); else if (info(itemStack.getItemDamage()).length > 0) InfoNC.infoFull(list, info(itemStack.getItemDamage()));
+        if (info(itemStack.getMetadata()) == InfoNC.nul); else if (info(itemStack.getMetadata()).length > 0) InfoNC.infoFull(list, info(itemStack.getMetadata()));
     }
 	
 	public String[] info(int m) {
@@ -34,7 +34,7 @@ public class ItemMaterial extends ItemMeta {
 	}
 
 	public String getUnlocalizedName(ItemStack stack) {
-	    switch (stack.getItemDamage()) {
+	    switch (stack.getMetadata()) {
 		    case 0: return "copperIngot";
 		    case 1: return "tinIngot";
 		    case 2: return "leadIngot";

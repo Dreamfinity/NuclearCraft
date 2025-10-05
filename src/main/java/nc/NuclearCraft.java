@@ -1070,26 +1070,26 @@ public class NuclearCraft {
 		// Fluid Registry
 		liquidHelium = new FluidHelium("liquidHelium");
 		FluidRegistry.registerFluid(liquidHelium);
-		NCBlocks.blockHelium = new BlockHelium(liquidHelium, liquidhelium.setReplaceable(), NuclearCraft.heliumfreeze).setCreativeTab(tabNC).setBlockName("liquidHeliumBlock");
+		NCBlocks.blockHelium = new BlockHelium(liquidHelium, liquidhelium.setReplaceable(), NuclearCraft.heliumfreeze).setCreativeTab(tabNC).setUnlocalizedName("liquidHeliumBlock");
 		GameRegistry.registerBlock(NCBlocks.blockHelium, "liquidHeliumBlock");
 		fusionPlasma = new FluidPlasma("fusionPlasma");
 		FluidRegistry.registerFluid(fusionPlasma);
-		NCBlocks.blockFusionPlasma = new BlockPlasma(fusionPlasma, fusionplasma.setReplaceable(), NuclearCraft.plasmaburn).setCreativeTab(tabNC).setBlockName("fusionPlasmaBlock");
+		NCBlocks.blockFusionPlasma = new BlockPlasma(fusionPlasma, fusionplasma.setReplaceable(), NuclearCraft.plasmaburn).setCreativeTab(tabNC).setUnlocalizedName("fusionPlasmaBlock");
 		GameRegistry.registerBlock(NCBlocks.blockFusionPlasma, "fusionPlasmaBlock");
 		
 		steam = new FluidSteam("steam");
 		FluidRegistry.registerFluid(steam);
-		NCBlocks.blockSteam = new BlockSteam(steam, steamMaterial.setReplaceable(), NuclearCraft.steamburn).setCreativeTab(tabNC).setBlockName("steamBlock");
+		NCBlocks.blockSteam = new BlockSteam(steam, steamMaterial.setReplaceable(), NuclearCraft.steamburn).setCreativeTab(tabNC).setUnlocalizedName("steamBlock");
 		GameRegistry.registerBlock(NCBlocks.blockSteam, "steamBlock");
 		
 		denseSteam = new FluidDenseSteam("denseSteam");
 		FluidRegistry.registerFluid(denseSteam);
-		NCBlocks.blockDenseSteam = new BlockDenseSteam(denseSteam, steamMaterial.setReplaceable(), NuclearCraft.steamburn).setCreativeTab(tabNC).setBlockName("denseSteamBlock");
+		NCBlocks.blockDenseSteam = new BlockDenseSteam(denseSteam, steamMaterial.setReplaceable(), NuclearCraft.steamburn).setCreativeTab(tabNC).setUnlocalizedName("denseSteamBlock");
 		GameRegistry.registerBlock(NCBlocks.blockDenseSteam, "denseSteamBlock");
 		
 		superdenseSteam = new FluidSuperdenseSteam("superdenseSteam");
 		FluidRegistry.registerFluid(superdenseSteam);
-		NCBlocks.blockSuperdenseSteam = new BlockSuperdenseSteam(superdenseSteam, steamMaterial.setReplaceable(), NuclearCraft.steamburn).setCreativeTab(tabNC).setBlockName("superdenseSteamBlock");
+		NCBlocks.blockSuperdenseSteam = new BlockSuperdenseSteam(superdenseSteam, steamMaterial.setReplaceable(), NuclearCraft.steamburn).setCreativeTab(tabNC).setUnlocalizedName("superdenseSteamBlock");
 		GameRegistry.registerBlock(NCBlocks.blockSuperdenseSteam, "superdenseSteamBlock");
 		
 		// Ore Registry
@@ -1098,209 +1098,209 @@ public class NuclearCraft {
 		// Block Registry
 		GameRegistry.registerBlock(NCBlocks.blockBlock = new BlockBlock("blockBlock", Material.iron), ItemBlockBlock.class, "blockBlock");
 		
-		NCBlocks.simpleQuantumUp = new BlockSimpleQuantum(true).setBlockName("simpleQuantumUp").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.simpleQuantumUp = new BlockSimpleQuantum(true).setUnlocalizedName("simpleQuantumUp").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.simpleQuantumUp, ItemBlockSimpleQuantum.class, "simpleQuantumUp");
-		NCBlocks.simpleQuantumDown = new BlockSimpleQuantum(false).setBlockName("simpleQuantumDown").setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.simpleQuantumDown = new BlockSimpleQuantum(false).setUnlocalizedName("simpleQuantumDown").setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.simpleQuantumDown, ItemBlockSimpleQuantum.class, "simpleQuantumDown");
 		
-		NCBlocks.graphiteBlock = new BlockGraphiteBlock().setBlockName("graphiteBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeStone).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.graphiteBlock = new BlockGraphiteBlock().setUnlocalizedName("graphiteBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeStone).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.graphiteBlock, ItemBlockGraphiteBlock.class, "graphiteBlock");
-		NCBlocks.cellBlock = new BlockCellBlock().setBlockName("cellBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.cellBlock = new BlockCellBlock().setUnlocalizedName("cellBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.cellBlock, ItemBlockCellBlock.class, "cellBlock");
-		NCBlocks.reactorBlock = new BlockReactorBlock().setBlockName("reactorBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(3.0F);
+		NCBlocks.reactorBlock = new BlockReactorBlock().setUnlocalizedName("reactorBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.reactorBlock, ItemBlockReactorBlock.class, "reactorBlock");
-		NCBlocks.fusionConnector = new BlockFusionConnector().setBlockName("fusionConnector").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(3.0F);
+		NCBlocks.fusionConnector = new BlockFusionConnector().setUnlocalizedName("fusionConnector").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.fusionConnector, ItemBlockFusionConnector.class, "fusionConnector");
 		
-		NCBlocks.coolerBlock = new BlockCoolerBlock().setBlockName("coolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.coolerBlock = new BlockCoolerBlock().setUnlocalizedName("coolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.coolerBlock, ItemBlockCoolerBlock.class, "coolerBlock");
-		NCBlocks.emptyCoolerBlock = new BlockCoolerBlock().setBlockName("emptyCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.emptyCoolerBlock = new BlockCoolerBlock().setUnlocalizedName("emptyCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.emptyCoolerBlock, "emptyCoolerBlock");
-		NCBlocks.waterCoolerBlock = new BlockCoolerBlock().setBlockName("waterCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.waterCoolerBlock = new BlockCoolerBlock().setUnlocalizedName("waterCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.waterCoolerBlock, ItemBlockCoolerBlock.class, "waterCoolerBlock");
-		NCBlocks.cryotheumCoolerBlock = new BlockCoolerBlock().setBlockName("cryotheumCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F).setLightLevel(0.25F);
+		NCBlocks.cryotheumCoolerBlock = new BlockCoolerBlock().setUnlocalizedName("cryotheumCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F).setLightLevel(0.25F);
 		GameRegistry.registerBlock(NCBlocks.cryotheumCoolerBlock, ItemBlockCoolerBlock.class, "cryotheumCoolerBlock");
-		NCBlocks.redstoneCoolerBlock = new BlockCoolerBlock().setBlockName("redstoneCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F).setLightLevel(0.25F);
+		NCBlocks.redstoneCoolerBlock = new BlockCoolerBlock().setUnlocalizedName("redstoneCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F).setLightLevel(0.25F);
 		GameRegistry.registerBlock(NCBlocks.redstoneCoolerBlock, ItemBlockCoolerBlock.class, "redstoneCoolerBlock");
-		NCBlocks.enderiumCoolerBlock = new BlockCoolerBlock().setBlockName("enderiumCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F).setLightLevel(0.25F);
+		NCBlocks.enderiumCoolerBlock = new BlockCoolerBlock().setUnlocalizedName("enderiumCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F).setLightLevel(0.25F);
 		GameRegistry.registerBlock(NCBlocks.enderiumCoolerBlock, ItemBlockCoolerBlock.class, "enderiumCoolerBlock");
-		NCBlocks.glowstoneCoolerBlock = new BlockCoolerBlock().setBlockName("glowstoneCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F).setLightLevel(1F);
+		NCBlocks.glowstoneCoolerBlock = new BlockCoolerBlock().setUnlocalizedName("glowstoneCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F).setLightLevel(1F);
 		GameRegistry.registerBlock(NCBlocks.glowstoneCoolerBlock, ItemBlockCoolerBlock.class, "glowstoneCoolerBlock");
-		NCBlocks.coolantCoolerBlock = new BlockCoolerBlock().setBlockName("coolantCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.coolantCoolerBlock = new BlockCoolerBlock().setUnlocalizedName("coolantCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.coolantCoolerBlock, ItemBlockCoolerBlock.class, "coolantCoolerBlock");
-		NCBlocks.heliumCoolerBlock = new BlockCoolerBlock().setBlockName("heliumCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.heliumCoolerBlock = new BlockCoolerBlock().setUnlocalizedName("heliumCoolerBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.heliumCoolerBlock, ItemBlockCoolerBlock.class, "heliumCoolerBlock");
 		
-		NCBlocks.speedBlock = new BlockSpeedBlock().setBlockName("speedBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.speedBlock = new BlockSpeedBlock().setUnlocalizedName("speedBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.speedBlock, ItemBlockSpeedBlock.class, "speedBlock");
-		NCBlocks.blastBlock = new BlockBlastBlock().setBlockName("blastBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(6000.0F).setHardness(10.0F);
+		NCBlocks.blastBlock = new BlockBlastBlock().setUnlocalizedName("blastBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(6000.0F).setHardness(10.0F);
 		GameRegistry.registerBlock(NCBlocks.blastBlock, ItemBlockBlastBlock.class, "blastBlock");
-		NCBlocks.machineBlock = new BlockMachineBlock().setBlockName("machineBlockNC").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.machineBlock = new BlockMachineBlock().setUnlocalizedName("machineBlockNC").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.machineBlock, "machineBlockNC");
 		
-		NCBlocks.tubing1 = new BlockTubing1().setBlockName("tubing1").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.tubing1 = new BlockTubing1().setUnlocalizedName("tubing1").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.tubing1, "tubing1");
-		NCBlocks.tubing2 = new BlockTubing2().setBlockName("tubing2").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
+		NCBlocks.tubing2 = new BlockTubing2().setUnlocalizedName("tubing2").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(2.0F);
 		GameRegistry.registerBlock(NCBlocks.tubing2, "tubing2");
 	
 		// Machine Registry
 			// Block
-		NCBlocks.electromagnetIdle = new BlockElectromagnet(false).setBlockName("electromagnetIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
+		NCBlocks.electromagnetIdle = new BlockElectromagnet(false).setUnlocalizedName("electromagnetIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.electromagnetIdle, ItemBlockElectromagnet.class, "electromagnetIdle");
-		NCBlocks.electromagnetActive = new BlockElectromagnet(true).setBlockName("electromagnetActive").setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
+		NCBlocks.electromagnetActive = new BlockElectromagnet(true).setUnlocalizedName("electromagnetActive").setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.electromagnetActive, ItemBlockElectromagnet.class, "electromagnetActive");
-		NCBlocks.superElectromagnetIdle = new BlockSuperElectromagnet(false).setBlockName("superElectromagnetIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
+		NCBlocks.superElectromagnetIdle = new BlockSuperElectromagnet(false).setUnlocalizedName("superElectromagnetIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.superElectromagnetIdle, ItemBlockSuperElectromagnet.class, "superElectromagnetIdle");
-		NCBlocks.superElectromagnetActive = new BlockSuperElectromagnet(true).setBlockName("superElectromagnetActive").setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
+		NCBlocks.superElectromagnetActive = new BlockSuperElectromagnet(true).setUnlocalizedName("superElectromagnetActive").setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.superElectromagnetActive, ItemBlockSuperElectromagnet.class, "superElectromagnetActive");
-		NCBlocks.supercoolerIdle = new BlockSupercooler(false).setBlockName("supercoolerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
+		NCBlocks.supercoolerIdle = new BlockSupercooler(false).setUnlocalizedName("supercoolerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.supercoolerIdle, ItemBlockSupercooler.class, "supercoolerIdle");
-		NCBlocks.supercoolerActive = new BlockSupercooler(true).setBlockName("supercoolerActive").setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
+		NCBlocks.supercoolerActive = new BlockSupercooler(true).setUnlocalizedName("supercoolerActive").setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.supercoolerActive, ItemBlockSupercooler.class, "supercoolerActive");
-		NCBlocks.synchrotronIdle = new BlockSynchrotron(false).setBlockName("synchrotronIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
+		NCBlocks.synchrotronIdle = new BlockSynchrotron(false).setUnlocalizedName("synchrotronIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.synchrotronIdle, ItemBlockSynchrotron.class, "synchrotronIdle");
-		NCBlocks.synchrotronActive = new BlockSynchrotron(true).setBlockName("synchrotronActive").setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
+		NCBlocks.synchrotronActive = new BlockSynchrotron(true).setUnlocalizedName("synchrotronActive").setStepSound(Block.soundTypeMetal).setResistance(8.0F).setHardness(3.0F);
 		GameRegistry.registerBlock(NCBlocks.synchrotronActive, ItemBlockSynchrotron.class, "synchrotronActive");
 		
-		NCBlocks.nuclearWorkspace = new BlockNuclearWorkspace(Material.iron).setBlockName("nuclearWorkspace").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.nuclearWorkspace = new BlockNuclearWorkspace(Material.iron).setUnlocalizedName("nuclearWorkspace").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.nuclearWorkspace, ItemBlockNuclearWorkspace.class, "nuclearWorkspace");
 		
-		NCBlocks.fusionReactor = new BlockFusionReactor(Material.iron).setBlockName("fusionReactor").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.fusionReactor = new BlockFusionReactor(Material.iron).setUnlocalizedName("fusionReactor").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fusionReactor, ItemBlockFusionReactor.class, "fusionReactor");
-		NCBlocks.fusionReactorBlock = new BlockFusionReactorBlock().setBlockName("fusionReactorBlock").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.fusionReactorBlock = new BlockFusionReactorBlock().setUnlocalizedName("fusionReactorBlock").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fusionReactorBlock, "fusionReactorBlock");
-		NCBlocks.fusionReactorBlockTop = new BlockFusionReactorBlockTop().setBlockName("fusionReactorBlockTop").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.fusionReactorBlockTop = new BlockFusionReactorBlockTop().setUnlocalizedName("fusionReactorBlockTop").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fusionReactorBlockTop, "fusionReactorBlockTop");
 		
-		NCBlocks.fusionReactorSteam = new BlockFusionReactorSteam(Material.iron).setBlockName("fusionReactorSteam").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.fusionReactorSteam = new BlockFusionReactorSteam(Material.iron).setUnlocalizedName("fusionReactorSteam").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fusionReactorSteam, ItemBlockFusionReactorSteam.class, "fusionReactorSteam");
-		NCBlocks.fusionReactorSteamBlock = new BlockFusionReactorSteamBlock().setBlockName("fusionReactorSteamBlock").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.fusionReactorSteamBlock = new BlockFusionReactorSteamBlock().setUnlocalizedName("fusionReactorSteamBlock").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fusionReactorSteamBlock, "fusionReactorSteamBlock");
-		NCBlocks.fusionReactorSteamBlockTop = new BlockFusionReactorSteamBlockTop().setBlockName("fusionReactorSteamBlockTop").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.fusionReactorSteamBlockTop = new BlockFusionReactorSteamBlockTop().setUnlocalizedName("fusionReactorSteamBlockTop").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fusionReactorSteamBlockTop, "fusionReactorSteamBlockTop");
 		
-		NCBlocks.nuclearFurnaceIdle = new BlockNuclearFurnace(false).setBlockName("nuclearFurnaceIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.nuclearFurnaceIdle = new BlockNuclearFurnace(false).setUnlocalizedName("nuclearFurnaceIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.nuclearFurnaceIdle, ItemBlockNuclearFurnace.class, "nuclearFurnaceIdle");
-		NCBlocks.nuclearFurnaceActive = new BlockNuclearFurnace(true).setBlockName("nuclearFurnaceActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.nuclearFurnaceActive = new BlockNuclearFurnace(true).setUnlocalizedName("nuclearFurnaceActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.nuclearFurnaceActive, ItemBlockNuclearFurnace.class, "nuclearFurnaceActive");
-		NCBlocks.furnaceIdle = new BlockFurnace(false).setBlockName("furnaceIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.furnaceIdle = new BlockFurnace(false).setUnlocalizedName("furnaceIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.furnaceIdle, ItemBlockFurnace.class, "furnaceIdle");
-		NCBlocks.furnaceActive = new BlockFurnace(true).setBlockName("furnaceActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.furnaceActive = new BlockFurnace(true).setUnlocalizedName("furnaceActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.furnaceActive, ItemBlockFurnace.class, "furnaceActive");
-		NCBlocks.crusherIdle = new BlockCrusher(false).setBlockName("crusherIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.crusherIdle = new BlockCrusher(false).setUnlocalizedName("crusherIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.crusherIdle, ItemBlockCrusher.class, "crusherIdle");
-		NCBlocks.crusherActive = new BlockCrusher(true).setBlockName("crusherActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.crusherActive = new BlockCrusher(true).setUnlocalizedName("crusherActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.crusherActive, ItemBlockCrusher.class, "crusherActive");
-		NCBlocks.electricCrusherIdle = new BlockElectricCrusher(false).setBlockName("electricCrusherIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.electricCrusherIdle = new BlockElectricCrusher(false).setUnlocalizedName("electricCrusherIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.electricCrusherIdle, ItemBlockElectricCrusher.class, "electricCrusherIdle");
-		NCBlocks.electricCrusherActive = new BlockElectricCrusher(true).setBlockName("electricCrusherActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.electricCrusherActive = new BlockElectricCrusher(true).setUnlocalizedName("electricCrusherActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.electricCrusherActive, ItemBlockElectricCrusher.class, "electricCrusherActive");
-		NCBlocks.electricFurnaceIdle = new BlockElectricFurnace(false).setBlockName("electricFurnaceIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.electricFurnaceIdle = new BlockElectricFurnace(false).setUnlocalizedName("electricFurnaceIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.electricFurnaceIdle, ItemBlockElectricFurnace.class, "electricFurnaceIdle");
-		NCBlocks.electricFurnaceActive = new BlockElectricFurnace(true).setBlockName("electricFurnaceActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.electricFurnaceActive = new BlockElectricFurnace(true).setUnlocalizedName("electricFurnaceActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.electricFurnaceActive, ItemBlockElectricFurnace.class, "electricFurnaceActive");
 		
-		NCBlocks.reactionGeneratorIdle = new BlockReactionGenerator(false).setBlockName("reactionGeneratorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.reactionGeneratorIdle = new BlockReactionGenerator(false).setUnlocalizedName("reactionGeneratorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.reactionGeneratorIdle, ItemBlockReactionGenerator.class, "reactionGeneratorIdle");
-		NCBlocks.reactionGeneratorActive = new BlockReactionGenerator(true).setBlockName("reactionGeneratorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.reactionGeneratorActive = new BlockReactionGenerator(true).setUnlocalizedName("reactionGeneratorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.reactionGeneratorActive, ItemBlockReactionGenerator.class, "reactionGeneratorActive");
 		
-		NCBlocks.fissionReactorGraphiteIdle = new BlockFissionReactor(false).setBlockName("fissionReactorGraphiteIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.fissionReactorGraphiteIdle = new BlockFissionReactor(false).setUnlocalizedName("fissionReactorGraphiteIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fissionReactorGraphiteIdle, ItemBlockFissionReactor.class, "fissionReactorGraphiteIdle");
-		NCBlocks.fissionReactorGraphiteActive = new BlockFissionReactor(true).setBlockName("fissionReactorGraphiteActive").setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.fissionReactorGraphiteActive = new BlockFissionReactor(true).setUnlocalizedName("fissionReactorGraphiteActive").setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fissionReactorGraphiteActive, ItemBlockFissionReactor.class, "fissionReactorGraphiteActive");
 		
-		NCBlocks.fissionReactorSteamIdle = new BlockFissionReactorSteam(false).setBlockName("fissionReactorSteamIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.fissionReactorSteamIdle = new BlockFissionReactorSteam(false).setUnlocalizedName("fissionReactorSteamIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fissionReactorSteamIdle, ItemBlockFissionReactorSteam.class, "fissionReactorSteamIdle");
-		NCBlocks.fissionReactorSteamActive = new BlockFissionReactorSteam(true).setBlockName("fissionReactorSteamActive").setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.fissionReactorSteamActive = new BlockFissionReactorSteam(true).setUnlocalizedName("fissionReactorSteamActive").setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.fissionReactorSteamActive, ItemBlockFissionReactorSteam.class, "fissionReactorSteamActive");
 		
-		NCBlocks.RTG = new BlockRTG().setBlockName("RTG").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.RTG = new BlockRTG().setUnlocalizedName("RTG").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.RTG, ItemBlockRTG.class, "RTG");
-		NCBlocks.AmRTG = new BlockAmRTG().setBlockName("AmRTG").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.AmRTG = new BlockAmRTG().setUnlocalizedName("AmRTG").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.AmRTG, ItemBlockAmRTG.class, "AmRTG");
-		NCBlocks.CfRTG = new BlockCfRTG().setBlockName("CfRTG").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.CfRTG = new BlockCfRTG().setUnlocalizedName("CfRTG").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.CfRTG, ItemBlockCfRTG.class, "CfRTG");
-		NCBlocks.WRTG = new BlockWRTG().setBlockName("WRTG").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.WRTG = new BlockWRTG().setUnlocalizedName("WRTG").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.WRTG, ItemBlockWRTG.class, "WRTG");
-		NCBlocks.solarPanel = new BlockSolarPanel().setBlockName("solarPanel").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.solarPanel = new BlockSolarPanel().setUnlocalizedName("solarPanel").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.solarPanel, ItemBlockSolarPanel.class, "solarPanel");
 		
-		NCBlocks.lithiumIonBatteryBlock = new BlockLithiumIonBattery().setBlockName("lithiumIonBatteryBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.lithiumIonBatteryBlock = new BlockLithiumIonBattery().setUnlocalizedName("lithiumIonBatteryBlock").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.lithiumIonBatteryBlock, ItemBlockLithiumIonBattery.class, "lithiumIonBatteryBlock");
-		NCBlocks.voltaicPile = new BlockVoltaicPile().setBlockName("voltaicPile").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.voltaicPile = new BlockVoltaicPile().setUnlocalizedName("voltaicPile").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.voltaicPile, ItemBlockVoltaicPile.class, "voltaicPile");
 		
-		NCBlocks.separatorIdle = new BlockSeparator(false).setBlockName("separatorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.separatorIdle = new BlockSeparator(false).setUnlocalizedName("separatorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.separatorIdle, ItemBlockSeparator.class, "separatorIdle");
-		NCBlocks.separatorActive = new BlockSeparator(true).setBlockName("separatorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.separatorActive = new BlockSeparator(true).setUnlocalizedName("separatorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.separatorActive, ItemBlockSeparator.class, "separatorActive");
-		NCBlocks.hastenerIdle = new BlockHastener(false).setBlockName("hastenerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.hastenerIdle = new BlockHastener(false).setUnlocalizedName("hastenerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.hastenerIdle, ItemBlockHastener.class, "hastenerIdle");
-		NCBlocks.hastenerActive = new BlockHastener(true).setBlockName("hastenerActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.hastenerActive = new BlockHastener(true).setUnlocalizedName("hastenerActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.hastenerActive, ItemBlockHastener.class, "hastenerActive");
-		NCBlocks.electrolyserIdle = new BlockElectrolyser(false).setBlockName("electrolyserIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.electrolyserIdle = new BlockElectrolyser(false).setUnlocalizedName("electrolyserIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.electrolyserIdle, ItemBlockElectrolyser.class, "electrolyserIdle");
-		NCBlocks.electrolyserActive = new BlockElectrolyser(true).setBlockName("electrolyserActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.electrolyserActive = new BlockElectrolyser(true).setUnlocalizedName("electrolyserActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.electrolyserActive, ItemBlockElectrolyser.class, "electrolyserActive");
 		
-		NCBlocks.collectorIdle = new BlockCollector(false).setBlockName("collectorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.collectorIdle = new BlockCollector(false).setUnlocalizedName("collectorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.collectorIdle, ItemBlockCollector.class, "collectorIdle");
-		NCBlocks.collectorActive = new BlockCollector(true).setBlockName("collectorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.collectorActive = new BlockCollector(true).setUnlocalizedName("collectorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.collectorActive, ItemBlockCollector.class, "collectorActive");
-		NCBlocks.oxidiserIdle = new BlockOxidiser(false).setBlockName("oxidiserIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.oxidiserIdle = new BlockOxidiser(false).setUnlocalizedName("oxidiserIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.oxidiserIdle, ItemBlockOxidiser.class, "oxidiserIdle");
-		NCBlocks.oxidiserActive = new BlockOxidiser(true).setBlockName("oxidiserActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.oxidiserActive = new BlockOxidiser(true).setUnlocalizedName("oxidiserActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.oxidiserActive, ItemBlockOxidiser.class, "oxidiserActive");
-		NCBlocks.ioniserIdle = new BlockIoniser(false).setBlockName("ioniserIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.ioniserIdle = new BlockIoniser(false).setUnlocalizedName("ioniserIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.ioniserIdle, ItemBlockIoniser.class, "ioniserIdle");
-		NCBlocks.ioniserActive = new BlockIoniser(true).setBlockName("ioniserActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.ioniserActive = new BlockIoniser(true).setUnlocalizedName("ioniserActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.ioniserActive, ItemBlockIoniser.class, "ioniserActive");
-		NCBlocks.irradiatorIdle = new BlockIrradiator(false).setBlockName("irradiatorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.irradiatorIdle = new BlockIrradiator(false).setUnlocalizedName("irradiatorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.irradiatorIdle, ItemBlockIrradiator.class, "irradiatorIdle");
-		NCBlocks.irradiatorActive = new BlockIrradiator(true).setBlockName("irradiatorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.irradiatorActive = new BlockIrradiator(true).setUnlocalizedName("irradiatorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.irradiatorActive, ItemBlockIrradiator.class, "irradiatorActive");
-		NCBlocks.coolerIdle = new BlockCooler(false).setBlockName("coolerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.coolerIdle = new BlockCooler(false).setUnlocalizedName("coolerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.coolerIdle, ItemBlockCooler.class, "coolerIdle");
-		NCBlocks.coolerActive = new BlockCooler(true).setBlockName("coolerActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.coolerActive = new BlockCooler(true).setUnlocalizedName("coolerActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.coolerActive, ItemBlockCooler.class, "coolerActive");
-		NCBlocks.factoryIdle = new BlockFactory(false).setBlockName("factoryIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.factoryIdle = new BlockFactory(false).setUnlocalizedName("factoryIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.factoryIdle, ItemBlockFactory.class, "factoryIdle");
-		NCBlocks.factoryActive = new BlockFactory(true).setBlockName("factoryActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.factoryActive = new BlockFactory(true).setUnlocalizedName("factoryActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.factoryActive, ItemBlockFactory.class, "factoryActive");
-		NCBlocks.heliumExtractorIdle = new BlockHeliumExtractor(false).setBlockName("heliumExtractorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.heliumExtractorIdle = new BlockHeliumExtractor(false).setUnlocalizedName("heliumExtractorIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.heliumExtractorIdle, ItemBlockHeliumExtractor.class, "heliumExtractorIdle");
-		NCBlocks.heliumExtractorActive = new BlockHeliumExtractor(true).setBlockName("heliumExtractorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.heliumExtractorActive = new BlockHeliumExtractor(true).setUnlocalizedName("heliumExtractorActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.heliumExtractorActive, ItemBlockHeliumExtractor.class, "heliumExtractorActive");
-		NCBlocks.assemblerIdle = new BlockAssembler(false).setBlockName("assemblerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.assemblerIdle = new BlockAssembler(false).setUnlocalizedName("assemblerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.assemblerIdle, ItemBlockAssembler.class, "assemblerIdle");
-		NCBlocks.assemblerActive = new BlockAssembler(true).setBlockName("assemblerActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.assemblerActive = new BlockAssembler(true).setUnlocalizedName("assemblerActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.assemblerActive, ItemBlockAssembler.class, "assemblerActive");
-		NCBlocks.recyclerIdle = new BlockRecycler(false).setBlockName("recyclerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.recyclerIdle = new BlockRecycler(false).setUnlocalizedName("recyclerIdle").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.recyclerIdle, ItemBlockRecycler.class, "recyclerIdle");
-		NCBlocks.recyclerActive = new BlockRecycler(true).setBlockName("recyclerActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
+		NCBlocks.recyclerActive = new BlockRecycler(true).setUnlocalizedName("recyclerActive").setStepSound(Block.soundTypeMetal).setResistance(20.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.recyclerActive, ItemBlockRecycler.class, "recyclerActive");
 		
-		NCBlocks.steamGenerator = new BlockSteamGenerator().setBlockName("steamGenerator").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.steamGenerator = new BlockSteamGenerator().setUnlocalizedName("steamGenerator").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.steamGenerator, ItemBlockSteamGenerator.class, "steamGenerator");
-		NCBlocks.steamDecompressor = new BlockSteamDecompressor().setBlockName("steamDecompressor").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.steamDecompressor = new BlockSteamDecompressor().setUnlocalizedName("steamDecompressor").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.steamDecompressor, ItemBlockSteamDecompressor.class, "steamDecompressor");
-		NCBlocks.denseSteamDecompressor = new BlockDenseSteamDecompressor().setBlockName("denseSteamDecompressor").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
+		NCBlocks.denseSteamDecompressor = new BlockDenseSteamDecompressor().setUnlocalizedName("denseSteamDecompressor").setCreativeTab(tabNC).setStepSound(Block.soundTypeMetal).setResistance(5.0F).setHardness(5.0F);
 		GameRegistry.registerBlock(NCBlocks.denseSteamDecompressor, ItemBlockDenseSteamDecompressor.class, "denseSteamDecompressor");
 		
-		NCBlocks.nuke = new BlockNuke().setBlockName("nuke").setCreativeTab(tabNC).setStepSound(Block.soundTypeCloth).setHardness(0.0F);
+		NCBlocks.nuke = new BlockNuke().setUnlocalizedName("nuke").setCreativeTab(tabNC).setStepSound(Block.soundTypeCloth).setHardness(0.0F);
 		GameRegistry.registerBlock(NCBlocks.nuke, ItemBlockNuke.class, "nuke");
-		NCBlocks.nukeE = new BlockNukeExploding().setBlockName("nukeE").setStepSound(Block.soundTypeCloth).setHardness(0.0F);
+		NCBlocks.nukeE = new BlockNukeExploding().setUnlocalizedName("nukeE").setStepSound(Block.soundTypeCloth).setHardness(0.0F);
 		GameRegistry.registerBlock(NCBlocks.nukeE, ItemBlockNuke.class, "nukeE");
 		
-		NCBlocks.antimatterBomb = new BlockAntimatterBomb().setBlockName("antimatterBomb").setCreativeTab(tabNC).setStepSound(Block.soundTypeCloth).setHardness(0.0F);
+		NCBlocks.antimatterBomb = new BlockAntimatterBomb().setUnlocalizedName("antimatterBomb").setCreativeTab(tabNC).setStepSound(Block.soundTypeCloth).setHardness(0.0F);
 		GameRegistry.registerBlock(NCBlocks.antimatterBomb, ItemBlockAntimatterBomb.class, "antimatterBomb");
-		NCBlocks.antimatterBombE = new BlockAntimatterBombExploding().setBlockName("antimatterBombE").setStepSound(Block.soundTypeCloth).setHardness(0.0F);
+		NCBlocks.antimatterBombE = new BlockAntimatterBombExploding().setUnlocalizedName("antimatterBombE").setStepSound(Block.soundTypeCloth).setHardness(0.0F);
 		GameRegistry.registerBlock(NCBlocks.antimatterBombE, ItemBlockAntimatterBomb.class, "antimatterBombE");
 		
-		NCBlocks.EMP = new BlockEMP().setBlockName("EMP").setCreativeTab(tabNC).setStepSound(Block.soundTypeCloth).setHardness(0.0F);
+		NCBlocks.EMP = new BlockEMP().setUnlocalizedName("EMP").setCreativeTab(tabNC).setStepSound(Block.soundTypeCloth).setHardness(0.0F);
 		GameRegistry.registerBlock(NCBlocks.EMP, ItemBlockEMP.class, "EMP");
-		NCBlocks.EMPE = new BlockEMPExploding().setBlockName("EMPE").setStepSound(Block.soundTypeCloth).setHardness(0.0F);
+		NCBlocks.EMPE = new BlockEMPExploding().setUnlocalizedName("EMPE").setStepSound(Block.soundTypeCloth).setHardness(0.0F);
 		GameRegistry.registerBlock(NCBlocks.EMPE, ItemBlockEMP.class, "EMPE");
 			
 			// Tile Entity
@@ -1738,12 +1738,12 @@ public class NuclearCraft {
 		// Other Shapeless Recipes
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(NCItems.parts, 3, 4), new Object[] {Items.sugar, "dustLapis", Items.redstone}));
 		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(NCItems.fishAndRicecake, 1), new Object[] {Items.cooked_fished, NCItems.ricecake}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(NCItems.fishAndRicecake, 1), new Object[] {Items.cooked_fish, NCItems.ricecake}));
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(NCItems.recordPractice, 1), new Object[] {"record", "ingotBoron"}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(NCItems.recordArea51, 1), new Object[] {"record", "ingotTough"}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(NCItems.recordNeighborhood, 1), new Object[] {"record", "universalReactant"}));
-		//GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(NCItems.recordJoe, 1), new Object[] {"record", "record"}));
+//		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(NCItems.recordJoe, 1), new Object[] {"record", "record"}));
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(NCItems.material, 4, 22), new Object[] {new ItemStack(NCItems.parts, 1, 4), "dustCoal", "dustCoal", "dustLead", "dustLead", "dustSilver", "dustSilver", "dustIron", "dustIron"}));
 		

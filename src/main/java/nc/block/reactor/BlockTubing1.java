@@ -42,7 +42,7 @@ public class BlockTubing1 extends BlockContainer {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister)
+	public void registerIcons(IIconRegister iconRegister)
 	{
 	this.blockIcon = iconRegister.registerIcon("nc:reactor/" + "accStraight1InHand");
 	}
@@ -90,22 +90,22 @@ public class BlockTubing1 extends BlockContainer {
 			byte b0 = 3;
 
 
-			if ((b1.func_149730_j()) && (!b2.func_149730_j())) {
+			if ((b1.isFullBlock()) && (!b2.isFullBlock())) {
 				b0 = 3;
 			}
 
 
-			if ((b2.func_149730_j()) && (!b1.func_149730_j())) {
+			if ((b2.isFullBlock()) && (!b1.isFullBlock())) {
 				b0 = 2;
 			}
 
 
-			if ((b3.func_149730_j()) && (!b4.func_149730_j())) {
+			if ((b3.isFullBlock()) && (!b4.isFullBlock())) {
 				b0 = 5;
 			}
 
 
-			if ((b4.func_149730_j()) && (!b3.func_149730_j())) {
+			if ((b4.isFullBlock()) && (!b3.isFullBlock())) {
 				b0 = 4;
 			}
 

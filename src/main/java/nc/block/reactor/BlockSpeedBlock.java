@@ -20,7 +20,7 @@ public class BlockSpeedBlock extends Block {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister icon) {
+	public void registerIcons(IIconRegister icon) {
 		blockIcon = icon.registerIcon("nc:reactor/" + this.getUnlocalizedName().substring(5));
 	}
 	

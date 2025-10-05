@@ -305,8 +305,8 @@ public abstract class TileMachineBase extends TileInventory implements IEnergyHa
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readSides(packet.func_148857_g());
-		readEnergy(packet.func_148857_g());
+		readSides(packet.getNbtCompound());
+		readEnergy(packet.getNbtCompound());
 	}
 
 	public boolean canConnectEnergy(ForgeDirection from) {
@@ -352,7 +352,7 @@ public abstract class TileMachineBase extends TileInventory implements IEnergyHa
 		else return slot < inputSize;
 	}
 	
-	public int[] getAccessibleSlotsFromSide(int i) {
+	public int[] getSlotsForFace(int i) {
 		return automation;
 	}
 

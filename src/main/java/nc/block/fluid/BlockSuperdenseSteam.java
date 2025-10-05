@@ -39,7 +39,7 @@ public class BlockSuperdenseSteam extends BlockFluidClassic {
     }
     
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register) {
+    public void registerIcons(IIconRegister register) {
             stillIcon = register.registerIcon("nc:fluid/superdenseSteamStill");
             flowingIcon = register.registerIcon("nc:fluid/superdenseSteamFlowing");
     }

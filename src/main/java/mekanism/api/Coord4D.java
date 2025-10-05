@@ -231,7 +231,7 @@ public class Coord4D
 	 */
 	public static Coord4D get(TileEntity tileEntity)
 	{
-		return new Coord4D(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity.getWorldObj().provider.dimensionId);
+		return new Coord4D(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity.getWorld().provider.dimensionId);
 	}
 
 	/**

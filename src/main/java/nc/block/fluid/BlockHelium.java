@@ -38,7 +38,7 @@ public class BlockHelium extends BlockFluidClassic {
     }
     
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register) {
+    public void registerIcons(IIconRegister register) {
             stillIcon = register.registerIcon("nc:fluid/heliumStill");
             flowingIcon = register.registerIcon("nc:fluid/heliumFlowing");
     }

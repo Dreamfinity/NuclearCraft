@@ -102,7 +102,7 @@ public class TileCrusher extends TileFuelUser {
             	return 8000/NuclearCraft.crusherCrushEfficiency;
             if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD"))
             	return 8000/NuclearCraft.crusherCrushEfficiency;
-            if (item instanceof ItemHoe && ((ItemHoe)item).getToolMaterialName().equals("WOOD"))
+            if (item instanceof ItemHoe && ((ItemHoe)item).getMaterialName().equals("WOOD"))
             	return 8000/NuclearCraft.crusherCrushEfficiency;
             if (item == Items.stick) return 4000/NuclearCraft.crusherCrushEfficiency;
             if (item == Items.coal) return 96000/NuclearCraft.crusherCrushEfficiency;

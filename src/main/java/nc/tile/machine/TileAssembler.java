@@ -145,6 +145,6 @@ public class TileAssembler extends TileMachineBase {
 	
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readMode(packet.func_148857_g());
+		readMode(packet.getNbtCompound());
 	}
 }

@@ -67,8 +67,8 @@ public abstract class TileContinuousBase extends TileEntity implements IEnergyHa
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readEnergy(packet.func_148857_g());
-		readFromNBT(packet.func_148857_g());
+		readEnergy(packet.getNbtCompound());
+		readFromNBT(packet.getNbtCompound());
 	}
 	
 	public void readEnergy(NBTTagCompound nbt) {

@@ -103,8 +103,8 @@ public abstract class TileGeneratorInventory extends TileInventory implements IE
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readEnergy(packet.func_148857_g());
-		readFromNBT(packet.func_148857_g());
+		readEnergy(packet.getNbtCompound());
+		readFromNBT(packet.getNbtCompound());
 	}
 	
 	public void readEnergy(NBTTagCompound nbt) {
@@ -139,7 +139,7 @@ public abstract class TileGeneratorInventory extends TileInventory implements IE
 		return storage.getMaxEnergyStored();
 	}
 
-	public int[] getAccessibleSlotsFromSide(int slot) {
+	public int[] getSlotsForFace(int slot) {
 		return automation;
 	}
 

@@ -41,7 +41,7 @@ public class BlockSimpleQuantum extends BlockContainer {
 	protected IIcon blockIcon;
 
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister i) {
+	public void registerIcons(IIconRegister i) {
 		blockIcon = i.registerIcon("nc:" + this.getUnlocalizedName().substring(5));
 	}
 
@@ -97,7 +97,7 @@ public class BlockSimpleQuantum extends BlockContainer {
 					t.angle = /*180 +*/ newAngle;
 				}
 			}
-			//if (world.isRemote) player.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + ("Angle: " + Math.round(displayedAngle) + "°")));
+			//if (world.isRemote) player.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE + ("Angle: " + Math.round(displayedAngle) + "ï¿½")));
 		}
 		return true;
 	}

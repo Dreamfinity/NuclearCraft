@@ -39,7 +39,7 @@ public class BlockSteam extends BlockFluidClassic {
     }
     
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register) {
+    public void registerIcons(IIconRegister register) {
             stillIcon = register.registerIcon("nc:fluid/steamStill");
             flowingIcon = register.registerIcon("nc:fluid/steamFlowing");
     }

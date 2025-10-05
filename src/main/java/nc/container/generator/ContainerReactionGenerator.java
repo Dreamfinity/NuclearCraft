@@ -40,9 +40,9 @@ public class ContainerReactionGenerator extends Container
         }
     }
 
-    public void addCraftingToCrafters(ICrafting icrafting)
+    public void onCraftGuiOpened(ICrafting icrafting)
     {
-        super.addCraftingToCrafters(icrafting);
+        super.onCraftGuiOpened(icrafting);
     }
 
     /**

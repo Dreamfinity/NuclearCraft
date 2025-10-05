@@ -14,14 +14,14 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public final class AnvilRepairHandler {
 
-	public static int getItemDamage(final ItemStack stack) {
+	public static int getMetadata(final ItemStack stack) {
 		assert stack != null;
-		return stack.getItemDamage();
+		return stack.getMetadata();
 	}
 	
 	public static boolean isRepairable(final ItemStack stack) {
 		final Item item = stack.getItem();
-		return item != null ? item.isRepairable() : false;
+		return item != null && item.isRepairable();
 	}
 	
 	public static void setItemName(final ItemStack stack, final String name) {
@@ -84,7 +84,7 @@ public final class AnvilRepairHandler {
 			if (itemToRepair.getItem() == NCItems.dUPaxel) repairAmount = 32000/8;
 
 			// Figure out the quantity needed to fully repair the item
-			final int itemDamage = getItemDamage(itemToRepair);
+			final int itemDamage = getMetadata(itemToRepair);
 			int howManyUnits = (int) Math.ceil(itemDamage / repairAmount);
 			if (itemDamage % repairAmount != 0)
 				howManyUnits++;
@@ -95,7 +95,7 @@ public final class AnvilRepairHandler {
 
 			event.cost += (int) Math.round(2 + 2 * itemDamage / repairAmount);
 			event.materialCost += howManyUnits;
-			event.output.setItemDamage(getItemDamage(event.output) - damageRepaired);
+			event.output.setMetadata(getMetadata(event.output) - damageRepaired);
 		}
 	}
 

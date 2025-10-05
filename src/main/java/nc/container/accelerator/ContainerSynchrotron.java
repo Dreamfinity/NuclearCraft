@@ -44,8 +44,9 @@ public class ContainerSynchrotron extends Container {
         }
     }
 
-    public void addCraftingToCrafters(ICrafting icrafting) {
-        super.addCraftingToCrafters(icrafting);
+    @Override
+    public void onCraftGuiOpened(ICrafting icrafting) {
+        super.onCraftGuiOpened(icrafting);
     }
 
     /**

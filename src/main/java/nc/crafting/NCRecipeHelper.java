@@ -68,7 +68,7 @@ public abstract class NCRecipeHelper {
 				} else if (!(i - inputSize > outputSize)) {
 					ArrayList<ItemStack> ores = OreDictionary.getOres(((OreStack) objects[i]).oreString);
 					if (ores.size() > 0) {
-						stack[i] = new ItemStack(ores.get(0).getItem(),((OreStack) objects[i]).stackSize, ores.get(0).getItemDamage());
+						stack[i] = new ItemStack(ores.get(0).getItem(),((OreStack) objects[i]).stackSize, ores.get(0).getMetadata());
 					} else {
 						return;
 					}
@@ -263,7 +263,7 @@ public abstract class NCRecipeHelper {
 						.getOres(((OreStack) output[i]).oreString);
 				stack[i] = new ItemStack(ore.get(0).getItem(),
 						((OreStack) output[i]).stackSize, ore.get(0)
-								.getItemDamage());
+								.getMetadata());
 			}
 		}
 		return stack;
@@ -345,7 +345,7 @@ public abstract class NCRecipeHelper {
 	private boolean equalStack(ItemStack stack, ItemStack key, boolean checkSize) {
 		//System.out.print(stack.stackSize >= stack.stackSize);
 		return stack.getItem() == key.getItem()
-				&& (stack.getItemDamage() == key.getItemDamage())
+				&& (stack.getMetadata() == key.getMetadata())
 				&& (!checkSize || key.stackSize <= stack.stackSize);
 	}
 
@@ -376,7 +376,7 @@ public abstract class NCRecipeHelper {
 				ItemStack[] ores = new ItemStack[ore.size()];
 				for (int o = 0; o < ore.size(); o++) {
 					ores[o] = new ItemStack(ore.get(o).getItem(),
-							((OreStack) object[i]).stackSize, ore.get(o).getItemDamage());
+							((OreStack) object[i]).stackSize, ore.get(o).getMetadata());
 				}
 				stack[i] = ores;
 			}

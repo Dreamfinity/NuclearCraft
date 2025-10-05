@@ -20,13 +20,13 @@ public class BlockOre extends Block {
 
 	public BlockOre(String unlocalizedName, Material material) {
 		super(material);
-        this.setBlockName(unlocalizedName);
+        this.setUnlocalizedName(unlocalizedName);
         this.setCreativeTab(NuclearCraft.tabNC);
         this.setHardness(3.0F);
         this.setResistance(8.0F);
         this.setStepSound(soundTypeStone);
         this.setHarvestLevel("pickaxe", 1);
-        this.setBlockTextureName("nc:ore/" + unlocalizedName);
+        this.setTextureName("nc:ore/" + unlocalizedName);
 	}
 	
 	public IIcon[] icons = new IIcon[6];
@@ -34,7 +34,7 @@ public class BlockOre extends Block {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister reg) {
+	public void registerIcons(IIconRegister reg) {
 		for (int i = 0; i < 6; i ++) {
 			this.icons[i] = reg.registerIcon(this.textureName + i);
 		}

@@ -372,7 +372,7 @@ public class TileFusionReactorSteam extends TileSteamProducer implements IEnergy
 	}
 	
 	public boolean completeString() {
-    	if (completeStringPre(getWorldObj(), this.xCoord, this.yCoord, this.zCoord)) {
+    	if (completeStringPre(getWorld(), this.xCoord, this.yCoord, this.zCoord)) {
     		return true;
     	} return false;
 	}
@@ -1405,7 +1405,7 @@ public class TileFusionReactorSteam extends TileSteamProducer implements IEnergy
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readEnergy(packet.func_148857_g());
+		readEnergy(packet.getNbtCompound());
 	}
 	
 	public void readEnergy(NBTTagCompound nbt) {
@@ -1537,7 +1537,7 @@ public class TileFusionReactorSteam extends TileSteamProducer implements IEnergy
 	 * Returns an array containing the indices of the slots that can be accessed by automation on the given side of this
 	 * block.
 	 */
-	public int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(int side) {
 	    return input;
 	}
 

@@ -16,7 +16,7 @@ public class BlockInfo
 
 	public static BlockInfo get(ItemStack stack)
 	{
-		return new BlockInfo(Block.getBlockFromItem(stack.getItem()), stack.getItemDamage());
+		return new BlockInfo(Block.getBlockFromItem(stack.getItem()), stack.getMetadata());
 	}
 
 	@Override

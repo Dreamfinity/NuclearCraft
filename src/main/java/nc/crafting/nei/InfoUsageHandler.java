@@ -14,7 +14,7 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
 public class InfoUsageHandler extends TemplateRecipeHandler {
-	public static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+	public static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 	public static ArrayList<InfoPair> ainfo;
 	public InfoUsageHandler() {}
   

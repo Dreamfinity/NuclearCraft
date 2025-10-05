@@ -20,7 +20,7 @@ public class BlockNukeExploding extends Block {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 	this.blockIcon = iconRegister.registerIcon("nc:nuke/" + "nuke" + "SideOn");
 	this.iconBottom = iconRegister.registerIcon("nc:nuke/" + "nuke" + "Bottom");
 	this.iconTop = iconRegister.registerIcon("nc:nuke/" + "nuke" + "Top");

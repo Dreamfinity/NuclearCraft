@@ -50,7 +50,7 @@ public class BlockElectricFurnace extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister)
+	public void registerIcons(IIconRegister iconRegister)
 	{
 	this.blockIcon = iconRegister.registerIcon("nc:machine/electricFurnace/" + "side");
 	this.iconFront = iconRegister.registerIcon("nc:machine/electricFurnace/" + "front" + (this.isActive ? "Active" : "Idle"));
@@ -79,22 +79,22 @@ public class BlockElectricFurnace extends BlockContainer {
 	            Block block3 = world.getBlock(x + 1, y, z);
 	            byte b0 = 3;
 
-	            if (block.func_149730_j() && !block1.func_149730_j())
+	            if (block.isFullBlock() && !block1.isFullBlock())
 	            {
 	                b0 = 3;
 	            }
 
-	            if (block1.func_149730_j() && !block.func_149730_j())
+	            if (block1.isFullBlock() && !block.isFullBlock())
 	            {
 	                b0 = 2;
 	            }
 
-	            if (block2.func_149730_j() && !block3.func_149730_j())
+	            if (block2.isFullBlock() && !block3.isFullBlock())
 	            {
 	                b0 = 5;
 	            }
 
-	            if (block3.func_149730_j() && !block2.func_149730_j())
+	            if (block3.isFullBlock() && !block2.isFullBlock())
 	            {
 	                b0 = 4;
 	            }
@@ -239,7 +239,7 @@ public class BlockElectricFurnace extends BlockContainer {
 							
 							itemstack.stackSize -= 	j;
 							EntityItem item = new EntityItem(world, (double) ((float) x + f), ((float) y + f1), ((float) z + f2),
-							new ItemStack (itemstack.getItem(), j, itemstack.getItemDamage()));
+							new ItemStack (itemstack.getItem(), j, itemstack.getMetadata()));
 							
 							if(itemstack.hasTagCompound())
 							{
@@ -257,7 +257,7 @@ public class BlockElectricFurnace extends BlockContainer {
 					}
 				}
 				
-				world.func_147453_f(x, y, z, oldBlockID);
+				world.updateNeighborsAboutBlockChange(x, y, z, oldBlockID);
 			}
 		}
 		

@@ -22,7 +22,7 @@ public class ItemFuel extends ItemMeta {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean whatIsThis) {
 		super.addInformation(itemStack, player, list, whatIsThis);
-		if (info(itemStack.getItemDamage()) == InfoNC.nul); else if (info(itemStack.getItemDamage()).length > 0) InfoNC.infoFull(list, info(itemStack.getItemDamage()));
+		if (info(itemStack.getMetadata()) == InfoNC.nul); else if (info(itemStack.getMetadata()).length > 0) InfoNC.infoFull(list, info(itemStack.getMetadata()));
 	}
 	
 	public String[] info(int m) {
@@ -90,7 +90,7 @@ public class ItemFuel extends ItemMeta {
 	}
 	
 	public String getUnlocalizedName(ItemStack stack) {
-		switch (stack.getItemDamage()) {
+		switch (stack.getMetadata()) {
 			case 0: return "LEU235";
 			case 1: return "HEU235";
 			case 2: return "LEP239";
@@ -237,7 +237,7 @@ public class ItemFuel extends ItemMeta {
 	}
 	
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (stack.getItemDamage() == 45) {
+		if (stack.getMetadata() == 45) {
 			MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(world, player, true);
 			if (movingobjectposition == null) {
 				return stack;

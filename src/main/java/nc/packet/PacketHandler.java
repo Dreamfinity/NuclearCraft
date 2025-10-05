@@ -23,7 +23,7 @@ public class PacketHandler {
 	}
 
 	public static void sendToAllAround(IMessage message, TileEntity te, int range) {
-		INSTANCE.sendToAllAround(message, new TargetPoint(te.getWorldObj().provider.dimensionId, te.xCoord, te.yCoord, te.zCoord, range));
+		INSTANCE.sendToAllAround(message, new TargetPoint(te.getWorld().provider.dimensionId, te.xCoord, te.yCoord, te.zCoord, range));
 	}
 
 	public static void sendToAllAround(IMessage message, TileEntity te) {

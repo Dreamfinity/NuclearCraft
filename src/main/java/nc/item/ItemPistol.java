@@ -15,7 +15,7 @@ public class ItemPistol extends ItemNC {
 
     public ItemPistol(String nam, String... lines) {
 		super("tools", nam, lines);
-		this.setMaxDamage(-1);
+		this.setMaxDurability(-1);
 	}
 
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {

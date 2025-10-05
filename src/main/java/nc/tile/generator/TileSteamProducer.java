@@ -87,8 +87,8 @@ public abstract class TileSteamProducer extends TileInventory implements IFluidH
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readFluid(packet.func_148857_g());
-		readFromNBT(packet.func_148857_g());
+		readFluid(packet.getNbtCompound());
+		readFromNBT(packet.getNbtCompound());
 	}
 	
 	public void readFluid(NBTTagCompound nbt) {
@@ -107,7 +107,7 @@ public abstract class TileSteamProducer extends TileInventory implements IFluidH
 		return false;
 	}
 
-	public int[] getAccessibleSlotsFromSide(int slot) {
+	public int[] getSlotsForFace(int slot) {
 		return automation;
 	}
 

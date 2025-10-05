@@ -33,7 +33,7 @@ public class BlockSupercooler extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		this.blockIcon = iconRegister.registerIcon("nc:accelerator/supercooler/" + "side" + (this.isActive ? "Active" : "Idle"));
 		this.iconTop = iconRegister.registerIcon("nc:accelerator/supercooler/" + "top" + (this.isActive ? "Active" : "Idle"));
 		this.iconBottom = iconRegister.registerIcon("nc:accelerator/supercooler/" + "bottom" + (this.isActive ? "Active" : "Idle"));

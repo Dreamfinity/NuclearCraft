@@ -48,7 +48,7 @@ public class MetalFurnaceFuelRecipeHandler extends MetalFurnaceRecipeHandler
     }
 
     private void loadAllSmelting() {
-        @SuppressWarnings("unchecked") Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.smelting().getSmeltingList();
+        @SuppressWarnings("unchecked") Map<ItemStack, ItemStack> recipes = (Map<ItemStack, ItemStack>) FurnaceRecipes.instance().getSmeltingList();
 
         for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet())
             mmetalfurnace.add(new MetalSmeltingPair(recipe.getKey(), recipe.getValue()));

@@ -126,8 +126,8 @@ public abstract class TileStorageInventory extends TileInventory implements IEne
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readEnergy(packet.func_148857_g());
-		readFromNBT(packet.func_148857_g());
+		readEnergy(packet.getNbtCompound());
+		readFromNBT(packet.getNbtCompound());
 	}
 	
 	public void readEnergy(NBTTagCompound nbt) {
@@ -162,7 +162,7 @@ public abstract class TileStorageInventory extends TileInventory implements IEne
 		return storage.getMaxEnergyStored();
 	}
 
-	public int[] getAccessibleSlotsFromSide(int slot) {
+	public int[] getSlotsForFace(int slot) {
 		return automation;
 	}
 
@@ -171,7 +171,7 @@ public abstract class TileStorageInventory extends TileInventory implements IEne
 	}
 
 	public boolean decrSide(int side) {
-		if (!this.getWorldObj().isRemote) {
+		if (!this.getWorld().isRemote) {
 			if (sideMode[side] >= 3 || sideMode[side] <= 0) {
 				sideMode[side] = 2;
 			} else if (sideMode[side] == 2) {
@@ -185,7 +185,7 @@ public abstract class TileStorageInventory extends TileInventory implements IEne
 	}
 
 	public boolean incrSide(int side) {
-		if (!this.getWorldObj().isRemote) {
+		if (!this.getWorld().isRemote) {
 			if (sideMode[side] >= 2) {
 				sideMode[side] = 0;
 			} else if (sideMode[side] <= 0) {

@@ -23,7 +23,7 @@ public class BlockNuke extends BlockTNT {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 	this.blockIcon = iconRegister.registerIcon("nc:nuke/" + "nuke" + "Side");
 	this.iconBottom = iconRegister.registerIcon("nc:nuke/" + "nuke" + "Bottom");
 	this.iconTop = iconRegister.registerIcon("nc:nuke/" + "nuke" + "Top");

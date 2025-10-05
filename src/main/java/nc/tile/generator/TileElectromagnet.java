@@ -129,7 +129,7 @@ public class TileElectromagnet extends TileInventory implements IEnergyHandler, 
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readEnergy(packet.func_148857_g());
+		readEnergy(packet.getNbtCompound());
 	}
 
 	public boolean canConnectEnergy(ForgeDirection from) {
@@ -156,7 +156,7 @@ public class TileElectromagnet extends TileInventory implements IEnergyHandler, 
 		return false;
 	}
 
-	public int[] getAccessibleSlotsFromSide(int slot) {
+	public int[] getSlotsForFace(int slot) {
 		return null;
 	}
 
