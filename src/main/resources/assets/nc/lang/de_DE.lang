@@ -650,3 +650,5 @@ achievement.antimatterBomb.desc=Baue eine Antimaterienbombe
 death.attack.heliumfreeze=%1$s fror zu einem Klotz in flüssigem Helium.
 death.attack.plasmaburn=%1$s wurde durch supererhitztes Plasma eingeäschert.
 death.attack.steamburn=%1$s wurde dampfgegart.
+
+message.nuclearcraft.antimatterExplosionDisabled=Antimaterie-Explosionen sind deaktiviert

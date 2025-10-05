@@ -652,3 +652,5 @@ achievement.nuke.desc=制作一个反物质炸弹
 death.attack.heliumfreeze=%1$s冻死在液氦中
 death.attack.plasmaburn=%1$s 被超高温等离子体烧成灰烬
 death.attack.steamburn=%1$s 被蒸汽煮熟
+
+message.nuclearcraft.antimatterExplosionDisabled=反物质爆炸被禁用

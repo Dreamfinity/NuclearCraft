@@ -1,0 +1,677 @@
+##############################################################################
+#                                                                            #
+#  Неофициальный русскоязычный перевод NuclearCraft                          #
+#  Редакция от: 05.10.2025                                                   #
+#                                                                            #
+#  Автор перевода: TroubleDakrness, так же известен как CrashBox.            #
+#  Мелкие правки: Veritaris.                                                 #
+#                                                                            #
+#                                                                            #
+#  Вдохновлено проектом Dreamfinity.                                         #
+#                                                                            #
+#  При внесении каких-либо изменений, настоятельно прошу согласовать их      #
+#  c автором, ну или по крайней мере держать его в курсе.                    #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+itemGroup.tabNC=NuclearCraft
+
+entity.NuclearMonster.name=Ядерный монстр
+entity.Paul.name=Пол
+entity.Brian.name=Брайан
+entity.NukePrimed.name=Бомба - БЕГИ!
+entity.EMPPrimed.name=Эдектромагнитная бомба!
+entity.AntimatterBombPrimed.name=Антиматериалная бомба - БЕГИ!
+entity.NuclearGrenade.name=Ядерная граната
+entity.EntityBullet.name=DU Пуля
+
+copperOre.name=Медная руда
+tinOre.name=Оловянная руда
+leadOre.name=Свинцовая руда
+silverOre.name=Серебряная руда
+uraniumOre.name=Урановая руда
+thoriumOre.name=Ториевая руда
+plutoniumOre.name=Плутониевая руда
+lithiumOre.name=Литиевая руда
+boronOre.name=Борная руда
+magnesiumOre.name=Магнезитовая руда
+
+copperBlock.name=Блок меди
+tinBlock.name=Блок олова
+leadBlock.name=Блок свинца
+silverBlock.name=Блок серебра
+bronzeBlock.name=Блок бронзы
+uraniumBlock.name=Блок урана
+thoriumBlock.name=Блок тория
+toughBlock.name=Блок прочного сплава
+lithiumBlock.name=Блок лития
+boronBlock.name=Блок бора
+magnesiumBlock.name=Блок магнезита
+
+tile.simpleQuantumUp.name=Вращение 1/2 блока
+tile.simpleQuantumDown.name=Вращение 1/2 блока
+
+tile.graphiteBlock.name=Блок графита
+tile.cellBlock.name=Отсек топливных элементов
+tile.reactorBlock.name=Обшивка реактора
+tile.fusionConnector.name=Коннектор термоядерного реактора
+tile.coolerBlock.name=Стандартный охладитель реактора
+tile.redstoneCoolerBlock.name=Охладитель реактора (Редстоун)
+tile.cryotheumCoolerBlock.name=Охладитель реактора (Криотеум)
+tile.waterCoolerBlock.name=Охладитель реактора (Вода)
+tile.coolantCoolerBlock.name=Охладитель реактора (Хладагент)
+tile.enderiumCoolerBlock.name=Охладитель реактора (Эндериум)
+tile.glowstoneCoolerBlock.name=Охладитель реактора (Светопыль)
+tile.heliumCoolerBlock.name=Охладитель реактора (Жидкий гелий)
+tile.emptyCoolerBlock.name=Пустой охладитель реактора
+tile.speedBlock.name=Ускоритель реактора
+tile.blastBlock.name=Взрывоустойчивый блок
+tile.nuke.name=Ядерная бомба
+tile.nukeE.name=Ядерная бомба
+tile.EMP.name=Электромагнитная бомба
+tile.EMPE.name=Электромагнитная бомба
+tile.antimatterBomb.name=Антиматериальная бомба
+tile.antimatterBombE.name=Антиматериальная бомба
+tile.machineBlockNC.name=Машинный корпус
+
+tile.tubing1.name=Горизонтальная укреплённая трубка
+tile.tubing2.name=Вертикальная укреплённая трубка
+
+tile.liquidHeliumBlock.name=Жидкий гелий
+fluid.liquidHelium=Жидкий гелий
+tile.fusionPlasmaBlock.name=Плазма
+fluid.fusionPlasma=Плазма
+tile.plasmaFire.name=Огонь
+tile.steamBlock.name=Пар
+fluid.steam=Пар
+tile.denseSteamBlock.name=Плотный пар
+fluid.denseSteam=Плотный пар
+tile.superdenseSteamBlock.name=Сверхплотный пар
+fluid.superdenseSteam=Сверхплотный пар
+
+tile.nuclearFurnaceIdle.name=Ядерная печь
+tile.nuclearFurnaceActive.name=Ядерная печь
+tile.furnaceIdle.name=Металлическая печь
+tile.furnaceActive.name=Металлическая печь
+tile.crusherIdle.name=Дробитель
+tile.crusherActive.name=Дробитель
+tile.electricCrusherIdle.name=Электрический дробитель
+tile.electricCrusherActive.name=Электрический дробитель
+tile.electricFurnaceIdle.name=Электрическая печь
+tile.electricFurnaceActive.name=Электрическая печь
+tile.reactionGeneratorIdle.name=Генератор реакции
+tile.reactionGeneratorActive.name=Генератор реакции
+tile.separatorIdle.name=Сепаратор изотопов
+tile.separatorActive.name=Сепаратор изотопов
+tile.hastenerIdle.name=Ускоритель распада
+tile.hastenerActive.name=Ускоритель распада
+tile.fissionReactorGraphiteIdle.name=Контроллер деления
+tile.fissionReactorGraphiteActive.name=Контроллер деления
+tile.fissionReactorSteamIdle.name=Паровой контроллер деления
+tile.fissionReactorSteamActive.name=Паровой контроллер деления
+tile.nuclearWorkspace.name=Тяжелый верстак
+tile.fusionReactor.name=Ядро термоядерного реактора
+tile.fusionReactorBlock.name=Ядро термоядерного реактора
+tile.fusionReactorBlockTop.name=Ядро термоядерного реактора
+tile.fusionReactorSteam.name=Ядро парового термоядерного реактора
+tile.fusionReactorSteamBlock.name=Ядро парового термоядерного реактора
+tile.fusionReactorSteamBlockTop.name=Ядро парового термоядерного реактора
+tile.RTG.name=Плутоний (РИТЭГ)
+tile.AmRTG.name=Америций (РИТЭГ)
+tile.CfRTG.name=Калифорний (РИТЭГ)
+tile.WRTG.name=Слабое РИТЭГ-топливо
+tile.solarPanel.name=Солнечная панель
+tile.collectorIdle.name=Сборщик гелия
+tile.collectorActive.name=Сборщик гелия
+tile.electrolyserIdle.name=Электролизер
+tile.electrolyserActive.name=Электролизер
+tile.oxidiserIdle.name=Окислитель
+tile.oxidiserActive.name=Окислитель
+tile.ioniserIdle.name=Ионизатор
+tile.ioniserActive.name=Ионизатор
+tile.irradiatorIdle.name=Нейтронный излучатель
+tile.irradiatorActive.name=Нейтронный излучатель
+tile.coolerIdle.name=Разжижитель гелия
+tile.coolerActive.name=Разжижитель гелия
+tile.factoryIdle.name=Фабрика
+tile.factoryActive.name=Фабрика
+tile.assemblerIdle.name=Сборщик
+tile.assemblerActive.name=Сборщик
+tile.heliumExtractorIdle.name=Экстрактор жидкого гелия
+tile.heliumExtractorActive.name=Экстрактор жидкого гелия
+tile.recyclerIdle.name=Перерабатывающий завод
+tile.recyclerActive.name=Перерабатывающий завод
+tile.electromagnetIdle.name=Электромагнит
+tile.electromagnetActive.name=Электромагнит
+tile.superElectromagnetIdle.name=Сверхпроводящий электромагнит
+tile.superElectromagnetActive.name=Сверхпроводящий электромагнит
+tile.supercoolerIdle.name=Электромагнитный сверх-охладитель
+tile.supercoolerActive.name=Электромагнитный сверх-охладитель
+tile.synchrotronIdle.name=Контроллер синхротрона
+tile.synchrotronActive.name=Контроллер синхротрона
+tile.steamGenerator.name=Паровой генератор
+tile.steamDecompressor.name=Паровой генератор
+tile.denseSteamDecompressor.name=Декомпрессор плотного пара
+
+tile.lithiumIonBatteryBlock.name=Литий-ионная батарейка
+tile.voltaicPile.name=Вольтовая свая
+
+gui.reactor=Реактор
+gui.fuel=Топливо
+gui.heat=Нагрев
+gui.noFuel=Нет топлива
+gui.casingIncomplete=Обшивка не завершена
+gui.invalidStructure=Неверная структура
+gui.multipleControllers=Множественные контроллеры
+gui.fuelRodIncomplete=Топливные стержни не завершены
+gui.casingInInterior=Обшивка открыта
+gui.cells=Ячейки
+gui.type=Type
+gui.LEU=LEU
+gui.HEU=HEU
+gui.LEP=LEP
+gui.HEP=HEP
+gui.MOX=MOX
+gui.TBU=TBU
+gui.TBUOx=TBUOx
+gui.TBU-Ox=TBU-Ox
+gui.LEU-Ox=LEU-Ox
+gui.HEU-Ox=HEU-Ox
+gui.LEP-Ox=LEP-Ox
+gui.HEP-Ox=HEP-Ox
+gui.LEUOx=LEUOx
+gui.HEUOx=HEUOx
+gui.LEPOx=LEPOx
+gui.HEPOx=HEPOx
+gui.LEN=LEN
+gui.HEN=HEN
+gui.LEA=LEA
+gui.HEA=HEA
+gui.LEC=LEC
+gui.HEC=HEC
+gui.LENOx=LENOx
+gui.HENOx=HENOx
+gui.LEAOx=LEAOx
+gui.HEAOx=HEAOx
+gui.LECOx=LECOx
+gui.HECOx=HECOx
+gui.LEN-Ox=LEN-Ox
+gui.HEN-Ox=HEN-Ox
+gui.LEA-Ox=LEA-Ox
+gui.HEA-Ox=HEA-Ox
+gui.LEC-Ox=LEC-Ox
+gui.HEC-Ox=HEC-Ox
+gui.dense=Плотный
+gui.superdense=Сверхплотный
+
+gui.energyStored=Энергии запасено
+gui.steamStored=Пар
+gui.level1=Уровень 1 
+gui.level2=Уровень 2 
+gui.reactorSize=Размер реактора
+gui.ringRadius=Размер тороида
+gui.efficiency=Эффективность
+gui.temperature=Температура
+gui.heatVar=Переменная температуры
+gui.input=Вход
+gui.output=Выход
+gui.power=Мощность
+gui.steamProduction=Производство пара
+gui.connectorsIncomplete=Коннекторы не завершены
+gui.ringIncomplete=Кольцо не завершено
+gui.powerIssue=Электромагниты не заряжены
+gui.ringBlock=Электромагнит заблокирован
+gui.noProblem=Проблем не выявлено
+gui.incorrectStructure=Неверная структура
+
+gui.synchrotron=Синхротрон
+gui.electronEnergy=Энергия
+gui.percentageOn=Секций онлайн
+gui.radiationPower=Сила излучения
+gui.tubeIncomplete=Труба не завершена
+gui.cornerIncomplete=Угол не завершен
+gui.ringNotBigEnough=Кольцо слишком мало
+gui.antimatterProgress=Антиматерия
+
+gui.online=Онлайн
+gui.offline=Оффлайн
+
+gui.heavyDutyWorkspace=Тяжелый верстак
+
+gui.reaction=Реакция
+gui.generator=Генератор
+
+uraniumIngot.name=Урановый слиток
+copperIngot.name=Медный слиток
+tinIngot.name=Оловянный слиток
+leadIngot.name=Свинцовый слиток
+silverIngot.name=Серебряный слиток
+thoriumIngot.name=Ториевый слиток
+bronzeIngot.name=Бронзовый слиток
+lithiumIngot.name=Литиевый слиток
+boronIngot.name=Борный слиток
+magnesiumIngot.name=Магнезитовый слиток
+MgBIngot.name=Слиток диборида магния
+
+crushedIron.name=Дробленое железо
+crushedGold.name=Дробленое золото
+crushedLapis.name=Дробленый лазурит
+crushedDiamond.name=Дробленый алмаз
+crushedEmerald.name=Дробленый изумруд
+crushedQuartz.name=Дробленый кварц
+crushedCoal.name=Дробленый уголь
+crushedCopper.name=Дробленая медь
+crushedLead.name=Дробленая свинец
+crushedTin.name=Дробленое олово
+crushedSilver.name=Дробленое серебро
+crushedUranium.name=Дробленый уран
+crushedThorium.name=Дробленый торий
+crushedBronze.name=Дробленая бронза
+crushedLithium.name=Дробленый литий
+crushedBoron.name=Дробленый бор
+crushedMagnesium.name=Дробленый магнезит
+crushedMgB.name=Дробленый диборид магния
+crushedObsidian.name=Дробленый обсидиан
+tinyCrushedLead.name=Кучка дробленого свинца
+
+item.dominoes.name=Домино
+item.boiledEgg.name=Вареное яйцо
+item.ricecake.name=Рисовый пирог (без рыбы)
+item.fishAndRicecake.name=Рисовый пирог с рыбой
+item.upgradeSpeed.name=Улучшение - «Скорость»
+item.upgradeEnergy.name=Улучшение - «Энергия»
+item.nuclearGrenade.name=Ядерная граната
+item.portableEnderChest.name=Портативный сундук края
+
+U238.name=Уран-238
+tinyU238.name=Крошечный кусочек Урана-238
+U235.name=Уран-235
+tinyU235.name=Крошечный кусочек Урана-235
+U233.name=Уран-233
+tinyU233.name=Крошечный кусочек Урана-233
+Pu238.name=Плутоний-238
+tinyPu238.name=Крошечный кусочек Плутония-238
+Pu239.name=Плутоний-239
+tinyPu239.name=Крошечный кусочек Плутония-239
+Pu242.name=Плутоний-242
+tinyPu242.name=Крошечный кусочек Плутония-242
+Pu241.name=Плутоний-241
+tinyPu241.name=Крошечный кусочек Плутония-241
+Th232.name=Торий-232
+tinyTh232.name=Крошечный кусочек Тория-232
+Th230.name=Торий-230
+tinyTh230.name=Крошечный кусочек Тория-230
+
+Li6.name=Литий-6
+Li7.name=Литий-7
+B10.name=Бор-10
+B11.name=Бор-11
+tinyLi6.name=Крошечный кусочек Лития-6
+tinyB10.name=Крошечный кусочек Бора-10
+
+U238Oxide.name=Оксид Урана-238
+tinyU238Oxide.name=Крошечный кусочек Оксида Урана-238
+U235Oxide.name=Оксид Урана-235
+tinyU235Oxide.name=Крошечный кусочек Оксида Урана-235
+U233Oxide.name=Оксид Урана-233
+tinyU233Oxide.name=Крошечный кусочек Оксида Урана-233
+Pu238Oxide.name=Оксид Плутония-238
+tinyPu238Oxide.name=Крошечный кусочек Оксида Плутония-238
+Pu239Oxide.name=Оксид Плутония-239
+tinyPu239Oxide.name=Крошечный кусочек Оксида Плутония-239
+Pu242Oxide.name=Оксид Плутония-242
+tinyPu242Oxide.name=Крошечный кусочек Оксида Плутония-242
+Pu241Oxide.name=Оксид Плутония-241
+tinyPu241Oxide.name=Крошечный кусочек Оксида Плутония-241
+Th232Oxide.name=Оксид Тория-232
+tinyTh232Oxide.name=Крошечный кусочек Оксида Тория-232
+Th230Oxide.name=Оксид Тория-230
+tinyTh230Oxide.name=Крошечный кусочек Оксида Тория-230
+
+Np236.name=Нептуний-236
+tinyNp236.name=Крошечный кусочек Нептуния-236
+Np237.name=Нептуний-237
+tinyNp237.name=Крошечный кусочек Нептуния-237
+Am241.name=Америций-241
+tinyAm241.name=Крошечный кусочек Америция-241
+Am242.name=Америций-242
+tinyAm242.name=Крошечный кусочек Америция-242
+Am243.name=Америций-243
+tinyAm243.name=Крошечный кусочек Америция-243
+Cm243.name=Кюрий-243
+tinyCm243.name=Крошечный кусочек Кюрия-243
+Cm245.name=Кюрий-245
+tinyCm245.name=Крошечный кусочек Кюрия-245
+Cm246.name=Кюрий-246
+tinyCm246.name=Крошечный кусочек Кюрия-246
+Cm247.name=Кюрий-247
+tinyCm247.name=Крошечный кусочек Кюрия-247
+
+Np236Oxide.name=Оксид Нептуния-236
+tinyNp236Oxide.name=Крошечный кусочек Оксида Нептуния-236
+Np237Oxide.name=Оксид Нептуния-237
+tinyNp237Oxide.name=Крошечный кусочек Оксида Нептуния-237
+Am241Oxide.name=Оксид Америция-241
+tinyAm241Oxide.name=Крошечный кусочек Оксида Нептуния=241
+Am242Oxide.name=Оксид Америция-242
+tinyAm242Oxide.name=Крошечный кусочек Оксида Нептуния-242
+Am243Oxide.name=Оксид Америция-243
+tinyAm243Oxide.name=Крошечный кусочек Оксида Нептуния-243
+Cm243Oxide.name=Оксид Кюрия-243
+tinyCm243Oxide.name=Крошечный кусочек Оксида Кюрия-243
+Cm245Oxide.name=Оксид Кюрия-245
+tinyCm245Oxide.name=Крошечный кусочек Оксида Кюрия-245
+Cm246Oxide.name=Оксид Кюрия-24
+tinyCm246Oxide.name=Крошечный кусочек Оксида Кюрия-246
+Cm247Oxide.name=Оксид Кюрия-247
+tinyCm247Oxide.name=Крошечный кусочек Оксида Кюрия-247
+
+Cf250.name=Калифорний-250
+tinyCf250.name=Крошечный кусочек Калифорния-250
+Cf250Oxide.name=Оксид Калифорния-250
+tinyCf250Oxide.name=Крошечный кусочек Оксида Калифорния-250
+
+uraniumOxideIngot.name=Слиток оксида урона
+crushedUraniumOxide.name=Дробленый оксид урана
+thoriumOxideIngot.name=Слиток оксида тория
+crushedThoriumOxide.name=Дробленый оксид тория
+rhodochrosite.name=Родохрозит
+crushedMnO.name=Дробленый оксид магнезия
+crushedMnO2.name=Дробленый диоксид магнезия
+graphiteIngot.name=Слиток графита
+crushedGraphite.name=Дробленый графит
+hardCarbonIngot.name=Слиток твердого карбона
+crushedHardCarbon.name=Дробленый твердый карбон
+LiMnO2Ingot.name=Слиток литий-диоксид марганца
+crushedLiMnO2.name=Дробленый литий-диоксид марганца
+
+LEU235.name=LEU-235 Топливо
+HEU235.name=HEU-235 Топливо
+LEP239.name=LEP-239 Топливо
+HEP239.name=HEP-239 Топливо
+MOX239.name=MOX-239 Топливо
+HEU233.name=HEU-233 Топливо
+LEP241.name=LEP-241 Топливо
+HEP241.name=HEP-241 Топливо
+MOX241.name=MOX-241 Топливо
+TBU.name=TBU Топливо
+
+emptyCell.name=Пустой стержень
+LEU235Cell.name=Топливный стержень (LEU-235)
+HEU235Cell.name=Топливный стержень (HEU-235)
+LEP239Cell.name=Топливный стержень (LEP-239)
+HEP239Cell.name=Топливный стержень (HEP239)
+MOX239Cell.name=Топливный стержень (MOX239)
+LEU233Cell.name=Топливный стержень (LEU233)
+HEU233Cell.name=Топливный стержень (HEU233)
+LEP241Cell.name=Топливный стержень (LEP241)
+HEP241Cell.name=Топливный стержень (HEP241)
+MOX241Cell.name=Топливный стержень (MOX241)
+TBUCell.name=Топливный стержень (TBU)
+
+dLEU235Cell.name=Топливный стержень (Обедненный LEU-235)
+dHEU235Cell.name=Топливный стержень (Обедненный HEU-235)
+dLEP239Cell.name=Топливный стержень (Обедненный LEP-239)
+dHEP239Cell.name=Топливный стержень (Обедненный HEP239)
+dMOX239Cell.name=Топливный стержень (Обедненный MOX239)
+dLEU233Cell.name=Топливный стержень (Обедненный LEU233)
+dHEU233Cell.name=Топливный стержень (Обедненный HEU233)
+dLEP241Cell.name=Топливный стержень (Обедненный LEP241)
+dHEP241Cell.name=Топливный стержень (Обедненный HEP241)
+dMOX241Cell.name=Топливный стержень (Обедненный MOX241)
+dTBUCell.name=Топливный стержень (Обедненный TBU)
+
+LEU235Oxide.name=LEU-235 Оксид топливо
+HEU235Oxide.name=HEU-235 Оксид топливо
+LEP239Oxide.name=LEP-239 Оксид топливо
+HEP239Oxide.name=HEP-239 Оксид топливо
+LEU233Oxide.name=LEU-233 Оксид топливо
+HEU233Oxide.name=HEU-233 Оксид топливо
+LEP241Oxide.name=LEP-241 Оксид топливо
+HEP241Oxide.name=HEP-241 Оксид топливо
+
+LEU235CellOxide.name=Топливный стержень (Оксид LEU-235)
+HEU235CellOxide.name=Топливный стержень (Оксид HEU-235)
+LEP239CellOxide.name=Топливный стержень (Оксид LEP-239)
+HEP239CellOxide.name=Топливный стержень (Оксид HEP239)
+LEU233CellOxide.name=Топливный стержень (Оксид LEU233)
+HEU233CellOxide.name=Топливный стержень (Оксид HEU233)
+LEP241CellOxide.name=Топливный стержень (Оксид LEP241)
+HEP241CellOxide.name=Топливный стержень (Оксид HEP241)
+
+dLEU235CellOxide.name=Топливный стержень (Об. оксид LEU-235)
+dHEU235CellOxide.name=Топливный стержень (Об. оксид HEU-235)
+dLEP239CellOxide.name=Топливный стержень (Об. оксид LEP-239)
+dHEP239CellOxide.name=Топливный стержень (Об. оксид HEP239)
+dLEU233CellOxide.name=Топливный стержень (Об. оксид LEU233)
+dHEU233CellOxide.name=Топливный стержень (Об. оксид HEU233)
+dLEP241CellOxide.name=Топливный стержень (Об. оксид LEP241)
+dHEP241CellOxide.name=Топливный стержень (Об. оксид HEP241)
+
+TBUOxide.name=TBU Оксидное топливо
+TBUCellOxide.name=Топливный стержень (Оксид TBU)
+dTBUCellOxide.name=Топливный стержень (Об. оксид TBU)
+
+LEN236.name=LEN-236 Топливо
+HEN236.name=HEN-236 Топливо
+LEA242.name=LEA-242 Топливо
+HEA242.name=HEA-242 Топливо
+LEC243.name=LEC-243 Топливо
+HEC243.name=HEC-243 Топливо
+LEC245.name=LEC-245 Топливо
+HEC245.name=HEC-245 Топливо
+LEC247.name=LEC-247 Топливо
+HEC247.name=HEC-247 Топливо
+
+LEN236Cell.name=Топливный стержень (LEN-236)
+HEN236Cell.name=Топливный стержень (HEN-236)
+LEA242Cell.name=Топливный стержень (LEA-242)
+HEA242Cell.name=Топливный стержень (HEA-242)
+LEC243Cell.name=Топливный стержень (LEC-243)
+HEC243Cell.name=Топливный стержень (HEC-243)
+LEC245Cell.name=Топливный стержень (LEC-245)
+HEC245Cell.name=Топливный стержень (HEC-245)
+LEC247Cell.name=Топливный стержень (LEC-247)
+HEC247Cell.name=Топливный стержень (HEC-247)
+
+dLEN236Cell.name=Топливный стержень (Обедненный LEN-236)
+dHEN236Cell.name=Топливный стержень (Обедненный HEN-236)
+dLEA242Cell.name=Топливный стержень (Обедненный LEA-242)
+dHEA242Cell.name=Топливный стержень (Обедненный HEA-242)
+dLEC243Cell.name=Топливный стержень (Обедненный LEC-243)
+dHEC243Cell.name=Топливный стержень (Обедненный HEC-243)
+dLEC245Cell.name=Топливный стержень (Обедненный LEC-245)
+dHEC245Cell.name=Топливный стержень (Обедненный HEC-245)
+dLEC247Cell.name=Топливный стержень (Обедненный LEC-247)
+dHEC247Cell.name=Топливный стержень (Обедненный HEC-247)
+
+LEN236Oxide.name=LEN-236 Оксид топливо
+HEN236Oxide.name=HEN-236 Оксид топливо
+LEA242Oxide.name=LEA-242 Оксид топливо
+HEA242Oxide.name=HEA-242 Оксид топливо
+LEC243Oxide.name=LEC-243 Оксид топливо
+HEC243Oxide.name=HEC-243 Оксид топливо
+LEC245Oxide.name=LEC-245 Оксид топливо
+HEC245Oxide.name=HEC-245 Оксид топливо
+LEC247Oxide.name=LEC-247 Оксид топливо
+HEC247Oxide.name=HEC-247 Оксид топливо
+
+LEN236CellOxide.name=Топливный стержень (Оксид LEN-236)
+HEN236CellOxide.name=Топливный стержень (Оксид HEN-236)
+LEA242CellOxide.name=Топливный стержень (Оксид LEA-242)
+HEA242CellOxide.name=Топливный стержень (Оксид HEA-242)
+LEC243CellOxide.name=Топливный стержень (Оксид LEC-243)
+HEC243CellOxide.name=Топливный стержень (Оксид HEC-243)
+LEC245CellOxide.name=Топливный стержень (Оксид LEC-245)
+HEC245CellOxide.name=Топливный стержень (Оксид HEC-245)
+LEC247CellOxide.name=Топливный стержень (Оксид LEC-247)
+HEC247CellOxide.name=Топливный стержень (Оксид HEC-247)
+
+dLEN236CellOxide.name=Топливный стержень (Об. оксид LEN-236)
+dHEN236CellOxide.name=Топливный стержень (Об. оксид HEN-236)
+dLEA242CellOxide.name=Топливный стержень (Об. оксид LEA-242)
+dHEA242CellOxide.name=Топливный стержень (Об. оксид HEA-242)
+dLEC243CellOxide.name=Топливный стержень (Об. оксид LEC-243)
+dHEC243CellOxide.name=Топливный стержень (Об. оксид HEC-243)
+dLEC245CellOxide.name=Топливный стержень (Об. оксид LEC-245)
+dHEC245CellOxide.name=Топливный стержень (Об. оксид HEC-245)
+dLEC247CellOxide.name=Топливный стержень (Об. оксид LEC-247)
+dHEC247CellOxide.name=Топливный стержень (Об. оксид HEC-247)
+
+RTGCell.name=РИТЭГ-капсула (Плутоний)
+AmRTGCell.name=РИТЭГ-капсула (Америций)
+CfRTGCell.name=РИТЭГ-капсула (Калифорний)
+
+H2OCell.name=Ячейка (Вода)
+OCell.name=Ячейка (Кислород)
+HCell.name=Ячейка (Водород)
+DCell.name=Ячейка (Дейтерий)
+TCell.name=Ячейка (Тритий)
+He3Cell.name=Ячейка (Гелий-3)
+He4Cell.name=Ячейка (Гелий-4)
+SCHe4Cell.name=Ячейка (Жидкий Гелий-4)
+Li6Cell.name=Ячейка (Литий-6)
+Li7Cell.name=Ячейка (Литий-7)
+B10Cell.name=Ячейка (Бор-10)
+B11Cell.name=Ячейка (Бор-11)
+emptyFluidCell.name=Пустая жидкостная ячейка
+
+emptyCapsule.name=Пустая капсула
+nCapsule.name=Капсуса (Нейтрон)
+pCapsule.name=Капсула (Протон)
+eCapsule.name=Капсула (Электрон)
+
+simpleNeutronReflector.name=Базовое покрытие
+ironPlating.name=Железное покрытие
+conGrind.name=Конвекционный измельчитель
+advancedNeutronReflector.name=Укрепленное покрытие
+tinPlating.name=Оловянное покрытие
+iWater.name=Бесконечный источник воды
+dUPlating.name=Покрытие из обедненного урана
+aPlating.name=Продвинутое покрытие
+ironGrating.name=Железная решетка
+goldContacts.name=Позолоченные контакты
+copperWiring.name=Медная проводка
+tinTubing.name=Оловянные трубки
+leadPlating.name=Свинцовое покрытие
+silverPanel.name=Серебряная панель
+bronzeBearing.name=Бронзовый подшипник
+MgBWiring.name=Проводка из диборида магния
+computerPlate.name=Компьютерная плата
+mechanicalPart.name=Механические части
+plastic.name=Биопластик
+
+item.pistol.name=Пистолет
+item.dUBullet.name=DU Пули
+
+item.bronzePickaxe.name=Бронзовая кирка
+item.bronzeShovel.name=Бронзовая лопата
+item.bronzeAxe.name=Бронзовый топор
+item.bronzeHoe.name=Бронзовая мотыга
+item.bronzeSword.name=Бронзовый меч
+
+item.boronPickaxe.name=Борая кирка
+item.boronShovel.name=Борная лопата
+item.boronAxe.name=Борный топор
+item.boronHoe.name=Борная мотыга
+item.boronSword.name=Борный меч
+
+item.toughAlloyPickaxe.name=Кирка из прочного сплава
+item.toughAlloyShovel.name=Лопата из прочного сплава
+item.toughAlloyAxe.name=Топор из прочного сплава
+item.toughAlloyHoe.name=Мотыга из прочного сплава
+item.toughAlloySword.name=Меч из прочного сплава
+item.toughAlloyPaxel.name=Мультитул из прочного сплава
+item.toughBow.name=Лук из прочного сплава
+
+item.dUPickaxe.name=Кирка из обедненного урана
+item.dUShovel.name=Лопата из обедненного урана
+item.dUAxe.name=Топор из обедненного урана
+item.dUHoe.name=Мотыга из обедненного урана
+item.dUSword.name=Меч из обедненного урана
+item.dUPaxel.name=Мультитул из обедненного урана
+
+item.toughHelm.name=Шлем из прочного сплава
+item.toughChest.name=Нагрудник из прочного сплава
+item.toughLegs.name=Поножи из прочного сплава
+item.toughBoots.name=Сапоги из прочного сплава
+
+item.dUHelm.name=Шлем из обедненного урана
+item.dUChest.name=Нагрудник из обедненного урана
+item.dULegs.name=Поножи из обедненного урана
+item.dUBoots.name=Сапоги из обедненного урана
+
+item.boronHelm.name=Шлем из бора
+item.boronChest.name=Нагрудник из бора
+item.boronLegs.name=Поножи из бора
+item.boronBoots.name=Сапоги из бора
+
+item.bronzeHelm.name=Бронзовый шлем
+item.bronzeChest.name=Бронзовый нагрудник
+item.bronzeLegs.name=Бронзовые поножи
+item.bronzeBoots.name=Бронзовые ботинки
+
+universalReactant.name=Универсальный реагент
+reactionVessel.name=Малая ядерная камера
+toughAlloy.name=Слиток из прочного сплава
+toughDust.name=Пыль из прочного сплава
+
+item.recordPractice.name=NuclearCraft - Музыкальный диск
+item.Practice.desc=Yokian Practice
+item.recordArea51.name=NuclearCraft - Музыкальный диск
+item.Area51.desc=Jimmy in Area 51
+item.recordNeighborhood.name=NuclearCraft - Музыкальный диск
+item.recordJoe.name=Special Michael Music - Музыкальный диск
+item.Neighborhood.desc=Retroville Neighbourhood
+
+item.blank.name=Blank
+
+item.antimatter.name=Антиматерия (Временная)
+
+item.lithiumIonBattery.name=Литий-ионная батарея
+
+item.geiger.name=Счетчик Гейгера
+item.radaway.name=Антирадин
+item.radX.name=Рад-Икс
+
+achievement.nuclearFurnace=Скоростная плавка
+achievement.nuclearFurnace.desc=Создайте ядерную печь
+achievement.dominos=Особая доставка
+achievement.dominos.desc=Создайте домино
+achievement.fishAndRicecake=Строгая диета
+achievement.fishAndRicecake.desc=Приготовьте рисовый пирог с рыбой
+achievement.heavyDutyWorkspace=Ядерный инженер
+achievement.heavyDutyWorkspace.desc=Создайте тяжелый верстак
+achievement.nuke=Война... Война никогда не меняется.
+achievement.nuke.desc=Сделайте большую баху
+achievement.tool=Один инструмент для управления... Остальными
+achievement.tool.desc=Создайте мультитул из обедненного урана
+achievement.reactionGenerator=Нервирующая смесь
+achievement.reactionGenerator.desc=Создайте генератор реакций
+achievement.fissionController=Разделяя атом
+achievement.fissionController.desc=Создайте контроллер деления
+achievement.RTG=Красный Горячий Плутоний
+achievement.RTG.desc=Создайте радиоизотопный термоэлектрический генератор (РТГ/РИТЭГ)
+achievement.fusionReactor=Звезда в коробке
+achievement.fusionReactor.desc=Создайте термоядерный реактор
+achievement.factory=Индустриализация
+achievement.factory.desc=Создайте фабрику
+achievement.separator=Дальнейшие уточнения
+achievement.separator.desc=Создайте сепаратор изотопов
+achievement.oxidiser=Максимус Эффективиус
+achievement.oxidiser.desc=Создайте окислитель
+achievement.pistol=Лицензия на убийства
+achievement.pistol.desc=Создайте пистолет
+achievement.solar=Эко-дружелюбие
+achievement.solar.desc=Создайте солнечную панель
+achievement.synchrotron=Экстремальная фотоника
+achievement.synchrotron.desc=Создайте контроллер синхротрона
+achievement.antimatterBomb=Смерть, Уничтожитель Миров
+achievement.antimatterBomb.desc=Создайте антиматериальную бомбу
+
+death.attack.heliumfreeze=%1$s замерз до смерти в ёмкости жидкого гелия
+death.attack.plasmaburn=%1$s был испепелен сверх-горячей плазмой
+death.attack.steamburn=%1$s был приготовлен на пару
+
+message.nuclearcraft.antimatterExplosionDisabled=Взрыв антиматерии отключен
