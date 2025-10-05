@@ -29,7 +29,7 @@ public class ItemAntimatter extends ItemNC {
                 playerWhoDropped.addChatMessage(new ChatComponentTranslation("message.nuclearcraft.antimatterExplosionDisabled"));
             }
             entityItem.setDead();
-            return true;
+            return false;
         }
 
         int x = (int) Math.floor(entityItem.posX);
