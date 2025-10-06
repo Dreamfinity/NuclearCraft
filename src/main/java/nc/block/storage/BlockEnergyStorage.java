@@ -48,7 +48,7 @@ public abstract class BlockEnergyStorage extends BlockContainer {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		blockIcon = iconRegister.registerIcon("nc:storage/" + name + "/" + "sideIn");
 		blockIcon1 = iconRegister.registerIcon("nc:storage/" + name + "/" + "sideOut");
 		blockIcon2 = iconRegister.registerIcon("nc:storage/" + name + "/" + "sideDisabled");

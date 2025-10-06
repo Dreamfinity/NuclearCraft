@@ -26,14 +26,14 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 /**
- * 
+ *
  * Custom Explosion class that allows for specifying whether or not to destroy blocks,
  * whether to inflict damage, how much and what type of damage to inflict, whether to
  * exclude liquids from the calculations, and also what particles to spawn under
  * various circumstances.
- * 
+ *
  * Extends vanilla Explosion class to allow substitution in several vanilla methods.
- * 
+ *
  *
  */
 public class NCExplosion extends Explosion
@@ -225,8 +225,8 @@ public class NCExplosion extends Explosion
 				k = chunkposition.chunkPosZ;
 				block = worldObj.getBlock(i, j, k);
 				Block block1 = worldObj.getBlock(i, j - 1, k);
-				// func_149730_j() returns block.opaque
-				if (block == Blocks.air && block1.func_149730_j() && rand.nextInt(3) == 0) {
+				// isFullBlock() returns block.opaque
+				if (block == Blocks.air && block1.isFullBlock() && rand.nextInt(3) == 0) {
 					worldObj.setBlock(i, j, k, Blocks.fire);
 				}
 			}
@@ -305,7 +305,7 @@ public class NCExplosion extends Explosion
 												(ignoreLiquidType == 2 && block.getMaterial() == Material.lava)));
 								if (flag) {
 									// func_145772_a is getBlockExplosionResistance
-									float f3 = exploder != null ? exploder.func_145772_a(this, worldObj, l, i1, j1, block) : block.getExplosionResistance(exploder, worldObj, l, i1, j1, explosionX, explosionY, explosionZ);
+									float f3 = exploder != null ? exploder.getExplosionResistance(this, worldObj, l, i1, j1, block) : block.getExplosionResistance(exploder, worldObj, l, i1, j1, explosionX, explosionY, explosionZ);
 									f1 -= (f3 + 0.3F) * f2;
 								}
 							}
@@ -391,7 +391,7 @@ public class NCExplosion extends Explosion
 	 */
 	@Override
 	public EntityLivingBase getExplosivePlacedBy() {
-		return exploder == null ? null : (exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed) exploder).getTntPlacedBy() : 
+		return exploder == null ? null : (exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed) exploder).getTntPlacedBy() :
 			(exploder instanceof EntityLivingBase ? (EntityLivingBase) exploder : (exploder instanceof EntityThrowable ? ((EntityThrowable) exploder).getThrower() : null)));
 	}
 

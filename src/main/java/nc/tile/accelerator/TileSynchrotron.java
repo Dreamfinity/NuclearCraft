@@ -520,7 +520,7 @@ public class TileSynchrotron extends TileInventory implements IEnergyHandler, IE
         return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this;
     }
     
-    public boolean hasCustomInventoryName() {
+    public boolean isCustomInventoryName() {
 		return false;
 	}
     
@@ -600,7 +600,7 @@ public class TileSynchrotron extends TileInventory implements IEnergyHandler, IE
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		this.readFromNBT(packet.func_148857_g());
+		this.readFromNBT(packet.getNbtCompound());
 	}
 	
 	public static boolean isFuel(ItemStack stack) {
@@ -629,7 +629,7 @@ public class TileSynchrotron extends TileInventory implements IEnergyHandler, IE
 		return this.storage.getMaxEnergyStored();
 	}
 
-	public int[] getAccessibleSlotsFromSide(int slot) {
+	public int[] getSlotsForFace(int slot) {
 		return slots1;
 	}
 

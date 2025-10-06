@@ -21,7 +21,7 @@ public class BlockReactorBlock extends Block {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister p_149651_1_) {
+	public void registerIcons(IIconRegister p_149651_1_) {
 		blockIcon = p_149651_1_.registerIcon("nc:reactor/" + this.getUnlocalizedName().substring(5) + (NuclearCraft.alternateCasing ? "Alt" : ""));
 	}
 	

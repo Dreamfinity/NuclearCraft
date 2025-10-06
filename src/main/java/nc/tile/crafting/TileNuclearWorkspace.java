@@ -57,9 +57,9 @@ public class TileNuclearWorkspace extends TileEntity implements IInventory, ISid
         return null;
     }
 
-    public void openInventory() {}
+    public void openChest() {}
 
-    public void closeInventory() {}
+    public void closeChest() {}
 
     public boolean isUseableByPlayer(EntityPlayer player) {
         return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this && player.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
@@ -86,11 +86,11 @@ public class TileNuclearWorkspace extends TileEntity implements IInventory, ISid
         return  "Heavy Duty Workspace";
     }
 
-    public boolean hasCustomInventoryName() {
+    public boolean isCustomInventoryName() {
         return false;
     }
 
-    public int[] getAccessibleSlotsFromSide(int side) {
+    public int[] getSlotsForFace(int side) {
         return new int[]{};
     }
 
@@ -143,8 +143,8 @@ public class TileNuclearWorkspace extends TileEntity implements IInventory, ISid
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		this.result = ItemStack.loadItemStackFromNBT(packet.func_148857_g().getCompoundTag("Result"));
-        for (int x = 0;x < matrix.length;x++) matrix[x] = ItemStack.loadItemStackFromNBT(packet.func_148857_g().getCompoundTag("Craft" + x));
+		this.result = ItemStack.loadItemStackFromNBT(packet.getNbtCompound().getCompoundTag("Result"));
+        for (int x = 0;x < matrix.length;x++) matrix[x] = ItemStack.loadItemStackFromNBT(packet.getNbtCompound().getCompoundTag("Craft" + x));
 	}
 
 }

@@ -26,8 +26,8 @@ public abstract class ContainerMachineBase extends Container {
 		recipes = recipe;
 	}
   
-	public void addCraftingToCrafters(ICrafting icrafting) {
-		super.addCraftingToCrafters(icrafting);
+	public void onCraftGuiOpened(ICrafting icrafting) {
+		super.onCraftGuiOpened(icrafting);
 		icrafting.sendProgressBarUpdate(this, 0, entity.cookTime);
 	}
   

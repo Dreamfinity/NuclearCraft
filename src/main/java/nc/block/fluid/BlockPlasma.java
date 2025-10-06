@@ -43,7 +43,7 @@ public class BlockPlasma extends BlockFluidClassic {
     }
     
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register) {
+    public void registerIcons(IIconRegister register) {
             stillIcon = register.registerIcon("nc:fluid/plasmaStill");
             flowingIcon = register.registerIcon("nc:fluid/plasmaFlowing");
     }

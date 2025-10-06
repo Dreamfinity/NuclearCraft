@@ -33,7 +33,7 @@ public class BlockElectromagnet extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		this.blockIcon = iconRegister.registerIcon("nc:generator/fusionEM/" + "side" + (this.isActive ? "Active" : "Idle"));
 		this.iconTop = iconRegister.registerIcon("nc:generator/fusionEM/" + "top" + (this.isActive ? "Active" : "Idle"));
 		this.iconBottom = iconRegister.registerIcon("nc:generator/fusionEM/" + "bottom" + (this.isActive ? "Active" : "Idle"));

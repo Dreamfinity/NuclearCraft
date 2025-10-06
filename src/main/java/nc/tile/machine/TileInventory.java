@@ -82,11 +82,14 @@ public abstract class TileInventory extends TileEntity implements ISidedInventor
 		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this;
 	}
 
-	public void openInventory() {}
+	@Override
+	public void openChest() {}
 
-	public void closeInventory() {}
+	@Override
+	public void closeChest() {}
 
-	public boolean hasCustomInventoryName() {	
+	@Override
+	public boolean isCustomInventoryName() {
 		return false;
 	}
 }

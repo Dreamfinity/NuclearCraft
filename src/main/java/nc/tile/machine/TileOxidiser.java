@@ -36,7 +36,7 @@ public class TileOxidiser extends TileMachineBase {
 		return true;
 	}
 	
-	public int[] getAccessibleSlotsFromSide(int i) {
+	public int[] getSlotsForFace(int i) {
 		return i == 1 ? input : output;
 	}
 }

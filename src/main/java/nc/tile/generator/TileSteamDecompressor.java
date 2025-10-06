@@ -129,7 +129,7 @@ public class TileSteamDecompressor extends TileEntity implements IFluidHandler {
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readFluid(packet.func_148857_g());
-		this.readFromNBT(packet.func_148857_g());
+		readFluid(packet.getNbtCompound());
+		this.readFromNBT(packet.getNbtCompound());
 	}
 }

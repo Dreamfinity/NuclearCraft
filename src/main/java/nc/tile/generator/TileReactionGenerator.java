@@ -153,7 +153,7 @@ public class TileReactionGenerator extends TileGeneratorInventory {
 		else return false;
 	}
 	
-	public int[] getAccessibleSlotsFromSide(int slot) {
+	public int[] getSlotsForFace(int slot) {
 		return slots2;
 	}
 

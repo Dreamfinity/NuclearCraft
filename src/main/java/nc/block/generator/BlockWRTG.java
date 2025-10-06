@@ -27,7 +27,7 @@ public class BlockWRTG extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 	this.blockIcon = iconRegister.registerIcon("nc:generator/RTG/" + "WRTGSide");
 	this.iconTop = iconRegister.registerIcon("nc:generator/RTG/" + "WRTG");
 	}

@@ -26,7 +26,7 @@ public final class GasTransmission
 
 		for(ForgeDirection orientation : sides)
 		{
-			TileEntity acceptor = Coord4D.get(tileEntity).getFromSide(orientation).getTileEntity(tileEntity.getWorldObj());
+			TileEntity acceptor = Coord4D.get(tileEntity).getFromSide(orientation).getTileEntity(tileEntity.getWorld());
 
 			if(acceptor instanceof IGasHandler)
 			{
@@ -58,7 +58,7 @@ public final class GasTransmission
 
 		for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS)
 		{
-			TileEntity connection = Coord4D.get(tileEntity).getFromSide(orientation).getTileEntity(tileEntity.getWorldObj());
+			TileEntity connection = Coord4D.get(tileEntity).getFromSide(orientation).getTileEntity(tileEntity.getWorld());
 
 			if(canConnect(connection, orientation))
 			{

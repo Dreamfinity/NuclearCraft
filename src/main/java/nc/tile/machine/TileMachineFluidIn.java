@@ -140,10 +140,10 @@ public abstract class TileMachineFluidIn extends TileMachineBase implements IFlu
 
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		super.onDataPacket(net, packet);
-		readSides(packet.func_148857_g());
-		readEnergy(packet.func_148857_g());
-		readFluid(packet.func_148857_g());
-		readFromNBT(packet.func_148857_g());
+		readSides(packet.getNbtCompound());
+		readEnergy(packet.getNbtCompound());
+		readFluid(packet.getNbtCompound());
+		readFromNBT(packet.getNbtCompound());
 	}
 	
 	public void readFluid(NBTTagCompound nbt) {

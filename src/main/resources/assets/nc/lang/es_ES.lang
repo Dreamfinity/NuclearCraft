@@ -373,3 +373,5 @@ toughAlloy.name=Lingote de Aleación Dura
 toughDust.name=Polvo de Aleación Dura
 
 death.attack.heliumfreeze=%1$s se congeló a muerte en una pozo de helio líquido
+
+message.nuclearcraft.antimatterExplosionDisabled=Explosión de antimateria deshabilitada

@@ -29,7 +29,7 @@ public class BlockSynchrotron extends BlockMachine {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		this.blockIcon = iconRegister.registerIcon("nc:accelerator/synchrotron/" + "side" + (this.isActive ? "Active" : "Idle"));
 		this.iconFront = iconRegister.registerIcon("nc:accelerator/synchrotron/" + "front" + (this.isActive ? "Active" : "Idle"));
 		this.iconTop = iconRegister.registerIcon("nc:accelerator/synchrotron/" + "top" + (this.isActive ? "Active" : "Idle"));
@@ -50,7 +50,7 @@ public class BlockSynchrotron extends BlockMachine {
 		IChatComponent localIChatComponent;
 		TileSynchrotron s = (TileSynchrotron) world.getTileEntity(x, y, z);
 		double e = s.efficiency;
-    	localIChatComponent = IChatComponent.Serializer.func_150699_a(""+e);
+    	localIChatComponent = IChatComponent.Serializer.jsonToComponent(""+e);
     	if (world.isRemote) {((ICommandSender) player).addChatMessage(localIChatComponent);}
 		return true;
 	}
@@ -59,7 +59,7 @@ public class BlockSynchrotron extends BlockMachine {
 		super.onBlockPlacedBy(world, x, y, z, entityLivingBase, itemstack);
 		
 		IChatComponent localIChatComponent;
-    	localIChatComponent = IChatComponent.Serializer.func_150699_a("[{text:\"Use NuclearCraft's NEI info system or click here for help with the mod!\",color:white,italic:false,clickEvent:{action:open_url,value:\"http://minecraft.curseforge.com/projects/nuclearcraft-mod\"}}]");
+    	localIChatComponent = IChatComponent.Serializer.jsonToComponent("[{text:\"Use NuclearCraft's NEI info system or click here for help with the mod!\",color:white,italic:false,clickEvent:{action:open_url,value:\"http://minecraft.curseforge.com/projects/nuclearcraft-mod\"}}]");
 
     	if (world.isRemote) {((ICommandSender) entityLivingBase).addChatMessage(localIChatComponent);}
 	}
@@ -106,7 +106,7 @@ public class BlockSynchrotron extends BlockMachine {
 							}
 							itemstack.stackSize -= 	j;
 							EntityItem item = new EntityItem(world, (double) ((float) x + f), ((float) y + f1), ((float) z + f2),
-							new ItemStack (itemstack.getItem(), j, itemstack.getItemDamage()));
+							new ItemStack (itemstack.getItem(), j, itemstack.getMetadata()));
 							if(itemstack.hasTagCompound()) {
 								item.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
 							}
@@ -118,7 +118,7 @@ public class BlockSynchrotron extends BlockMachine {
 						}
 					}
 				}
-				world.func_147453_f(x, y, z, oldBlockID);
+				world.updateNeighborsAboutBlockChange(x, y, z, oldBlockID);
 			}
 		}
 		super.breakBlock(world, x, y, z, oldBlockID, oldMetadata);

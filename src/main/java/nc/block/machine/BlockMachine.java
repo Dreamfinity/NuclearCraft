@@ -50,7 +50,7 @@ public abstract class BlockMachine extends BlockContainer {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		this.blockIcon = iconRegister.registerIcon("nc:machine/" + textureName + "/" + "side");
 		this.iconFront = iconRegister.registerIcon("nc:machine/" + textureName + "/" + "front" + (this.isActive ? "Active" : "Idle"));
 		this.iconTop = iconRegister.registerIcon("nc:machine/" + textureName + "/" + "top");
@@ -79,16 +79,16 @@ public abstract class BlockMachine extends BlockContainer {
 			Block block2 = world.getBlock(x - 1, y, z);
 			Block block3 = world.getBlock(x + 1, y, z);
 			byte b0 = 3;
-			if (block.func_149730_j() && !block1.func_149730_j()) {
+			if (block.isFullBlock() && !block1.isFullBlock()) {
 				b0 = 3;
 			}
-			if (block1.func_149730_j() && !block.func_149730_j()) {
+			if (block1.isFullBlock() && !block.isFullBlock()) {
 				b0 = 2;
 			}
-			if (block2.func_149730_j() && !block3.func_149730_j()) {
+			if (block2.isFullBlock() && !block3.isFullBlock()) {
 				b0 = 5;
 			}
-			if (block3.func_149730_j() && !block2.func_149730_j()) {
+			if (block3.isFullBlock() && !block2.isFullBlock()) {
 				b0 = 4;
 			}
 			world.setBlockMetadataWithNotify(x, y, z, b0, 2);

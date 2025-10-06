@@ -36,7 +36,7 @@ public class BlockTubing2 extends BlockContainer {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister)
+	public void registerIcons(IIconRegister iconRegister)
 	{
 	this.blockIcon = iconRegister.registerIcon("nc:reactor/" + "accStraight2InHand");
 	}

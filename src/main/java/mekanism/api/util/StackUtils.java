@@ -50,7 +50,7 @@ public final class StackUtils
 			return false;
 		}
 
-		return stack1.getItem() != stack2.getItem() || stack1.getItemDamage() != stack2.getItemDamage();
+		return stack1.getItem() != stack2.getItem() || stack1.getMetadata() != stack2.getMetadata();
 	}
 
 	public static boolean equalsWildcard(ItemStack wild, ItemStack check)
@@ -60,7 +60,7 @@ public final class StackUtils
 			return check == wild;
 		}
 		
-		return wild.getItem() == check.getItem() && (wild.getItemDamage() == OreDictionary.WILDCARD_VALUE || wild.getItemDamage() == check.getItemDamage());
+		return wild.getItem() == check.getItem() && (wild.getMetadata() == OreDictionary.WILDCARD_VALUE || wild.getMetadata() == check.getMetadata());
 	}
 
 	public static boolean equalsWildcardWithNBT(ItemStack wild, ItemStack check)
@@ -251,7 +251,7 @@ public final class StackUtils
 			return -1;
 		}
 		
-		String name = stack.getItemDamage() == OreDictionary.WILDCARD_VALUE ? stack.getItem().getUnlocalizedName() : stack.getItem().getUnlocalizedName(stack);
-		return name.hashCode() << 8 | stack.getItemDamage();
+		String name = stack.getMetadata() == OreDictionary.WILDCARD_VALUE ? stack.getItem().getUnlocalizedName() : stack.getItem().getUnlocalizedName(stack);
+		return name.hashCode() << 8 | stack.getMetadata();
 	}
 }

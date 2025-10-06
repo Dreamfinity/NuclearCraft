@@ -54,11 +54,11 @@ public class CrusherRecipesOld
     	this.AddRecipe("oreSilver", new ItemStack(NCItems.material, 2, 18));
     	this.AddRecipe("oreUranium", new ItemStack(NCItems.material, 2, 19));
     	/*if (OreDictionary.doesOreNameExist("oreYellorite") && OreDictionary.doesOreNameExist("dustYellorite")) {
-    		this.AddRecipe("oreYellorite", new ItemStack(OreDictionary.getOres("dustYellorite").get(0).getItem(), 2, OreDictionary.getOres("dustYellorite").get(0).getItemDamage()));
-    		this.AddRecipe("oreYellorium", new ItemStack(OreDictionary.getOres("dustYellorite").get(0).getItem(), 2, OreDictionary.getOres("dustYellorite").get(0).getItemDamage()));
+    		this.AddRecipe("oreYellorite", new ItemStack(OreDictionary.getOres("dustYellorite").get(0).getItem(), 2, OreDictionary.getOres("dustYellorite").get(0).getMetadata()));
+    		this.AddRecipe("oreYellorium", new ItemStack(OreDictionary.getOres("dustYellorite").get(0).getItem(), 2, OreDictionary.getOres("dustYellorite").get(0).getMetadata()));
     	} else if (OreDictionary.doesOreNameExist("oreYellorium") && OreDictionary.doesOreNameExist("dustYellorium")) {
-    		this.AddRecipe("oreYellorite", new ItemStack(OreDictionary.getOres("dustYellorium").get(0).getItem(), 2, OreDictionary.getOres("dustYellorium").get(0).getItemDamage()));
-    		this.AddRecipe("oreYellorium", new ItemStack(OreDictionary.getOres("dustYellorium").get(0).getItem(), 2, OreDictionary.getOres("dustYellorium").get(0).getItemDamage()));
+    		this.AddRecipe("oreYellorite", new ItemStack(OreDictionary.getOres("dustYellorium").get(0).getItem(), 2, OreDictionary.getOres("dustYellorium").get(0).getMetadata()));
+    		this.AddRecipe("oreYellorium", new ItemStack(OreDictionary.getOres("dustYellorium").get(0).getItem(), 2, OreDictionary.getOres("dustYellorium").get(0).getMetadata()));
     	}*/
     	this.AddRecipe("oreThorium", new ItemStack(NCItems.material, 2, 20));
     	this.AddRecipe("orePlutonium", new ItemStack(NCItems.material, 2, 33));
@@ -85,11 +85,11 @@ public class CrusherRecipesOld
     	this.AddRecipe("ingotUranium", new ItemStack(NCItems.material, 1, 19));
     	this.AddRecipe("ingotTough", new ItemStack(NCItems.material, 1, 22));
     	/*if (OreDictionary.doesOreNameExist("ingotYellorite") && OreDictionary.doesOreNameExist("dustYellorite")) {
-    		this.AddRecipe("oreYellorite", new ItemStack(OreDictionary.getOres("dustYellorite").get(0).getItem(), 1, OreDictionary.getOres("dustYellorite").get(0).getItemDamage()));
-    		this.AddRecipe("oreYellorium", new ItemStack(OreDictionary.getOres("dustYellorite").get(0).getItem(), 1, OreDictionary.getOres("dustYellorite").get(0).getItemDamage()));
+    		this.AddRecipe("oreYellorite", new ItemStack(OreDictionary.getOres("dustYellorite").get(0).getItem(), 1, OreDictionary.getOres("dustYellorite").get(0).getMetadata()));
+    		this.AddRecipe("oreYellorium", new ItemStack(OreDictionary.getOres("dustYellorite").get(0).getItem(), 1, OreDictionary.getOres("dustYellorite").get(0).getMetadata()));
     	} else if (OreDictionary.doesOreNameExist("oreYellorium") && OreDictionary.doesOreNameExist("dustYellorium")) {
-    		this.AddRecipe("oreYellorite", new ItemStack(OreDictionary.getOres("dustYellorium").get(0).getItem(), 1, OreDictionary.getOres("dustYellorium").get(0).getItemDamage()));
-    		this.AddRecipe("oreYellorium", new ItemStack(OreDictionary.getOres("dustYellorium").get(0).getItem(), 1, OreDictionary.getOres("dustYellorium").get(0).getItemDamage()));
+    		this.AddRecipe("oreYellorite", new ItemStack(OreDictionary.getOres("dustYellorium").get(0).getItem(), 1, OreDictionary.getOres("dustYellorium").get(0).getMetadata()));
+    		this.AddRecipe("oreYellorium", new ItemStack(OreDictionary.getOres("dustYellorium").get(0).getItem(), 1, OreDictionary.getOres("dustYellorium").get(0).getMetadata()));
     	}*/
     	this.AddRecipe("ingotThorium", new ItemStack(NCItems.material, 1, 20));
     	this.AddRecipe("ingotBronze", new ItemStack(NCItems.material, 1, 21));
@@ -152,7 +152,7 @@ public class CrusherRecipesOld
     }
 
     private boolean func_151397_a(ItemStack p_151397_1_, ItemStack p_151397_2_) {
-        return p_151397_2_.getItem() == p_151397_1_.getItem() && (p_151397_2_.getItemDamage() == 32767 || p_151397_2_.getItemDamage() == p_151397_1_.getItemDamage());
+        return p_151397_2_.getItem() == p_151397_1_.getItem() && (p_151397_2_.getMetadata() == 32767 || p_151397_2_.getMetadata() == p_151397_1_.getMetadata());
     }
 
     public Map<ItemStack, ItemStack> getSmeltingList() {

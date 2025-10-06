@@ -78,10 +78,10 @@ public class TileFusionReactorBlock extends TileEntity implements IEnergyHandler
 		return (xOffset == 0 && yOffset == 0 && zOffset == 0);
 	}
 	
-	public int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(int side) {
 		ISidedInventory main = (ISidedInventory)worldObj.getTileEntity(xCoord + xOffset, yCoord + yOffset, zCoord + zOffset);
 		if (main == null || isNotReady()) {return null;}
-		return main.getAccessibleSlotsFromSide(side);
+		return main.getSlotsForFace(side);
 	}
 	
 	public boolean isItemValidForSlot(int slot, ItemStack s) {
@@ -178,10 +178,10 @@ public class TileFusionReactorBlock extends TileEntity implements IEnergyHandler
 		return main.getInventoryName();
 	}
 
-	public boolean hasCustomInventoryName() {
+	public boolean isCustomInventoryName() {
 		ISidedInventory main = (ISidedInventory)worldObj.getTileEntity(xCoord + xOffset, yCoord + yOffset, zCoord + zOffset);
 		if (main == null || isNotReady()) {return false;}
-		return main.hasCustomInventoryName();
+		return main.isCustomInventoryName();
 	}
 
 	public int getInventoryStackLimit() {
@@ -196,16 +196,16 @@ public class TileFusionReactorBlock extends TileEntity implements IEnergyHandler
 		return main.isUseableByPlayer(p);
 	}
 
-	public void openInventory() {
+	public void openChest() {
 		ISidedInventory main = (ISidedInventory)worldObj.getTileEntity(xCoord + xOffset, yCoord + yOffset, zCoord + zOffset);
 		if (main == null || isNotReady()) {return;}
-		main.openInventory();
+		main.openChest();
 	}
 
-	public void closeInventory() {
+	public void closeChest() {
 		ISidedInventory main = (ISidedInventory)worldObj.getTileEntity(xCoord + xOffset, yCoord + yOffset, zCoord + zOffset);
 		if (main == null || isNotReady()) {return;}
-		main.closeInventory();
+		main.closeChest();
 	}
 
 	@Override

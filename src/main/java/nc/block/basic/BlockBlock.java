@@ -17,13 +17,13 @@ public class BlockBlock extends Block {
 
 	public BlockBlock(String unlocalizedName, Material material) {
 		super(material);
-        this.setBlockName(unlocalizedName);
+        this.setUnlocalizedName(unlocalizedName);
         this.setCreativeTab(NuclearCraft.tabNC);
         this.setHardness(3.0F);
         this.setResistance(10.0F);
         this.setStepSound(soundTypeMetal);
         this.setHarvestLevel("pickaxe", 0);
-        this.setBlockTextureName("nc:metal/" + unlocalizedName);
+        this.setTextureName("nc:metal/" + unlocalizedName);
 	}
 
 	public IIcon[] icons = new IIcon[6];
@@ -31,7 +31,7 @@ public class BlockBlock extends Block {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister reg) {
+	public void registerIcons(IIconRegister reg) {
 		for (int i = 0; i < 6; i ++) {
 			this.icons[i] = reg.registerIcon(this.textureName + i);
 		}

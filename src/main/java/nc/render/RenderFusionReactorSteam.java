@@ -36,7 +36,7 @@ public class RenderFusionReactorSteam extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f)
    {
      int i;
-     if (tileentity.getWorldObj() == null)
+     if (tileentity.getWorld() == null)
      {
     	 i = 0;
      } else {

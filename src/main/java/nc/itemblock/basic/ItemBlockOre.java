@@ -11,7 +11,7 @@ public class ItemBlockOre extends ItemBlockMeta {
 	}
 
 	public String getUnlocalizedName(ItemStack stack) {
-		switch (stack.getItemDamage()) {
+		switch (stack.getMetadata()) {
 			case 0: return "copperOre";
 			case 1: return "tinOre";
 			case 2: return "leadOre";

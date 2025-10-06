@@ -16,7 +16,7 @@ public class ItemInfo
 
 	public static ItemInfo get(ItemStack stack)
 	{
-		return new ItemInfo(stack.getItem(), stack.getItemDamage());
+		return new ItemInfo(stack.getItem(), stack.getMetadata());
 	}
 
 	@Override

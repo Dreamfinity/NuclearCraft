@@ -34,7 +34,7 @@ public class BlockFusionReactorBlockTop extends BlockFusionReactor {
 
 			@SideOnly(Side.CLIENT)
 			@Override
-			public void registerBlockIcons(IIconRegister i)
+			public void registerIcons(IIconRegister i)
 			{
 				blockIcon = i.registerIcon("nc:generator/fusionReactor/" + "dummy");
 			}

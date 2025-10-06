@@ -21,7 +21,7 @@ public class BlockFusionConnector extends Block {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister p_149651_1_) {
+	public void registerIcons(IIconRegister p_149651_1_) {
 		blockIcon = p_149651_1_.registerIcon("nc:generator/fusionEM/" + this.getUnlocalizedName().substring(5));
 	}
 	

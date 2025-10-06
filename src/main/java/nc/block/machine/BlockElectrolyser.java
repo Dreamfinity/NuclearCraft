@@ -72,7 +72,7 @@ public class BlockElectrolyser extends BlockMachine {
 							}
 							itemstack.stackSize -= 	j;
 							EntityItem item = new EntityItem(world, (double) ((float) x + f), ((float) y + f1), ((float) z + f2),
-							new ItemStack (itemstack.getItem(), j, itemstack.getItemDamage()));
+							new ItemStack (itemstack.getItem(), j, itemstack.getMetadata()));
 							if(itemstack.hasTagCompound()) {
 								item.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
 							}
@@ -84,7 +84,7 @@ public class BlockElectrolyser extends BlockMachine {
 						}
 					}
 				}
-				world.func_147453_f(x, y, z, oldBlockID);
+				world.updateNeighborsAboutBlockChange(x, y, z, oldBlockID);
 			}
 		}
 		super.breakBlock(world, x, y, z, oldBlockID, oldMetadata);

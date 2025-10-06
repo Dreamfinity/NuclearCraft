@@ -34,7 +34,7 @@ public class ItemToughBow extends ItemBow {
 		info = strings;
 		name = nam;
 		setUnlocalizedName(nam);
-		this.setMaxDamage(4000);
+		this.setMaxDurability(4000);
 	}
 	
 	public String getUnlocalizedName() {

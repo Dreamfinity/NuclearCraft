@@ -697,7 +697,7 @@ public class TileFissionReactorSteam extends TileSteamProducer {
 		if (slots[1] != null) {
 			int type = TileFissionReactorSteam.setfueltype(slots[0]);
 			if (OreDictionary.getOreIDs(slots[1]).length == 0 || OreDictionary.getOreIDs(slots[1]) == null) for (int id : OreDictionary.getOreIDs(slots[1])) {
-				if (OreDictionary.getOres("d" + cellTypes[type - 1]).get(0).getItem() == OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getItem() && OreDictionary.getOres("d" + cellTypes[type - 1]).get(0).getItemDamage() == OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getItemDamage() && slots[1].stackSize < 64) {
+				if (OreDictionary.getOres("d" + cellTypes[type - 1]).get(0).getItem() == OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getItem() && OreDictionary.getOres("d" + cellTypes[type - 1]).get(0).getMetadata() == OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getMetadata() && slots[1].stackSize < 64) {
 					return true;
 				}
 			}
@@ -724,7 +724,7 @@ public class TileFissionReactorSteam extends TileSteamProducer {
 		if (slots[1] == null && fueltime <= 0 && fueltype != 0) {
 			for (int i = 0; i < cellTypes.length; i ++) {
 				if (fueltype == i + 1) {
-					slots[1] = new ItemStack(OreDictionary.getOres("d" + cellTypes[i]).get(0).getItem(), 1, OreDictionary.getOres("d" + cellTypes[i]).get(0).getItemDamage());
+					slots[1] = new ItemStack(OreDictionary.getOres("d" + cellTypes[i]).get(0).getItem(), 1, OreDictionary.getOres("d" + cellTypes[i]).get(0).getMetadata());
 					fueltype = 0;
 				}
 			}
@@ -732,7 +732,7 @@ public class TileFissionReactorSteam extends TileSteamProducer {
 		} else if (slots[1] != null && fueltime <= 0 && fueltype != 0) {
 			for (int i = 0; i < cellTypes.length; i ++) {
 				for (int id : OreDictionary.getOreIDs(slots[1])) {
-					if (OreDictionary.getOres("d" + cellTypes[i]).get(0).getItem() == OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getItem() && OreDictionary.getOres("d" + cellTypes[i]).get(0).getItemDamage() == OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getItemDamage() && slots[1].stackSize < 64) {
+					if (OreDictionary.getOres("d" + cellTypes[i]).get(0).getItem() == OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getItem() && OreDictionary.getOres("d" + cellTypes[i]).get(0).getMetadata() == OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getMetadata() && slots[1].stackSize < 64) {
 						if (fueltype == i + 1) {
 							slots[1].stackSize++;
 							fueltype = 0;

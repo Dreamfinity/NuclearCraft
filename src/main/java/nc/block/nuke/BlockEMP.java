@@ -17,7 +17,7 @@ public class BlockEMP extends BlockTNT {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		this.blockIcon = iconRegister.registerIcon("nc:nuke/" + "EMP");
 	}
 	

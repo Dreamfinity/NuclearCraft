@@ -46,9 +46,9 @@ public class ContainerElectricFurnace extends Container {
 		}	
 	}
 	
-	public void addCraftingToCrafters(ICrafting icrafting)
+	public void onCraftGuiOpened(ICrafting icrafting)
 	{
-		super.addCraftingToCrafters(icrafting);
+		super.onCraftGuiOpened(icrafting);
 		icrafting.sendProgressBarUpdate(this, 1, this.entity.energy);
 	}
 	
@@ -135,7 +135,7 @@ return input;
                         return null;
                     }
                 }
-				else if(FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null)
+				else if(FurnaceRecipes.instance().getSmeltingResult(itemstack1) != null)
 				{
 					if(!this.mergeItemStack(itemstack1, 0, 1, false))
 					{

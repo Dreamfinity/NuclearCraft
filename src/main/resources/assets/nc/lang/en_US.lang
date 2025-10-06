@@ -658,3 +658,5 @@ achievement.antimatterBomb.desc=Make an Antimatter Bomb
 death.attack.heliumfreeze=%1$s froze to death in a pool of Liquid Helium
 death.attack.plasmaburn=%1$s was incinerated by Superhot Plasma
 death.attack.steamburn=%1$s was cooked in Steam
+
+message.nuclearcraft.antimatterExplosionDisabled=Antimatter explosions are disabled

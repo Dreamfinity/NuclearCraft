@@ -656,3 +656,5 @@ achievement.antimatterBomb.desc=Construa uma Bomba de Antimatéria
 death.attack.heliumfreeze=%1$s Congelou até morrer em uma piscina de Hélio Líquido
 death.attack.plasmaburn=%1$s Foi Incinerado por Plasma Super quente
 death.attack.steamburn=%1$s Foi Cozido no Vapor
+
+message.nuclearcraft.antimatterExplosionDisabled=Explosão de antimatéria desabilitada
